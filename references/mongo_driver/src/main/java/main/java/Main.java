@@ -2,41 +2,32 @@ package main.java;
 
 import com.mongodb.client.*;
 import com.mongodb.ConnectionString;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
 import com.mongodb.client.model.*;
 import com.mongodb.client.result.DeleteResult;
-
 import com.mongodb.client.result.UpdateResult;
-
 import java.util.function.Consumer;
-
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
-
 import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Accumulators.*;
-import static com.mongodb.client.model.Sorts.*;
-import static com.mongodb.client.model.Projections.*;
-import static com.mongodb.client.model.Accumulators.addToSet;
-import static com.mongodb.client.model.Accumulators.sum;
 
-
+/**
+ * MongoDB Developer Harness test.
+ */
 public class Main {
 
+    /**
+     * Developer harness test entry point.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         //-------------------------------
         //-----Connect to the MongoDB----
         //-------------------------------
         // 1 - Default URI "mongodb://localhost:27017"
-        ConnectionString uri = new ConnectionString(
-                "mongodb://172.16.3.94:27017");
+        ConnectionString uri = new ConnectionString("mongodb://172.16.3.94:27017");
         MongoClient mongoClient = MongoClients.create(uri);
 
 
@@ -182,4 +173,4 @@ public class Main {
         return doc -> System.out.println(doc.toJson(JsonWriterSettings.builder().indent(true).build()));
     }
 
-    }
+}
