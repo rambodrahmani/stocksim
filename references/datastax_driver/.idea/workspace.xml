@@ -23,7 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6fea3f78-cd8c-4888-b7d4-786203405daf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/workgroup04/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mongo_driver/src/main/java/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../mongo_driver/src/main/java/main/java/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,13 +44,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA 2020.2.3\plugins\maven\lib\maven3" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="ProjectId" id="1lD3CGAwxLQUhumRB8Wx5m4WofH" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -58,8 +55,10 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/org/workgroup04" />
     <property name="last_opened_file_path" value="$USER_HOME$/IdeaProjects/test_mongo" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -67,14 +66,30 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.workgroup04" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
+      <option name="MAIN_CLASS_NAME" value="org.workgroup04.Main" />
       <module name="datastax_driver" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -104,6 +119,8 @@
       <workItem from="1607189257514" duration="606000" />
       <workItem from="1607189890497" duration="69000" />
       <workItem from="1607189999251" duration="28000" />
+      <workItem from="1607196770999" duration="53000" />
+      <workItem from="1607196835265" duration="245000" />
     </task>
     <servers />
   </component>
@@ -121,39 +138,5 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="223" y="63" width="1089" height="761" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607175893073">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="223" y="63" width="1089" height="761" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/1920.487.1366.728@0.0.1536.824" timestamp="1607175893073" />
-    <state x="498" y="214" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1607175890673">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="498" y="214" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824/1920.487.1366.728@0.0.1536.824" timestamp="1607175890673" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1607190022559">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824/1920.487.1366.728@0.0.1536.824" timestamp="1607190022559" />
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1607176338003">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.487.1366.728@0.0.1536.824" timestamp="1607176338003" />
-    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1607176338003">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824/1920.487.1366.728@0.0.1536.824" timestamp="1607176338003" />
-    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1607176338003">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824/1920.487.1366.728@0.0.1536.824" timestamp="1607176338003" />
-    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1607176338003">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824/1920.487.1366.728@0.0.1536.824" timestamp="1607176338003" />
-    <state x="249" y="0" key="SettingsEditor" timestamp="1607175777980">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="249" y="0" key="SettingsEditor/0.0.1536.824/1920.487.1366.728@0.0.1536.824" timestamp="1607175777980" />
   </component>
 </project>

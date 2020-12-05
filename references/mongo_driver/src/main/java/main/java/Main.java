@@ -18,33 +18,34 @@ import static com.mongodb.client.model.Filters.*;
 public class Main {
 
     /**
-     * Developer harness test entry point.
+     * Entry point.
      *
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
+
         //-------------------------------
         //-----Connect to the MongoDB----
         //-------------------------------
+
         // 1 - Default URI "mongodb://localhost:27017"
-        ConnectionString uri = new ConnectionString("mongodb://172.16.3.94:27017");
-        MongoClient mongoClient = MongoClients.create(uri);
+        final ConnectionString uri = new ConnectionString("mongodb://172.16.3.94:27017");
+        final MongoClient mongoClient = MongoClients.create(uri);
 
 
-        // 2 - Connection uri (Atlas)
-        /*ConnectionString uri = new ConnectionString(
-                "mongodb+srv://admin:<password>@largescaleandmultistruc.jhdlw.mongodb.net/<dbname>?retryWrites=true&w=majority");
-        MongoClient mongoClientAtlas = MongoClients.create(uri);*/
+        // 2 - MongoDB Atlas URI
+        //final ConnectionString uri = new ConnectionString("mongodb+srv://admin:<password>@largescaleandmultistruc.jhdlw.mongodb.net/<dbname>?retryWrites=true&w=majority");
+        //final MongoClient mongoClientAtlas = MongoClients.create(uri);
 
 
         //-------------------------------
         //---------Get database----------
         //-------------------------------
-        //If the database does not exists, mongoDB will create a new one
 
-        MongoDatabase db = mongoClient.getDatabase("test");
+        // If the database does not exists, mongoDB will create a new one
+        final MongoDatabase db = mongoClient.getDatabase("test");
 
-        //---List all the collection names---
+        // Loop through and print all the available collections
         for (String name : db.listCollectionNames()) {
             System.out.println(name);
         }
@@ -52,17 +53,20 @@ public class Main {
         //-------------------------------
         //---Get a specific collection---
         //-------------------------------
-        MongoCollection<Document> myColl = db.getCollection("students");
-        //---Count # of documents in a collection---
+        final MongoCollection<Document> myColl = db.getCollection("students");
+
+        // Count number of documents in a collection
         System.out.println(myColl.countDocuments());
-        //---Empty a collection---
+
+        // Empty a collection
         myColl.drop();
         myColl.deleteMany(new Document());
 
         //-------------------------------
         //--------Insert documents-------
         //-------------------------------
-        // 1 - Insert a single document
+
+        // 1 - Insert a single document into the collection
         Document student = new Document("name", "Laura")
                 .append("age", 25)
                 .append("gender", "F")
@@ -74,7 +78,7 @@ public class Main {
                 .append("location", new Document("x", 203).append("y", 102));
         myColl.insertOne(student);
 
-        // 2 -Insert multiple documents
+        // 2 -Insert multiple documents into the collection
         List<Document> documents = new ArrayList<>();
         List<String> names = Arrays.asList("Gionatan", "Luigi", "Marco", "Federico", "Paolo");
         for (String name : names) {
@@ -98,31 +102,33 @@ public class Main {
         //-------------------------------
         //---------Find documents--------
         //-------------------------------
-        // 1 - Find the all document
+
+        // 1 - Find all the documents in the collection
         try (MongoCursor<Document> cursor = myColl.find().iterator()) {
             while (cursor.hasNext()) {
                 System.out.println(cursor.next().toJson());
             }
         }
 
-        // 2 - Find the first document
+        // 2 - Find the first document in the collection: might be NULL
         Document firstDoc = myColl.find().first();
         if (firstDoc != null) System.out.println(firstDoc.toJson());
 
-        // 3 - Find documents through filters
+        // 3 - Find documents through filters: might be NULL
         //      Possible filters: eq. lt, lte, gt, gte, and, or, ...
         Document dbDoc = myColl.find(eq("name", "Federico")).first();
         if (dbDoc != null) System.out.println(dbDoc.toJson());
 
-        // a - Define a consumers statically: printDocuments()
+        // a - Define a consumer statically: printDocuments()
         //      --> defined as a private static member function (defined above)
-        // b - Define a consumer locally
+        // b - Define the consumer locally
         Consumer<Document> printFormattedDocuments = new Consumer<Document>() {
             @Override
             public void accept(Document document) {
                 System.out.println(document.toJson(JsonWriterSettings.builder().indent(true).build()));
             }
         };
+
         //----Lambda version (more compact)----
         //Consumer<Document> printFormattedDocuments2 =
         //        document -> System.out.println(document.toJson(JsonWriterSettings.builder().indent(true).build()));
@@ -134,6 +140,7 @@ public class Main {
         //-------------------------------
         //--------Update documents-------
         //-------------------------------
+
         // 1 - Update a single document
         myColl.updateOne(eq("name", "Federico"), set("age", 25));
         Document newGrade = new Document("mark", 27).append("DateOfExam", new Date()).append("name", "Intelligent Systems");
@@ -149,28 +156,43 @@ public class Main {
         //-------------------------------
         //--------Delete documents-------
         //-------------------------------
-        //Delete a single document
+
+        // Delete a single document
         myColl.deleteOne(eq("student", "Gionatan"));
-        //Delete many documents
+
+        // Delete many documents
         DeleteResult dr = myColl.deleteMany(lt("age", 25));
         System.out.println("Deleted documents: " + dr.getDeletedCount());
         myColl.find().forEach(printDocuments());
 
-        //Create an index
+        // Create an index
         myColl.createIndex(new Document("age", 1));
+
         // Execute in the MONGO SHELL
         // myColl.find().sort({"age": 1}).explain().queryPlanner.winningPlan
         // myColl.find().sort({"student": 1}).explain().queryPlanner.winningPlan
 
-        //--- Close connection ---
+        //----------------------------------------
+        //-----Close Connection to the MongoDB----
+        //----------------------------------------
         mongoClient.close();
     }
-    private static Consumer<Document> printDocuments() {
+
+    /**
+     * Static definition of a consumer.
+     *
+     * @return
+     */
+    private final static Consumer<Document> printDocuments() {
         return doc -> System.out.println(doc.toJson());
     }
 
-    private static Consumer<Document> printFormattedDocuments() {
+    /**
+     * Static definition of the printFormattedDocuments consumer.
+     *
+     * @return
+     */
+    private final static Consumer<Document> printFormattedDocuments() {
         return doc -> System.out.println(doc.toJson(JsonWriterSettings.builder().indent(true).build()));
     }
-
 }
