@@ -72,7 +72,7 @@ public class Main extends JFrame {
 				//.addContactPoint(new InetSocketAddress("172.16.3.96", 9042))
 				.withLocalDatacenter("datacenter1")
 				.build();) {
-			String query = "select * from test.stocks";
+			String query = "select * from test.stocks limit 20";
 			final ResultSet rs = session.execute(query);
 			for (Row row : rs) {
 				String datestring = row.getString("date");
