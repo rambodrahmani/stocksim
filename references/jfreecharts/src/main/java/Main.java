@@ -7,6 +7,7 @@ import org.jfree.data.xy.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.*;
 import java.util.*;
@@ -45,6 +46,7 @@ public class Main extends JFrame {
 		this.add(chartPanel);
 		this.pack();
 	}
+
 	protected AbstractXYDataset getDataSet(String stockSymbol) {
 		//This is the dataset we are going to create
 		DefaultOHLCDataset result = null;
@@ -59,6 +61,7 @@ public class Main extends JFrame {
 		
 		return result;
 	}
+
 	//This method connects to cassandra DB get the OHLC data
 	protected OHLCDataItem[] getData() {
 		List<OHLCDataItem> dataItems = new ArrayList<OHLCDataItem>();
@@ -69,18 +72,18 @@ public class Main extends JFrame {
 				//.addContactPoint(new InetSocketAddress("172.16.3.96", 9042))
 				.withLocalDatacenter("datacenter1")
 				.build();) {
-			String query = "select * from test.stocks where id = 1";
+			String query = "select * from test.stocks";
 			final ResultSet rs = session.execute(query);
 			for (Row row : rs) {
 				String datestring = row.getString("date");
 				Date date = new SimpleDateFormat("yyyy-mm-dd").parse(datestring);
-				double open = row.getFloat("open");
-				double high = row.getFloat("high");
-				double low = row.getFloat("low");
-				double close = row.getFloat("close");
-				double volume = row.getFloat("volume");
+				BigDecimal open = row.getBigDecimal("open");
+				BigDecimal high = row.getBigDecimal("high");
+				BigDecimal low = row.getBigDecimal("low");
+				BigDecimal close = row.getBigDecimal("close");
+				BigDecimal volume = row.getBigDecimal("volume");
 				
-				OHLCDataItem item = new OHLCDataItem(date, open, high, low, close, volume);
+				OHLCDataItem item = new OHLCDataItem(date, open.doubleValue(), high.doubleValue(), low.doubleValue(), close.doubleValue(), volume.doubleValue());
 				dataItems.add(item);
 			}
 		} catch (Exception e) {
@@ -91,6 +94,12 @@ public class Main extends JFrame {
 		
 		return data;
 	}
+
+	/**
+	 * Entry point.
+	 *
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		new Main("MSFT").setVisible(true);
 	}
