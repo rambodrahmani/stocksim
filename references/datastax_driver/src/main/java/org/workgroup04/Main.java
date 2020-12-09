@@ -23,12 +23,12 @@ public class Main {
                 //.addContactPoint(new InetSocketAddress("172.16.3.96", 9042))
                 .withLocalDatacenter("datacenter1")
                 .build();) {
-            final ResultSet rs = session.execute("select * from test.stocks");
+            final ResultSet rs = session.execute("select * from test.stocks_3");
             for (Row row : rs) {
                 System.out.print(row.getInt("id") + "|");
                 System.out.print(row.getBigDecimal("adj_close") + "|");
                 System.out.print(row.getBigDecimal("close") + "|");
-                System.out.print(row.getString("date") + "|");
+                System.out.print(row.getLocalDate("date") + "|");
                 System.out.print(row.getBigDecimal("high") + "|");
                 System.out.print(row.getBigDecimal("low") + "|");
                 System.out.print(row.getBigDecimal("open") + "|");
