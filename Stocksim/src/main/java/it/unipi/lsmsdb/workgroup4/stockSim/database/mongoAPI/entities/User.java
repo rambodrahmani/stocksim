@@ -11,4 +11,20 @@ public abstract  class User {
     protected ArrayList<Portfolio> portfolios;
     public abstract ArrayList<Portfolio> getPortfolios();
     public abstract Portfolio addPortfolio(String name, String Type);
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
 }

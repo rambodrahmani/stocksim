@@ -22,12 +22,15 @@ public abstract class MongoDBManager {
         mongoClient = MongoClients.create(uri);
         db=mongoClient.getDatabase("StockSim");
     }
+    protected void close(){
+        mongoClient.close();
+    }
 
     public abstract Stocks getStocks(String Attribute, String Value);
 
     public abstract Session login(String username, String password);
 
-    public abstract boolean logout(Session loggedSession);
+    protected abstract boolean logout(Session loggedSession);
 
     public abstract ArrayList<Portfolio> loadPortfolios(User owner);
 

@@ -5,13 +5,16 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Filters.*;
 
+import com.mongodb.client.model.Updates;
 import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.*;
 import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation.PortfolioImpl;
 import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation.UserImpl;
 import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.persistence.DocumentDBManager;
 import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.persistence.MongoDBManager;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 
@@ -78,7 +81,11 @@ public class MongoDBManagerImpl extends MongoDBManager {
     @Override
     public Portfolio createPortfolio(User owner, String name, String type) {
         Portfolio p =new PortfolioImpl(owner,name, type, (DocumentDBManager) this);
-        //todo db write
+        connect();
+        final MongoCollection<Document> usersColl = db.getCollection("users");
+        Document po=new Document().append("name",name ).append("type", type);
+        usersColl.updateOne(eq("username", owner.getUsername()), Updates.push("portfolios", po));
+        close();
         return  p;
     }
 
