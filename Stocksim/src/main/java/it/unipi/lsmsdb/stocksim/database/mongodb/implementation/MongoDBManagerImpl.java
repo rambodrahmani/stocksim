@@ -5,11 +5,20 @@ import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 
 import com.mongodb.client.model.Updates;
+<<<<<<< Updated upstream:Stocksim/src/main/java/it/unipi/lsmsdb/stocksim/database/mongodb/implementation/MongoDBManagerImpl.java
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.*;
 import it.unipi.lsmsdb.stocksim.database.mongodb.persistence.DocumentDBManager;
 import it.unipi.lsmsdb.stocksim.database.mongodb.persistence.MongoDBManager;
+=======
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.DocumentDBManager;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.MongoDBManager;
+import org.bson.BsonArray;
+>>>>>>> Stashed changes:Stocksim/src/main/java/it/unipi/lsmsdb/workgroup4/stocksim/database/mongodb/implementation/MongoDBManagerImpl.java
 import org.bson.Document;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 
 public class MongoDBManagerImpl extends MongoDBManager {
@@ -19,11 +28,15 @@ public class MongoDBManagerImpl extends MongoDBManager {
     }
 
     @Override
-    public Stocks getStocks(String Attribute, String Value) {
+    public Stocks getStocks(String attribute, String value) {
         connect();
-        final MongoCollection<Document> myColl = db.getCollection("stocks");
-
-        return null;
+        final MongoCollection<Document> stocksColl = db.getCollection("stocks");
+        Stocks res= new StocksImpl();
+        for (Document doc : stocksColl.find(eq(attribute, value))) {
+            Stock item= new Stockimpl(doc);
+            res.add(item);
+        }
+        return res;
     }
 
     @Override
