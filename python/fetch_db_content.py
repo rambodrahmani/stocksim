@@ -17,12 +17,15 @@ __author__ = "Marco Pinna, Yuri Mazzuoli and Rambod Rahmani"
 __copyright__ = "Copyright (C) 2007 Free Software Foundation, Inc."
 __license__ = "GPLv3"
 
-def move_symbols(symbols, dest):
-	for s in symbols:
+# moves the given files from source to destination
+def move_symbols(source, dest):
+	for s in source:
 		filename = '{}.csv'.format(s)
 		shutil.move(join('hist', filename), join(dest, filename))
 
 # clean up
+os.remove('stocksim.cql')
+
 if os.path.exists('etfs'):
 	shutil.rmtree('etfs')
 os.mkdir('etfs')
@@ -40,7 +43,7 @@ if os.path.exists('stocks'):
 os.mkdir('stocks')
 
 # configs
-offset = 0		# in case of download failure, no need to start from the beginning
+offset = 9430	# in case of download failure, no need to start from the beginning
 limit = 10000	# number of ticker symbols to be retrieved
 period = 'max'	# valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
 
@@ -50,6 +53,23 @@ data_clean = data[data['Test Issue'] == 'N']
 symbols = data_clean['Symbol'].tolist()
 
 print('Total number of symbols traded = {}'.format(len(symbols)))
+
+# open .cql file
+f = open("stocksim.cql", "w")
+
+# write to .cql file
+f.write("/*" + "\n")
+f.write(" * Apache Cassandra Stocksim CQL Query." + "\n")
+f.write(" *" + "\n")
+f.write(" * author: Marco Picca, Rambod Rahmani, Yuri Mazzuoli." + "\n")
+f.write(" */" + "\n")
+f.write("DROP KEYSPACE stocksim;" + "\n")
+f.write("\n")
+f.write("CREATE KEYSPACE IF NOT EXISTS stocksim" + "\n")
+f.write("WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};" + "\n")
+f.write("\n")
+f.write("USE stocksim;" + "\n")
+f.write("\n")
 
 # adjust configs based on retrieved symbols list size
 limit = limit if limit else len(symbols)
@@ -70,6 +90,21 @@ for i in range(offset, end):
 		pass
 		continue
 
+	# write to .cql file
+	f.write("CREATE TABLE " + s + " (" + "\n")
+	f.write("	id int," + "\n")
+	f.write("	date date," + "\n")
+	f.write("	open decimal," + "\n")
+	f.write("	high decimal," + "\n")
+	f.write("	low decimal," + "\n")
+	f.write("	close decimal," + "\n")
+	f.write("	adj_close decimal," + "\n")
+	f.write("	volume decimal," + "\n")
+	f.write("	primary key (id, Date)" + "\n")
+	f.write(") WITH CLUSTERING ORDER BY (Date DESC);" + "\n")
+	f.write("COPY " + s + " FROM '" + s + ".csv' WITH DELIMITER=',' AND HEADER=TRUE;" + "\n")
+	f.write("\n")
+
 	# retrieve ticker histoical data
 	data = yf.download(s, period=period)
 	
@@ -78,7 +113,7 @@ for i in range(offset, end):
 	data.columns = ["date", "open", "high", "low", "close", "adj_close", "volume"]
 	
 	# insert id column
-	data.insert(0, "id", range(0, len(data.index)), True)
+	data.insert(0, "id", [i] * len(data.index), True)
 	
 	# in case of errors during historical data retrieval, continue
 	if len(data.index) == 0:
@@ -88,6 +123,9 @@ for i in range(offset, end):
 	is_valid[i] = True
 	data.to_csv('hist/{}.csv'.format(s), index = False)
 	print("\n")
+
+# close .cql file
+f.close()
 
 # data retrieval ended
 print('Total number of valid symbols downloaded = {}'.format(sum(is_valid)))
