@@ -5,7 +5,7 @@ import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 
 import com.mongodb.client.model.Updates;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.*;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
 import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
 import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.DocumentDBManager;
 import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.MongoDBManager;

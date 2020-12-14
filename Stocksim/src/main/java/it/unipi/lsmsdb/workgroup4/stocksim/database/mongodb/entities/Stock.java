@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.Currency;
 import java.util.TimeZone;
 
-
 public abstract class Stock {
     protected String ticker;
     protected String sector;
@@ -12,8 +11,8 @@ public abstract class Stock {
     protected String summary;
     protected Location location;
     protected URL website;
-   protected String market;
-   protected Currency currency;
+    protected String market;
+    protected Currency currency;
     protected String exchange;
     protected  String short_name;
     protected  String long_name;

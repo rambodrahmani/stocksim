@@ -4,7 +4,6 @@ import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.*;
 import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
 
 import java.util.ArrayList;

@@ -1,11 +1,10 @@
 package it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities;
 
-
 public abstract class Location  {
     protected String city;
     protected String state;
     protected String country;
-    protected  String address;
+    protected String address;
     protected String phone;
 
     public String getCity() {

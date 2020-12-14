@@ -1,6 +1,6 @@
 package it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.implementation;
 
-import it.unipi.lsmdb.workgroup4.mongoAPI.entities.*;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
 import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Session;
 import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.User;
 
