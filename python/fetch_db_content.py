@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 """
+Retrieves historical data and company information for all the ticker symbols
+of the U.S. Stock Market.
 """
 
 import os
