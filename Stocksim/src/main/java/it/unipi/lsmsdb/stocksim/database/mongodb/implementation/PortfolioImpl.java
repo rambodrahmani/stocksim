@@ -4,6 +4,7 @@ import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Title;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.User;
 import it.unipi.lsmsdb.stocksim.database.mongodb.persistence.DocumentDBManager;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Stock;
+import org.bson.Document;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,12 @@ import java.util.ArrayList;
         this.dbManager=dbManager;
         this.owner=owner;
     }
-    public void setName(String name) {
+
+     protected PortfolioImpl(Document doc, DocumentDBManager db) {
+
+     }
+
+     public void setName(String name) {
         this.name = name;
 
     }

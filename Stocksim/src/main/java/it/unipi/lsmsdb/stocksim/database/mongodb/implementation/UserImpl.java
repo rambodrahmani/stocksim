@@ -3,6 +3,7 @@ package it.unipi.lsmsdb.stocksim.database.mongodb.implementation;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Portfolio;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.User;
 import it.unipi.lsmsdb.stocksim.database.mongodb.persistence.DocumentDBManager;
+import org.bson.Document;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,11 @@ public class UserImpl extends User {
         this.dbManager = dbManager;
         this.portfolios = null;
     }
+
+    public UserImpl(Document doc, DocumentDBManager dbManager) {
+        this.dbManager = dbManager;
+    }
+
     public int loadPortfolios(){
 
         portfolios= dbManager.loadPortfolios(this);

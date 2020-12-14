@@ -4,29 +4,29 @@ import com.mongodb.client.MongoCollection;
 
 import static com.mongodb.client.model.Filters.*;
 
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-<<<<<<< Updated upstream:Stocksim/src/main/java/it/unipi/lsmsdb/stocksim/database/mongodb/implementation/MongoDBManagerImpl.java
+
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.*;
 import it.unipi.lsmsdb.stocksim.database.mongodb.persistence.DocumentDBManager;
 import it.unipi.lsmsdb.stocksim.database.mongodb.persistence.MongoDBManager;
-=======
-import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
-import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
-import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.DocumentDBManager;
-import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.MongoDBManager;
-import org.bson.BsonArray;
->>>>>>> Stashed changes:Stocksim/src/main/java/it/unipi/lsmsdb/workgroup4/stocksim/database/mongodb/implementation/MongoDBManagerImpl.java
+
+
+
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.json.JSONArray;
 
-import javax.print.Doc;
 import java.util.ArrayList;
+import java.util.List;
 
-public class MongoDBManagerImpl extends MongoDBManager {
+public class MongoDBManagerImpl extends MongoDBManager implements  DocumentDBManager{
 
 
     public MongoDBManagerImpl() {
     }
 
+    // get a list of stocks with the same attribute value
     @Override
     public Stocks getStocks(String attribute, String value) {
         connect();
@@ -36,10 +36,12 @@ public class MongoDBManagerImpl extends MongoDBManager {
             Stock item= new Stockimpl(doc);
             res.add(item);
         }
+        close();
         return res;
+
     }
 
-    @Override
+    /*@Override
     public Session login(String username, String password) {
         connect();
         final MongoCollection<Document> myColl = db.getCollection("users");
@@ -51,15 +53,25 @@ public class MongoDBManagerImpl extends MongoDBManager {
         connect();
         final MongoCollection<Document> myColl = db.getCollection("users");
         return false;
-    }
+    }*/
 
+    // load in memory the portfolios of a specific users and return their list
     @Override
     public ArrayList<Portfolio> loadPortfolios(User owner) {
-
-        return new ArrayList<Portfolio>();
+        connect();
+        final MongoCollection<Document> usersColl = db.getCollection("users");
+        ArrayList<Portfolio> res= new ArrayList<Portfolio>();
+        Document user =usersColl.find(eq("username", owner.getUsername())).first();
+        List<Document> portfs= (List<Document>) user.get("portfolios");
+        for (Document port : portfs) {
+            res.add(new PortfolioImpl(port, (DocumentDBManager) this));
+        }
+        close();
+        return res;
 
     }
 
+    //add a title to a specific portfolio
     @Override
     public boolean addTitleToPortfolio(Portfolio portfolio, Title title) {
         return false;
@@ -80,11 +92,14 @@ public class MongoDBManagerImpl extends MongoDBManager {
         return false;
     }
 
+    //remove every titles from a portfolio
     @Override
     public boolean wipePortfolio(Portfolio portfolio) {
-        return false;
+
+        return removeTitlesFromPortfolio(portfolio, portfolio.getComposition());
     }
 
+    //create an empty portfolio
     @Override
     public Portfolio createPortfolio(User owner, String name, String type) {
         Portfolio p =new PortfolioImpl(owner,name, type, (DocumentDBManager) this);
@@ -98,12 +113,26 @@ public class MongoDBManagerImpl extends MongoDBManager {
 
     @Override
     public boolean removePortfolio(Portfolio portfolio) {
-        return false;
+        connect();
+        final MongoCollection<Document> usersColl = db.getCollection("users");
+        Document user = usersColl.find(eq("username", portfolio.getOwner().getUsername())).first();
+        Bson match = eq("name", portfolio.getName());
+        usersColl.updateOne(
+                eq("username", portfolio.getOwner().getUsername()),
+                Updates.pull("portfolios", match)
+        );
+        close();
+        return true;
+
     }
 
     @Override
-    public User getUser(String Username)  {
-        return new UserImpl(Username, "aa","  ","aa", (DocumentDBManager) this);
+    public User getUser(String username)  {
+        connect();
+        final MongoCollection<Document> usersColl = db.getCollection("users");
+        close();
+        return new UserImpl(usersColl.find(eq("username", username)).first(),  this);
+
     }
 
 

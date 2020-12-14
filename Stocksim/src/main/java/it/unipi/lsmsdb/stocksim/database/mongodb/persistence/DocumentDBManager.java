@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public interface DocumentDBManager {
     Stocks getStocks(String Attribute, String Value);
-    Session login(String username, String password);
-    boolean logout(Session loggedSession);
+    /*Session login(String username, String password);
+    boolean logout(Session loggedSession);*/
     ArrayList<Portfolio> loadPortfolios(User owner);
     boolean addTitleToPortfolio(Portfolio portfolio, Title title);
     boolean addTitlesToPortfolio(Portfolio portfolio, ArrayList<Title> titles);

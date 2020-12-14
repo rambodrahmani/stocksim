@@ -1,13 +1,11 @@
 package it.unipi.lsmsdb.stocksim.database.mongodb.implementation;
 
-<<<<<<< Updated upstream:Stocksim/src/main/java/it/unipi/lsmsdb/stocksim/database/mongodb/implementation/Stockimpl.java
+
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Location;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Stock;
-=======
-import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Location;
-import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Stock;
+
+
 import org.bson.Document;
->>>>>>> Stashed changes:Stocksim/src/main/java/it/unipi/lsmsdb/workgroup4/stocksim/database/mongodb/implementation/Stockimpl.java
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,9 +35,9 @@ import java.util.TimeZone;
         this.setSector(doc.getString("sector"));
         this.setIndustry(doc.getString("industry"));
         this.setSummary(doc.getString("longBusinessSummary"));
-        this.setLocation(new LocationImpl((Document) doc.get("location"));
+        this.setLocation(new LocationImpl((Document) doc.get("location")));
         try {
-            this.setWebsite(new URL(doc.getString("sector"));
+            this.setWebsite(new URL(doc.getString("sector")));
         } catch (MalformedURLException e) {
             this.setWebsite(null);
         }

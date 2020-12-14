@@ -12,6 +12,10 @@ public abstract  class User {
     public abstract ArrayList<Portfolio> getPortfolios();
     public abstract Portfolio addPortfolio(String name, String Type);
 
+    protected void setPortfolios(ArrayList<Portfolio> portfolios) {
+        this.portfolios = portfolios;
+    }
+
     public String getUsername() {
         return username;
     }
