@@ -40,7 +40,7 @@ if os.path.exists('stocks'):
 os.mkdir('stocks')
 
 # configs
-offset = 0		# in case of download failure, no need to start from the beginning
+offset = 0	# in case of download failure, no need to start from the beginning
 limit = 10000	# number of ticker symbols to be retrieved
 period = 'max'	# valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
 
