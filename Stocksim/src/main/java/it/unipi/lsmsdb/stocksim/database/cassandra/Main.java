@@ -3,6 +3,9 @@ package it.unipi.lsmsdb.stocksim.database.cassandra;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Developer harness test for the Datastax Java Driver for Apache Cassandra.
  *
@@ -25,14 +28,14 @@ public class Main {
         cassandraDB = cassandraDBFactory.getCassandraDB("172.16.3.94", 9042, "workgroup-04 Datacenter");
 
         // Cassandra DB with multiple explicit contact points
-        // final ArrayList<String> hostnames = new ArrayList<String>(Arrays.asList("172.16.3.94", "172.16.3.95", "172.16.3.96"));
-        // final ArrayList<Integer> ports = new ArrayList<Integer>(Arrays.asList(9042, 9042, 9042));
-        // cassandraDB = cassandraDBFactory.getCassandraDB(hostnames, ports, "workgroup-04 Datacenter");
+        final ArrayList<String> hostnames = new ArrayList<String>(Arrays.asList("172.16.3.94", "172.16.3.95", "172.16.3.96"));
+        final ArrayList<Integer> ports = new ArrayList<Integer>(Arrays.asList(9042, 9042, 9042));
+        cassandraDB = cassandraDBFactory.getCassandraDB(hostnames, ports, "workgroup-04 Datacenter");
 
         // connect to Cassandra DB Server
         if (cassandraDB.connect()) {
             try {
-                final ResultSet resultSet = cassandraDB.query("select * from test.stocks_3");
+                final ResultSet resultSet = cassandraDB.query("select * from stocksim.zyme");
 
                 for (final Row row : resultSet) {
                     System.out.print(row.getInt("id") + "|");
@@ -44,7 +47,7 @@ public class Main {
                     System.out.print(row.getBigDecimal("open") + "|");
                     System.out.println(row.getBigDecimal("volume"));
                 }
-            } catch (CQLSessionException e) {
+            } catch (final CQLSessionException e) {
                 e.printStackTrace();
             }
         } else {

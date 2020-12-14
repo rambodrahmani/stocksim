@@ -21,8 +21,8 @@
         </plugins>
     </build>
     <modules>
-        <module>it.unipi.lsmsdb.stocksim.client.Client</module>
-        <module>it.unipi.lsmsdb.stocksim.server.Server</module>
+        <module>Client</module>
+        <module>Server</module>
     </modules>
     <dependencies>
         <dependency>
