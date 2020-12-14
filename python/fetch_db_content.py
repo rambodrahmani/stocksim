@@ -17,10 +17,18 @@ __author__ = "Marco Pinna, Yuri Mazzuoli and Rambod Rahmani"
 __copyright__ = "Copyright (C) 2007 Free Software Foundation, Inc."
 __license__ = "GPLv3"
 
+# move files in a folder
 def move_symbols(symbols, dest):
 	for s in symbols:
 		filename = '{}.csv'.format(s)
 		shutil.move(join('hist', filename), join(dest, filename))
+
+# try to retrive an optional attribute
+def try_fetch_attr( source, doc, attname):
+    try:
+        doc[attname]= source[attname]
+    except KeyError:
+        pass
 
 # clean up
 if os.path.exists('etfs'):
@@ -56,6 +64,7 @@ limit = limit if limit else len(symbols)
 end = min(offset + limit, len(symbols))
 is_valid = [False] * len(symbols)
 
+titlesCollection=[] #collòection to be populated
 # for each ticker symbol
 for i in range(offset, end):
 	s = symbols[i]
@@ -63,23 +72,63 @@ for i in range(offset, end):
 
 	# retrieve and save ticker company info
 	try:
-		print(Curr_Ticker.info['symbol'] + " - " + Curr_Ticker.info['shortName'])
-		with open("json/" + s + ".json", 'w') as fp:
-			json.dump(Curr_Ticker.info, fp)
+		print(Curr_Ticker.info.info['symbol'] + " - " + Curr_Ticker.info.info['shortName'])
+
+		# common fileds
+		estractedTitle={
+  			"currency": Curr_Ticker.info["currency"],
+ 			"shortName": Curr_Ticker.info["shortName"],
+  			"longName": Curr_Ticker.info["longName"],
+  			"exchangeTimezoneName": Curr_Ticker.info["exchangeTimezoneName"],
+  			"exchangeTimezoneShortName": Curr_Ticker.info["exchangeTimezoneShortName"],
+  			"quoteType": Curr_Ticker.info["quoteType"],
+  			"ticker": Curr_Ticker.info["symbol"],
+  			"market": Curr_Ticker.info["market"],
+  			"logoURL": Curr_Ticker.info["logo_url"]
+		}
+		# optional fields
+		try_fetch_attr(Curr_Ticker.info,estractedTitle,"sector")
+		try_fetch_attr(Curr_Ticker.info,estractedTitle,"city")
+		try_fetch_attr(Curr_Ticker.info,estractedTitle,"website")
+		try_fetch_attr(Curr_Ticker.info,estractedTitle,"industry")
+		try_fetch_attr(Curr_Ticker.info,estractedTitle,"longBusinessSummary")
+		location={} # location is a subdocument
+		try_fetch_attr(Curr_Ticker.info,location,"state")
+		try_fetch_attr(Curr_Ticker.info,location,"country")
+		try_fetch_attr(Curr_Ticker.info,location,"phone")
+		# unionize address fields
+		try:
+			location["address"]= location["address1"]+" "+Curr_Ticker.info["address2"]
+		except KeyError:
+			try:
+				location["address"]= Curr_Ticker.info["address1"]
+			except KeyError:
+				pass
+		estractedTitle["location"]=(location)
+		titlesCollection.append(estractedTitle)
 	except:
 		pass
 		continue
+	print("dumping collection in json/TickerCollection.json")
+	with open("json/TickerCollection.json", 'w') as fp:
+		json.dump(titlesCollection, fp) #dump everything in one file 
+	
+	# import collection commands
+	# altert1: mongoimport from mongoTools is required
+	# alerrt2: no merge is performed
+	#os.system("mongoimport -h=172.16.3.94:27017 --jsonArray --db StokSim --collection stocks --file json/TickerCollection.json").
+	#os.system("mongoimport  --jsonArray --db StokSim --collection stocks --file json/TickerCollection.json").
 
 	# retrieve ticker histoical data
-	data = yf.download(s, period=period)
+	Curr_Ticker.info = yf.download(s, period=period)
 	
 	# in case of errors during historical data retrieval, continue
-	if len(data.index) == 0:
+	if len(Curr_Ticker.info.index) == 0:
 		continue
 
 	# all downloads completed without errors: ticker symbol is valid
 	is_valid[i] = True
-	data.to_csv('hist/{}.csv'.format(s))
+	Curr_Ticker.info.to_csv('hist/{}.csv'.format(s))
 	print("\n")
 
 # data retrieval ended
