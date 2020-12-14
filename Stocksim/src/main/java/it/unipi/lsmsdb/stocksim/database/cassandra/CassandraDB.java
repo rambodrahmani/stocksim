@@ -2,6 +2,7 @@ package it.unipi.lsmsdb.stocksim.database.cassandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import it.unipi.lsmsdb.stocksim.database.DBManager;
 
 import java.net.InetSocketAddress;
@@ -19,11 +20,11 @@ public class CassandraDB implements DBManager {
     // server port
     private ArrayList<Integer> ports;
 
-    // Cassandra DB datacenter parameter: only needed with explicit contact points
-    private String datacenter;
-
     // DB contact points vector
     private Vector<InetSocketAddress> contactPoints;
+
+    // Cassandra DB datacenter parameter: only needed with explicit contact points
+    private String datacenter;
 
     // session with convenience methods to execute CQL statements
     private CqlSession cqlSession;
@@ -60,12 +61,12 @@ public class CassandraDB implements DBManager {
     }
 
     /**
-     * Populates the DB contactpoints collection and builds the CqlSession.
+     * Populates the DB contact points collection and builds the CqlSession.
      */
     public boolean connect() {
         boolean ret = true;
 
-        // populate DB contactpoints collection
+        // populate DB contact points collection
         contactPoints = new Vector<InetSocketAddress>();
         Iterator<String> hostname = hostnames.iterator();
         Iterator<Integer> port = ports.iterator();
@@ -93,7 +94,8 @@ public class CassandraDB implements DBManager {
         ResultSet ret = null;
 
         if (cqlSession != null) {
-            ret = cqlSession.execute(query);
+            SimpleStatement simpleStatement = SimpleStatement.newInstance(query);
+            ret = cqlSession.execute(simpleStatement);
         } else {
             throw new CQLSessionException("CQL Session not initialized.");
         }
