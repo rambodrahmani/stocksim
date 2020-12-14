@@ -1,7 +1,6 @@
 package it.unipi.lsmsdb.stocksim.database.mongodb.entities;
 
 import java.net.URL;
-import java.util.Currency;
 import java.util.TimeZone;
 
 public abstract class Stock {
@@ -12,7 +11,7 @@ public abstract class Stock {
     protected Location location;
     protected URL website;
     protected String market;
-    protected Currency currency;
+    protected String currency;
     protected String exchange;
     protected  String short_name;
     protected  String long_name;
@@ -77,11 +76,11 @@ public abstract class Stock {
         this.market = market;
     }
 
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
