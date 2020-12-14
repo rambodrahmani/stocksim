@@ -64,7 +64,8 @@ limit = limit if limit else len(symbols)
 end = min(offset + limit, len(symbols))
 is_valid = [False] * len(symbols)
 
-titlesCollection=[] #collòection to be populated
+titlesCollection=[] #collection to be populated
+
 # for each ticker symbol
 for i in range(offset, end):
 	s = symbols[i]
@@ -109,16 +110,6 @@ for i in range(offset, end):
 	except:
 		pass
 		continue
-	print("dumping collection in json/TickerCollection.json")
-	with open("json/TickerCollection.json", 'w') as fp:
-		json.dump(titlesCollection, fp) #dump everything in one file 
-	
-	# import collection commands
-	# altert1: mongoimport from mongoTools is required
-	# alerrt2: no merge is performed
-	#os.system("mongoimport -h=172.16.3.94:27017 --jsonArray --db StokSim --collection stocks --file json/TickerCollection.json").
-	#os.system("mongoimport  --jsonArray --db StokSim --collection stocks --file json/TickerCollection.json").
-
 	# retrieve ticker histoical data
 	Curr_Ticker.info = yf.download(s, period=period)
 	
@@ -133,6 +124,14 @@ for i in range(offset, end):
 
 # data retrieval ended
 print('Total number of valid symbols downloaded = {}'.format(sum(is_valid)))
+print("dumping collection in json/TickerCollection.json")
+with open("json/TickerCollection.json", 'w') as fp:
+	json.dump(titlesCollection, fp) #dump everything in one file 
+# import collection commands
+# altert1: mongoimport from mongoTools is required
+# aleter2: no merge is performed
+#os.system("mongoimport -h=172.16.3.94:27017 --jsonArray --db StokSim --collection stocks --file json/TickerCollection.json").
+#os.system("mongoimport  --jsonArray --db StokSim --collection stocks --file json/TickerCollection.json").
 
 # create csv containing successfully retrived symbols stock data
 valid_data = data_clean[is_valid]
