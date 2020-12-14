@@ -1,7 +1,7 @@
-package it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.implementation;
 
 import it.unipi.lsmdb.workgroup4.mongoAPI.entities.*;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.Title;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Title;
 
 class TitleImpl extends Title {
     protected TitleImpl(Stockimpl stock, Double share) {

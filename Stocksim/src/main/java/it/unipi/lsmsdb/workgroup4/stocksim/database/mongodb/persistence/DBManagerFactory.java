@@ -1,6 +1,6 @@
-package it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.persistence;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence;
 
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation.MongoDBManagerImpl;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.implementation.MongoDBManagerImpl;
 
 public class DBManagerFactory {
         DBManagerFactory(){ }

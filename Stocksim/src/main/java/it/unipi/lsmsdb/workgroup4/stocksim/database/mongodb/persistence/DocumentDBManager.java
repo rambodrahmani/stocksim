@@ -1,10 +1,10 @@
-package it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.persistence;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence;
 
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.Portfolio;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.Session;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.Title;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.User;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.Stocks;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Portfolio;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Session;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Title;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.User;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Stocks;
 
 import java.util.ArrayList;
 

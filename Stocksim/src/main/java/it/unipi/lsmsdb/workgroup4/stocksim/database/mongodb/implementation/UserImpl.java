@@ -1,8 +1,8 @@
-package it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.implementation;
 
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.Portfolio;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.User;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.persistence.DocumentDBManager;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Portfolio;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.User;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.DocumentDBManager;
 
 import java.util.ArrayList;
 

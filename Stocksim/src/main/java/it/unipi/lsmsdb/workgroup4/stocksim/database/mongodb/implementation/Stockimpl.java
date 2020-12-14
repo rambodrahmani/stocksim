@@ -1,7 +1,7 @@
-package it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.implementation;
 
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.Location;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.Stock;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Location;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.Stock;
 
 import java.net.URL;
 import java.util.Currency;

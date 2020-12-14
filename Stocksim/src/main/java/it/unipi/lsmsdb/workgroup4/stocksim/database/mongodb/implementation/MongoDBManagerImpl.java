@@ -1,20 +1,15 @@
-package it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.implementation;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+
 import static com.mongodb.client.model.Filters.*;
 
 import com.mongodb.client.model.Updates;
 import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.entities.*;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation.PortfolioImpl;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.implementation.UserImpl;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.persistence.DocumentDBManager;
-import it.unipi.lsmsdb.workgroup4.stockSim.database.mongoAPI.persistence.MongoDBManager;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.entities.*;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.DocumentDBManager;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.mongodb.persistence.MongoDBManager;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 

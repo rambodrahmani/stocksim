@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>it.unipi.lsmsdb.workgroup4</groupId>
     <artifactId>Stocksim</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -31,7 +31,7 @@
             <version>3.8.1</version>
         </dependency>
 
-        <!-- dastastax driver needed both for client and server -->
+        <!-- dastastax driver needed for both the client and the server module -->
         <dependency>
             <groupId>com.datastax.oss</groupId>
             <artifactId>java-driver-core</artifactId>
