@@ -65,6 +65,7 @@ end = min(offset + limit, len(symbols))
 is_valid = [False] * len(symbols)
 
 titlesCollection=[] #collection to be populated
+
 # for each ticker symbol
 for i in range(offset, end):
 	s = symbols[i]
