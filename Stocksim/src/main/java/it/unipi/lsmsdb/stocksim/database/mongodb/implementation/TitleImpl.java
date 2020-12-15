@@ -1,12 +1,12 @@
 package it.unipi.lsmsdb.stocksim.database.mongodb.implementation;
 
+import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Stock;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Title;
 
 class TitleImpl extends Title {
-    protected TitleImpl(Stockimpl stock, Double share) {
-        this.stock = stock;
-        this.share = share;
+
+
+    public TitleImpl(Stock stock, Double share) {
+        super(stock, share);
     }
-
-
- }
+}

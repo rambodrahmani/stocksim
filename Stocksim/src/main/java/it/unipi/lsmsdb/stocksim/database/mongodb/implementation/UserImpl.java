@@ -20,8 +20,16 @@ public class UserImpl extends User {
     }
 
     public UserImpl(Document doc, DocumentDBManager dbManager) {
-        this.dbManager = dbManager;
+        this(
+                doc.getString("username"),
+                doc.getString("email"),
+                doc.getString("name"),
+                doc.getString("surname"),
+                dbManager
+        );
     }
+
+
 
     public int loadPortfolios(){
 
@@ -31,12 +39,17 @@ public class UserImpl extends User {
 
     @Override
     public ArrayList<Portfolio> getPortfolios() {
-        return null;
+        if(portfolios==null)
+            this.loadPortfolios();
+        return  this.portfolios;
     }
 
     @Override
     public Portfolio addPortfolio(String name, String type) {
         Portfolio p=dbManager.createPortfolio(this, name,type);
+        if(this.portfolios==null){
+            this.loadPortfolios();
+        }
         this.portfolios.add(p);
         return p;
     }

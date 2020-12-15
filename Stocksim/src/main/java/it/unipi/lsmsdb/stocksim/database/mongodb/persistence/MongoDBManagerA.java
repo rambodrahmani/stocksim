@@ -2,29 +2,24 @@ package it.unipi.lsmsdb.stocksim.database.mongodb.persistence;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.*;
+import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Title;
 
 import java.util.ArrayList;
 
-public abstract class MongoDBManager {
+public abstract class MongoDBManagerA {
     private final ConnectionString uri;
     private MongoClient mongoClient;
 
 
 
     protected MongoDatabase db;
-    protected MongoDBManager() {
-        uri = new ConnectionString("mongodb://172.16.3.94:27017");
+
+    protected MongoDBManagerA(ConnectionString uri) {
+        this.uri = uri;
     }
-    protected void connect(){
-        mongoClient = MongoClients.create(uri);
-        db=mongoClient.getDatabase("StockSim");
-    }
-    protected void close(){
-        mongoClient.close();
-    }
+
 
     public abstract Stocks getStocks(String Attribute, String Value);
 

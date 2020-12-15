@@ -8,7 +8,7 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 
- class PortfolioImpl extends Portfolio {
+class PortfolioImpl extends Portfolio {
     DocumentDBManager dbManager;
 
     protected PortfolioImpl(User owner, String name, String type, DocumentDBManager dbManager) {
@@ -20,10 +20,13 @@ import java.util.ArrayList;
         this.owner=owner;
     }
 
-     protected PortfolioImpl(Document doc, DocumentDBManager db) {
+     protected PortfolioImpl(User owner,Document doc, DocumentDBManager db) {
+            this(owner,doc.getString("name"), doc.getString("type"),db);
 
      }
-
+    protected void LoadComposition(){
+        this.composition=dbManager.loadPortfolioComposizion(this);
+    }
      public void setName(String name) {
         this.name = name;
 
@@ -45,7 +48,7 @@ import java.util.ArrayList;
     }
      @Override
      public boolean add(Stock stock, Double share) {
-         return add(new TitleImpl((Stockimpl) stock, share));
+         return add(new Title((Stockimpl) stock, share));
      }
 
      @Override

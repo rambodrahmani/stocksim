@@ -46,7 +46,12 @@ import java.util.TimeZone;
         this.setExchange(doc.getString("exchange"));
         this.setShort_name(doc.getString("shortName"));
         this.setLong_name(doc.getString("longName"));
-        this.setExchange_time_zone(TimeZone.getTimeZone(doc.getString("exchanheTimeZoneShortName")) );
+        try {
+            this.setExchange_time_zone(TimeZone.getTimeZone(doc.getString("exchanheTimeZoneShortName")) );
+        } catch (Exception e) {
+            this.setExchange_time_zone(null);
+        }
+
         this.setExchange_time_zone_desc(doc.getString("exchanheTimeZoneName"));
         this.setQuoteType(doc.getString("quoteTyope"));
         try {

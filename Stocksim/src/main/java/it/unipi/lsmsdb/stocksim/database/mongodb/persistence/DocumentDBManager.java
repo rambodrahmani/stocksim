@@ -1,17 +1,18 @@
 package it.unipi.lsmsdb.stocksim.database.mongodb.persistence;
 
+import it.unipi.lsmsdb.stocksim.database.DBManager;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Portfolio;
-import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Session;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Title;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.User;
 import it.unipi.lsmsdb.stocksim.database.mongodb.entities.Stocks;
 
 import java.util.ArrayList;
 
-public interface DocumentDBManager {
+public interface DocumentDBManager extends DBManager {
     Stocks getStocks(String Attribute, String Value);
     /*Session login(String username, String password);
     boolean logout(Session loggedSession);*/
+    public User createUser( String username, String email,String name, String surname, String password);
     ArrayList<Portfolio> loadPortfolios(User owner);
     boolean addTitleToPortfolio(Portfolio portfolio, Title title);
     boolean addTitlesToPortfolio(Portfolio portfolio, ArrayList<Title> titles);
@@ -21,4 +22,6 @@ public interface DocumentDBManager {
     Portfolio createPortfolio(User owner, String name, String type);
     boolean removePortfolio(Portfolio portfolio);
     User getUser(String Username);
+
+    ArrayList<Title> loadPortfolioComposizion(Portfolio portfolio);
 }
