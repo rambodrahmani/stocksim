@@ -54,7 +54,7 @@ symbols = data_clean['Symbol'].tolist()
 
 print('Total number of symbols traded = {}'.format(len(symbols)))
 
-# open .cql file
+# open .cql file for wrinting
 f = open("stocksim.cql", "w")
 
 # write to .cql file
@@ -71,6 +71,9 @@ f.write("\n")
 f.write("USE stocksim;" + "\n")
 f.write("\n")
 
+# close .cql file after writing
+f.close()
+
 # adjust configs based on retrieved symbols list size
 limit = limit if limit else len(symbols)
 end = min(offset + limit, len(symbols))
@@ -84,11 +87,15 @@ for i in range(offset, end):
 	# retrieve and save ticker company info
 	try:
 		print(Curr_Ticker.info['symbol'] + " - " + Curr_Ticker.info['shortName'])
-		with open("json/" + s + ".json", 'w') as fp:
-			json.dump(Curr_Ticker.info, fp)
+		fp = open("json/" + s + ".json", "w")
+		json.dump(Curr_Ticker.info, fp)
+		fp.close()
 	except:
 		pass
 		continue
+
+	# open .cql file for wrinting
+	f = open("stocksim.cql", "a")
 
 	# write to .cql file
 	f.write("CREATE TABLE " + s + " (" + "\n")
@@ -105,13 +112,16 @@ for i in range(offset, end):
 	f.write("COPY " + s + " FROM '" + s + ".csv' WITH DELIMITER=',' AND HEADER=TRUE;" + "\n")
 	f.write("\n")
 
+	# close .cql file after writing
+	f.close()
+
 	# retrieve ticker histoical data
-	data = yf.download(s, period=period)
-	
+	data = yf.download(s, period = period, threads = True)
+
 	# rename column names
 	data.reset_index(inplace=True)
 	data.columns = ["date", "open", "high", "low", "close", "adj_close", "volume"]
-	
+
 	# insert id column
 	data.insert(0, "id", [i] * len(data.index), True)
 	
@@ -123,9 +133,6 @@ for i in range(offset, end):
 	is_valid[i] = True
 	data.to_csv('hist/{}.csv'.format(s), index = False)
 	print("\n")
-
-# close .cql file
-f.close()
 
 # data retrieval ended
 print('Total number of valid symbols downloaded = {}'.format(sum(is_valid)))
