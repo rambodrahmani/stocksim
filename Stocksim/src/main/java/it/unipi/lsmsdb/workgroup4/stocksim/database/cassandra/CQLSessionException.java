@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.stocksim.database.cassandra;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra;
 
 /**
  * CQL Session custom exception.

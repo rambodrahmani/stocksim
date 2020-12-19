@@ -1,9 +1,9 @@
-package it.unipi.lsmsdb.stocksim.database.cassandra;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import it.unipi.lsmsdb.stocksim.database.DBManager;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.DBManager;
 
 import java.net.InetSocketAddress;
 import java.util.*;

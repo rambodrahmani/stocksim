@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.stocksim.database.cassandra;
+package it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra;
 
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;

@@ -1,10 +1,11 @@
-package it.unipi.lsmsdb.stocksim.server;
+package it.unipi.lsmsdb.workgroup4.stocksim.server;
 
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
-import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
-import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
-import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
+
+import it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra.CQLSessionException;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra.CassandraDB;
+import it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra.CassandraDBFactory;
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;

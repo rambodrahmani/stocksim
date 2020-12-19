@@ -1,5 +1,9 @@
-package it.unipi.lsmsdb.stocksim.database.mongodb.persistence;
-
+package it.unipi.lsmsdb.workgroup4.stocksim.database.mongoDB;
+/**
+ * data structure for a mongoDB server
+ *
+ * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
+ */
 public class MongoServer {
     public String host;
     public String port;
