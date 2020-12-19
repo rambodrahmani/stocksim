@@ -10,14 +10,13 @@ import java.util.List;
 public class MongoDBFactory implements DBFactory {
 
     /**
-     *
+     * Default constructor.
      */
-    public MongoDBFactory() {
+    private MongoDBFactory() {
     }
 
     /**
-     *
-     * @return
+     * @return a {@link MongoDBFactory} instance.
      */
     public static MongoDBFactory create() {
         return new MongoDBFactory();
@@ -27,17 +26,17 @@ public class MongoDBFactory implements DBFactory {
      *
      * @return
      */
-    public MongoDBManager getMongoDBManager() {
-        return  new MongoDB();
+    public MongoDB getMongoDBManager(final String databaseName) {
+        return  new MongoDB(databaseName);
     }
-    public MongoDBManager getMongoDBManager(String host, String port) {
-        return new MongoDB(host, port);
+    public MongoDB getMongoDBManager(final String host, final int port, final String databaseName) {
+        return new MongoDB(host, port, databaseName);
     }
 
-    public MongoDBManager getMongoDBManager(List<MongoServer> servers) {
-        return  new MongoDB(servers);
+    public MongoDB getMongoDBManager(final List<MongoServer> servers, final String databaseName) {
+        return new MongoDB(servers, databaseName);
     }
-    public MongoDBManager getMongoDBManager(List<MongoServer>servers , String preferences){
-        return  new MongoDB(servers, preferences);
+    public MongoDB getMongoDBManager(final List<MongoServer>servers, final String preferences, final String databaseName) {
+        return  new MongoDB(servers, preferences, databaseName);
     }
 }

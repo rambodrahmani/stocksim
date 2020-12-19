@@ -19,7 +19,7 @@ public class Main {
      * @param args command line arguments.
      */
     public static void main(final String[] args) {
-        final CassandraDBFactory cassandraDBFactory = new CassandraDBFactory();
+        final CassandraDBFactory cassandraDBFactory = CassandraDBFactory.create();
 
         // default constructor: empty Cassandra DB
         CassandraDB cassandraDB = cassandraDBFactory.getCassandraDB();

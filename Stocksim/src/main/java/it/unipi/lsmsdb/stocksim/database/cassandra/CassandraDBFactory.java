@@ -3,6 +3,7 @@ package it.unipi.lsmsdb.stocksim.database.cassandra;
 import java.util.ArrayList;
 
 import it.unipi.lsmsdb.stocksim.database.DBFactory;
+import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 
 /**
  * Apache Cassandra DB Factory.
@@ -14,7 +15,14 @@ public class CassandraDBFactory implements DBFactory {
     /**
      * Default constructor.
      */
-    public CassandraDBFactory() {
+    private CassandraDBFactory() {
+    }
+
+    /**
+     * @return a {@link MongoDBFactory} instance.
+     */
+    public static CassandraDBFactory create() {
+        return new CassandraDBFactory();
     }
 
     /**

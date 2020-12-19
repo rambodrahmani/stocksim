@@ -10,7 +10,7 @@ import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public interface DBManager {
+public interface DB {
     public boolean connect();
-    public ResultSet query(final String query) throws CQLSessionException;
+    public void disconnect();
 }

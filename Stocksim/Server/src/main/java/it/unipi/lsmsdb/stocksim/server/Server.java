@@ -1,19 +1,6 @@
 package it.unipi.lsmsdb.stocksim.server;
 
-import com.datastax.oss.driver.api.core.cql.ResultSet;
-import com.datastax.oss.driver.api.core.cql.Row;
-
-import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
-import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
-import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
-import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
-import yahoofinance.histquotes.HistoricalQuote;
-import yahoofinance.histquotes.Interval;
-
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.List;
+import java.util.Scanner;
 
 /**
  * Sotcksim Server implementation.
@@ -22,53 +9,39 @@ import java.util.List;
  */
 public class Server {
     /**
+     * Default input scanner.
+     */
+    final static Scanner scanner = new Scanner(System.in);
+
+    /**
      * Server entry point.
      *
      * @param args command line arguments.
      */
     public static void main(final String[] args) {
-        try {
-            // connect to cassandra db
-            final CassandraDBFactory cassandraDBFactory = new CassandraDBFactory();
-            CassandraDB cassandraDB = cassandraDBFactory.getCassandraDB("192.168.2.133", 9042, "datacenter1");
+        // print welcome message
+        Util.printWelcomeMessage();
 
-            // connect to Cassandra DB Server
-            if (cassandraDB.connect()) {
-                try {
-                    int i = 0;
-                    final ResultSet resultSet = cassandraDB.query("SELECT DISTINCT symbol FROM stocksim.tickers;");
-                    for (final Row row : resultSet) {
-                        i = i + 1;
-                        final String table = row.getString("symbol");
-                        System.out.println(table);
+        // infinite main loop
+        while (true) {
+            Util.printMainMenu();
+            final String command = scanner.nextLine();
+            parseCommand(command);
+        }
+    }
 
-                        /*Calendar from = Calendar.getInstance();
-                        Calendar to = Calendar.getInstance();
-                        to.add(Calendar.DATE, 1);
-                        Stock google = YahooFinance.get(table);
-                        List<HistoricalQuote> histQuotes = google.getHistory(from, to, Interval.DAILY);
-                        for (HistoricalQuote historicalQuote : histQuotes) {
-                            System.out.println(historicalQuote.getDate().getTime());
-                            System.out.println(historicalQuote.getOpen());
-                            System.out.println(historicalQuote.getHigh());
-                            System.out.println(historicalQuote.getLow());
-                            System.out.println(historicalQuote.getClose());
-                            System.out.println(historicalQuote.getAdjClose());
-                            System.out.println(historicalQuote.getVolume());
-                        }*/
-                    }
-                    System.out.println(i);
-                } catch (final CQLSessionException e) {
-                    e.printStackTrace();
-                }
-            } else {
-
-            }
-
-            // close Cassandra DB connection
-            cassandraDB.disconnect();
-        } catch (final Exception e) {
-            e.printStackTrace();
+    public static void parseCommand(final String command) {
+        switch (command) {
+            case "status":
+                break;
+            case "update":
+                break;
+            case "quit":
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Invalid command.\n");
+                break;
         }
     }
 }

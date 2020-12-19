@@ -3,7 +3,7 @@ package it.unipi.lsmsdb.stocksim.database.cassandra;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import it.unipi.lsmsdb.stocksim.database.DBManager;
+import it.unipi.lsmsdb.stocksim.database.DB;
 
 import java.net.InetSocketAddress;
 import java.time.Duration;
@@ -14,7 +14,7 @@ import java.util.*;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class CassandraDB implements DBManager {
+public class CassandraDB implements DB {
     // server host address
     private ArrayList<String> hostnames;
 

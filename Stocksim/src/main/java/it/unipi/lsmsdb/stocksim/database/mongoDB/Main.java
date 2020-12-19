@@ -10,17 +10,19 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
 
-
+/**
+ * Developer harness test for the Mongo Driver Sync for MongoDB.
+ *
+ * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
+ */
 public class Main {
     private static  final MongoDBFactory factory = MongoDBFactory.create();
 
     public static void main(String[] args) {
         //connect and get the collection
-        final String databaseName="StockSim";
-        MongoDBManager dbManager = factory.getMongoDBManager();
+        MongoDB dbManager = factory.getMongoDBManager("stocksim");
         System.out.println(dbManager.connect());
-        dbManager.open(databaseName);
-        MongoCollection<Document> collection = dbManager.getCollection(MongoCollectionName.users.toString());
+        com.mongodb.client.MongoCollection collection = dbManager.getCollection(StocksimCollection.USERS.getCollectionName());
 
         //get a user
         Bson filter=and(eq("username","TWOWS"));
@@ -64,7 +66,7 @@ public class Main {
         System.out.println(dbManager.deleteOne(filter2, collection));
 
         //find stocks
-        MongoCollection<Document> collection1 = dbManager.getCollection(MongoCollectionName.stocks.toString());
+        MongoCollection<Document> collection1 = dbManager.getCollection(StocksimCollection.STOCKS.getCollectionName());
         Bson filter4=eq("quoteType", "ETF");
         for (Document document : dbManager.findMany(filter4, collection1)) {
             System.out.println(document.toJson());
