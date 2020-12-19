@@ -66,11 +66,8 @@ for json_file in files:
     ticker_collection.append(estractedFields)
 
 # write collection in the new file
-with open("stocks_coll.json", "w") as target_file:
+with open("stocks.json", "w") as target_file:
    json.dump(ticker_collection,target_file)
 
 #os.system("mongoimport -h=172.16.3.94:27017 --jsonArray --db StokSim --collection stocks --file stocks_coll.json").
 #os.system("mongoimport  --jsonArray --db StokSim --collection stocks --file stocks_coll.json").
-
-
-
