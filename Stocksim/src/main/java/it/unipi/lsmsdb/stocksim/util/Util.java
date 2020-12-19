@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.workgroup4.stocksim.util;
+package it.unipi.lsmsdb.stocksim.util;
 
 /**
  * General purpose utility methods.

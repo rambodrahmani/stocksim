@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.workgroup4.stocksim.database.mongoDB;
+package it.unipi.lsmsdb.stocksim.database.mongoDB;
 /**
  * data structure for a mongoDB server
  *

@@ -1,8 +1,8 @@
-package it.unipi.lsmsdb.workgroup4.stocksim.database.mongoDB;
+package it.unipi.lsmsdb.stocksim.database.mongoDB;
 
 import com.mongodb.client.MongoCollection;
 
-import it.unipi.lsmsdb.workgroup4.stocksim.database.DBManager;
+import it.unipi.lsmsdb.stocksim.database.DBManager;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

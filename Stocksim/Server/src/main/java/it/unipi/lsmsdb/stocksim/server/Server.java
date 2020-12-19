@@ -1,11 +1,11 @@
-package it.unipi.lsmsdb.workgroup4.stocksim.server;
+package it.unipi.lsmsdb.stocksim.server;
 
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 
-import it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra.CQLSessionException;
-import it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra.CassandraDB;
-import it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra.CassandraDBFactory;
+import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
+import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
+import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;
@@ -28,18 +28,21 @@ public class Server {
      */
     public static void main(final String[] args) {
         try {
+            // connect to cassandra db
             final CassandraDBFactory cassandraDBFactory = new CassandraDBFactory();
-            CassandraDB cassandraDB = cassandraDBFactory.getCassandraDB("172.16.3.94", 9042, "workgroup-04 Datacenter");
+            CassandraDB cassandraDB = cassandraDBFactory.getCassandraDB("192.168.2.133", 9042, "datacenter1");
 
             // connect to Cassandra DB Server
             if (cassandraDB.connect()) {
                 try {
-                    final ResultSet resultSet = cassandraDB.query("SELECT * FROM system_schema.tables WHERE keyspace_name = 'stocksim';");
+                    int i = 0;
+                    final ResultSet resultSet = cassandraDB.query("SELECT DISTINCT symbol FROM stocksim.tickers;");
                     for (final Row row : resultSet) {
-                        final String table = row.getString("table_name");
+                        i = i + 1;
+                        final String table = row.getString("symbol");
                         System.out.println(table);
 
-                        Calendar from = Calendar.getInstance();
+                        /*Calendar from = Calendar.getInstance();
                         Calendar to = Calendar.getInstance();
                         to.add(Calendar.DATE, 1);
                         Stock google = YahooFinance.get(table);
@@ -52,8 +55,9 @@ public class Server {
                             System.out.println(historicalQuote.getClose());
                             System.out.println(historicalQuote.getAdjClose());
                             System.out.println(historicalQuote.getVolume());
-                        }
+                        }*/
                     }
+                    System.out.println(i);
                 } catch (final CQLSessionException e) {
                     e.printStackTrace();
                 }
@@ -63,14 +67,7 @@ public class Server {
 
             // close Cassandra DB connection
             cassandraDB.disconnect();
-
-            Stock stock = YahooFinance.get("ZYME");
-            System.out.println(stock.getQuote().getOpen());
-            System.out.println(stock.getQuote().getDayHigh());
-            System.out.println(stock.getQuote().getDayLow());
-            System.out.println(stock.getQuote().getPreviousClose());
-            System.out.println(stock.getQuote().getVolume());
-        } catch (final IOException e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }

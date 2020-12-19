@@ -1,23 +1,21 @@
-package it.unipi.lsmsdb.workgroup4.stocksim.database.mongoDB;
+package it.unipi.lsmsdb.stocksim.database.mongoDB;
 
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
 
-import com.mongodb.client.model.DeleteOptions;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra.CQLSessionException;
+import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
 
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;

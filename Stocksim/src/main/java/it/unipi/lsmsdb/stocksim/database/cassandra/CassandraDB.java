@@ -1,11 +1,12 @@
-package it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra;
+package it.unipi.lsmsdb.stocksim.database.cassandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import it.unipi.lsmsdb.workgroup4.stocksim.database.DBManager;
+import it.unipi.lsmsdb.stocksim.database.DBManager;
 
 import java.net.InetSocketAddress;
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -94,7 +95,28 @@ public class CassandraDB implements DBManager {
         ResultSet ret = null;
 
         if (cqlSession != null) {
-            SimpleStatement simpleStatement = SimpleStatement.newInstance(query);
+            final SimpleStatement simpleStatement = SimpleStatement.newInstance(query);
+            ret = cqlSession.execute(simpleStatement);
+        } else {
+            throw new CQLSessionException("CQL Session not initialized.");
+        }
+
+        return ret;
+    }
+
+    /**
+     * Executes the given CQL Query using the current CQL session.
+     *
+     * @param query the CQL query to be executed.
+     * @param timeout the CQL statement timeout in seconds; this won't override server side settings.
+     *
+     * @return the result set for the given CQL query.
+     */
+    public ResultSet query(final String query, final int timeout) throws CQLSessionException {
+        ResultSet ret = null;
+
+        if (cqlSession != null) {
+            final SimpleStatement simpleStatement = SimpleStatement.builder(query).setTimeout(Duration.ofSeconds(timeout)).build();
             ret = cqlSession.execute(simpleStatement);
         } else {
             throw new CQLSessionException("CQL Session not initialized.");

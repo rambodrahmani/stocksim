@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.workgroup4.stocksim.database.cassandra;
+package it.unipi.lsmsdb.stocksim.database.cassandra;
 
 import java.util.ArrayList;
 
