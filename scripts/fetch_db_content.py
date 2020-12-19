@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-"""
-Retrieves historical data and company information for all the ticker symbols
-of the U.S. Stock Market.
-"""
+##
+# Retrieves historical data and company information for all the ticker symbols
+# of the U.S. Stock Market.
+##
 
 import os
 import json
@@ -13,8 +13,8 @@ import pandas as pd
 import yfinance as yf
 from os.path import isfile, join
 
-__author__ = "Marco Pinna, Yuri Mazzuoli and Rambod Rahmani"
-__copyright__ = "Copyright (C) 2007 Free Software Foundation, Inc."
+__author__ = "Marco Pinna, Rambod Rahmani and Yuri Mazzuoli"
+__copyright__ = "Copyright (C) 2020 Marco Pinna, Rambod Rahmani and Yuri Mazzuoli"
 __license__ = "GPLv3"
 
 # copy the given files from source to destination
