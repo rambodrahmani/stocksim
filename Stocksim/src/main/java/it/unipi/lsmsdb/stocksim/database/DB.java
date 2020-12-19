@@ -12,5 +12,5 @@ import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
  */
 public interface DB {
     public boolean connect();
-    public void disconnect();
+    public DB disconnect();
 }

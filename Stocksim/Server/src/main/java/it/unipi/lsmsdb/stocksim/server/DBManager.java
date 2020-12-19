@@ -25,24 +25,60 @@ import java.util.List;
  */
 public class DBManager {
     /**
+     * Cassandra DB Factory.
+     */
+    final CassandraDBFactory cassandraDBFactory = CassandraDBFactory.create();
+
+    /**
+     * Cassandra DB instance.
+     */
+    private CassandraDB cassandraDB;
+
+    /**
+     * Mongo DB Factory.
+     */
+    final MongoDBFactory mongoDBFactory = MongoDBFactory.create();
+
+    /**
+     * Mongo DB shared instance.
+     */
+    private MongoDB mongoDB;
+
+    /**
+     * Checks databases data consistency.
+     *
+     * @return true if Cassandra DB and Mongo DB data are consistent with each other.
+     */
+    public boolean consistencyCheck() {
+        boolean ret = false;
+
+        try {
+            final ResultSet resultSet = getCassandraDB().query("SELECT DISTINCT symbol FROM stocksim.tickers;");
+            final int cassandraTickersCount = resultSet.all().size();
+            final MongoCollection mongoTickersCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+            final int mongoTickersCount = (int) mongoTickersCollection.countDocuments();
+
+            ret = (cassandraTickersCount == mongoTickersCount);
+
+            // close db connections
+            disconnectCassandraDB();
+            disconnectMongoDB();
+        } catch (final CQLSessionException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    /**
      *
      */
     public void updateDB() {
-        // connect to cassandra db
-        final CassandraDBFactory cassandraDBFactory = CassandraDBFactory.create();
-        final CassandraDB cassandraDB = cassandraDBFactory.getCassandraDB("192.168.2.133", 9042, "datacenter1");
-        cassandraDB.connect();
-
-        // connect to mongo db
-        final MongoDBFactory factory = MongoDBFactory.create();
-        final MongoDB mongoDB = factory.getMongoDBManager("192.168.2.133", 27017, "stocksim");
-        mongoDB.connect();
-
         // data consistency check
         try {
-            final ResultSet resultSet = cassandraDB.query("SELECT DISTINCT symbol FROM stocksim.tickers;");
+            final ResultSet resultSet = getCassandraDB().query("SELECT DISTINCT symbol FROM stocksim.tickers;");
             final int cassandraTickersCount = resultSet.all().size();
-            final MongoCollection mongoTickersCollection = mongoDB.getCollection(StocksimCollection.STOCKS.getCollectionName());
+            final MongoCollection mongoTickersCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
             final int mongoTickersCount = (int) mongoTickersCollection.countDocuments();
             if (cassandraTickersCount != mongoTickersCount) {
                 System.out.println("DATA CONSISTENCY CHECK FAILED.");
@@ -75,9 +111,47 @@ public class DBManager {
         }
 
         // close Cassandra DB connection
-        cassandraDB.disconnect();
+        disconnectCassandraDB();
 
         // close Mongo DB connection
-        mongoDB.disconnect();
+        disconnectMongoDB();
+    }
+
+    /**
+     * @return Cassandra DB shared instance;
+     */
+    private CassandraDB getCassandraDB() {
+        if (cassandraDB == null) {
+            cassandraDB = cassandraDBFactory.getCassandraDB("192.168.2.133", 9042, "datacenter1");
+            cassandraDB.connect();
+        }
+
+        return cassandraDB;
+    }
+
+    /**
+     * Disconnects from Cassandra DB and sets reference to null.
+     */
+    private void disconnectCassandraDB() {
+        cassandraDB = getCassandraDB().disconnect();
+    }
+
+    /**
+     * @return Mongo DB shared instance;
+     */
+    private MongoDB getMongoDB() {
+        if (mongoDB == null) {
+            mongoDB = mongoDBFactory.getMongoDBManager("192.168.2.133", 27017, "stocksim");
+            mongoDB.connect();
+        }
+
+        return mongoDB;
+    }
+
+    /**
+     * Disconnects from Mongo DB and sets reference to null.
+     */
+    private void disconnectMongoDB() {
+        mongoDB = getMongoDB().disconnect();
     }
 }

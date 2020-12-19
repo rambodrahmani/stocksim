@@ -128,7 +128,8 @@ public class CassandraDB implements DB {
     /**
      * Closes the CQL Session, relinquishing any underlying resources.
      */
-    public void disconnect() {
+    public CassandraDB disconnect() {
         cqlSession.close();
+        return null;
     }
 }

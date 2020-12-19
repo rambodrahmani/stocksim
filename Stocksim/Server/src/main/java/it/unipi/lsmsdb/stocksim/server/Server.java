@@ -14,6 +14,11 @@ public class Server {
     final static Scanner scanner = new Scanner(System.in);
 
     /**
+     * Stocksim Server DB Manager.
+     */
+    final static DBManager dbManager = new DBManager();
+
+    /**
      * Server entry point.
      *
      * @param args command line arguments.
@@ -33,6 +38,12 @@ public class Server {
     public static void parseCommand(final String command) {
         switch (command) {
             case "status":
+                final boolean consistent = dbManager.consistencyCheck();
+                if (!consistent) {
+                    Util.print("DATA CONSISTENCY CHECK FAILED.\n");
+                } else {
+                    Util.print("DATA CONSISTENCY CHECK SUCCESS.\n");
+                }
                 break;
             case "update":
                 break;
@@ -40,7 +51,7 @@ public class Server {
                 System.exit(0);
                 break;
             default:
-                System.out.println("Invalid command.\n");
+                Util.print("Invalid command.\n\n");
                 break;
         }
     }

@@ -7,20 +7,29 @@ package it.unipi.lsmsdb.stocksim.server;
  */
 public class Util {
     /**
+     * Prints the given message to the console.
+     *
+     * @param message the String message to be printed.
+     */
+    public final static void print(final String message) {
+        System.out.print(message);
+    }
+
+    /**
      * Prints the main menu for the Server usage.
      */
     public final static void printWelcomeMessage() {
-        System.out.println("Welcome to the StockSim Server.\n");
+        print("Welcome to the StockSim Server.\n\n");
     }
 
     /**
      * Prints the main menu for the Server usage.
      */
     public final static void printMainMenu() {
-        System.out.println("Available Commands:");
-        System.out.printf("%-6s %5s %-40s%n", "status", " ", "check databases status.");
-        System.out.printf("%-6s %5s %-40s%n", "update", " ", "update databases historical data.");
-        System.out.printf("%-6s %5s %-40s%n", "quit", " ", "quit Stocksim server.");
-        System.out.println("");
+        print("Available Commands:\n");
+        print(String.format("%-6s %5s %-40s%n", "status", " ", "check databases status."));
+        print(String.format("%-6s %5s %-40s%n", "update", " ", "update databases historical data."));
+        print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit Stocksim server."));
+        print("> ");
     }
 }

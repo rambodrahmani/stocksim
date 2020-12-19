@@ -54,7 +54,7 @@ public class Main {
 
         }
 
-        // close Cassandra DB connection
-        cassandraDB.disconnect();
+        // close Cassandra DB connection and set reference to null
+        cassandraDB = cassandraDB.disconnect();
     }
 }

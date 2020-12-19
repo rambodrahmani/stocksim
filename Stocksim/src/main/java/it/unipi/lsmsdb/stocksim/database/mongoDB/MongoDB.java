@@ -106,15 +106,12 @@ public class MongoDB implements DB {
     }
 
     /**
-     * close the connection to the database
-     *
+     * Closes the connection to the database.
      */
     @Override
-    public void disconnect() {
-        try {
-            mongoClient.close();
-        } catch (final Exception  e){
-        }
+    public MongoDB disconnect() {
+        mongoClient.close();
+        return null;
     }
 
     /**
