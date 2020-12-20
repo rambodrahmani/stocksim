@@ -1,6 +1,6 @@
 %-------------------------------------------------------------------------------
 % File: main.tex
-%       Omnet++ Epidemic Broadcast project documentation.
+%       StockSim project documentation.
 %
 %       Compile using:
 %           $ pdflatex main.tex
@@ -14,7 +14,7 @@
 \usepackage[hmarginratio=1:1]{geometry}
 
 % configuration to typeset documents in italian
-\usepackage[italian]{babel}
+\usepackage[english]{babel}
 
 % include graphics in the file
 \usepackage{graphicx}
@@ -67,15 +67,17 @@
 \title{
     \vspace{-3cm}
     \includegraphics[scale=0.3]{img/cherubino_black.eps}\\
-    {\scshape Universit\`a Di Pisa}\\
-    Scuola di Ingegneria\\
+    {\scshape University Pisa}\\
+    School of Engineering\\
     \rule{7cm}{0.01cm}\\
-    {\normalsize Corso di Laurea Triennale in {\scshape INGEGNERIA INFORMATICA}}\\
+    {\normalsize MSc in {\scshape Artificial Intelligence and Data Engineering}}\\
     [2cm]
-    {\scshape Kernel Linux Per Qemu Per La Visualizzazione Dei Dati}\\
+    {\scshape Stocksim: stock portfolio simulator}\\
     [3cm]
-    \LARGE{\textbf{Relatori}\hfill\textbf{Candidato}}\\
-    \Large{\emph{Prof. Mario G.C.A. Cimino}\hfill\emph{Rambod Rahmani\\}}
+    \LARGE{\textbf{Supervisor}\hfill\textbf{Students}}\\
+    \Large{\emph{Prof. Pietro Ducange}\hfill\emph{Marco Pinna\\}}
+    \Large{\hfill\emph{Rambod Rahmani\\}}
+    \Large{\hfill\emph{Yuri Mazzuoli\\}}
     \vfill
     \date{\today}
 }
@@ -94,53 +96,11 @@
 % blank page before dedication
 \afterpage{\blankpage}
 
-% we want a new page
-\clearpage
-
-%-------------------------------------------------------------------------------
-% Unviersity of Pisa Logo as Background Page
-%-------------------------------------------------------------------------------
-\begin{tikzpicture}[remember picture, overlay]
-    \node[opacity=0.1,inner sep=0pt] at (current page.center)
-    {\includegraphics[width=0.85\paperwidth]{img/cherubino_black.eps}};
-\end{tikzpicture}
-\begin{center}
-    \vspace{2cm}
-    {\large Rambod Rahmani}
-    \vfill
-    {\Huge{\scshape Kernel Linux Per Qemu Per La Visualizzazione Dei Dati}}\\
-    [1cm]
-    {\Large Tesi di Laurea Triennale}
-    \vfill
-    {\large Universit\'a di Pisa\\
-    \date{\today}}
-\end{center}
-\clearpage
-
-% stop page numbering for the following pages
-\pagenumbering{gobble}
-
-% dedication page
-\begin{dedication}
-    A mia madre Zara, mio padre Magid e mio fratello\\
-    gemello Ramtin per esserci stati quando ho avuto\\
-    bisogno e per avermi reso la persona che sono oggi.\\
-\end{dedication}
-
-% leave an empty page after the dedication page
-\newpage
-
 % enable page numbering back: roman numbers style
 \pagenumbering{roman}
 
 % print table of contents
 \tableofcontents
-\clearpage
-
-%-------------------------------------------------------------------------------
-% Part: Prima parte del documento
-%-------------------------------------------------------------------------------
-\part{Prima parte del documento}
 
 % set arabic page numbering style
 \pagenumbering{arabic}
