@@ -4,6 +4,12 @@
 # Log file
 *.log
 
+# Latex
+*.aux
+*.tox
+*.dvi
+*.synctex.gz
+
 # BlueJ files
 *.ctxt
 
@@ -18,6 +24,7 @@
 *.zip
 *.tar.gz
 *.rar
+
 
 #IntelliJ Idea settings files
 **/.idea/

@@ -1,0 +1,24 @@
+\babel@toc {english}{}
+\contentsline {part}{I\hspace {1em}Documentation}{3}{}%
+\contentsline {chapter}{\numberline {1}Introduction}{5}{}%
+\contentsline {chapter}{\numberline {2}Actors and requirements}{7}{}%
+\contentsline {section}{\numberline {2.1}Actors}{7}{}%
+\contentsline {section}{\numberline {2.2}Requirements}{7}{}%
+\contentsline {subsection}{\numberline {2.2.1}Functional requirements}{7}{}%
+\contentsline {subsection}{\numberline {2.2.2}Non-functional requirements}{7}{}%
+\contentsline {chapter}{\numberline {3}Database}{9}{}%
+\contentsline {section}{\numberline {3.1}Dataset}{9}{}%
+\contentsline {subsection}{\numberline {3.1.1}Yahoo! Finance}{9}{}%
+\contentsline {subsection}{\numberline {3.1.2}NasdaqTrader}{9}{}%
+\contentsline {section}{\numberline {3.2}MongoDB}{9}{}%
+\contentsline {section}{\numberline {3.3}Cassandra}{9}{}%
+\contentsline {chapter}{\numberline {4}UML diagrams}{11}{}%
+\contentsline {section}{\numberline {4.1}Use Case diagram}{11}{}%
+\contentsline {section}{\numberline {4.2}Class diagram}{11}{}%
+\contentsline {chapter}{\numberline {5}Software architecture}{13}{}%
+\contentsline {part}{II\hspace {1em}User manual}{15}{}%
+\contentsline {chapter}{\numberline {6}}{17}{}%
+\contentsline {section}{\numberline {6.1}Sign up}{17}{}%
+\contentsline {section}{\numberline {6.2}Login and logout}{17}{}%
+\contentsline {section}{\numberline {6.3}Create a portfolio}{17}{}%
+\contentsline {section}{\numberline {6.4}Other functionalities blabla}{17}{}%
