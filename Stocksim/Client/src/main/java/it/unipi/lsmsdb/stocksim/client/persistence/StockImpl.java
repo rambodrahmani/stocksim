@@ -1,7 +1,7 @@
 package it.unipi.lsmsdb.stocksim.client.persistence;
 
-import it.unipi.lsmsdb.stocksim.client.user.*;
-import it.unipi.lsmsdb.stocksim.client.user.Location;
+import it.unipi.lsmsdb.stocksim.client.entities.Location;
+import it.unipi.lsmsdb.stocksim.client.entities.Stock;
 import org.bson.Document;
 
 import java.net.MalformedURLException;
@@ -21,7 +21,7 @@ import java.util.TimeZone;
      *
      * @param doc document object containing the stock information
      */
-     protected StockImpl(Document doc){
+     protected StockImpl(final Document doc){
          super();
          URL website;
          TimeZone timeZone;
