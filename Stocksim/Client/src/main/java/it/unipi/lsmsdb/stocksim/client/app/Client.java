@@ -1,6 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
-import it.unipi.lsmsdb.stocksim.client.Util;
+import it.unipi.lsmsdb.stocksim.client.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.persistence.DBManager;
 import it.unipi.lsmsdb.stocksim.client.user.*;
 import org.bson.Document;
@@ -35,11 +35,11 @@ public class Client {
      */
     public static void main(String[] args) {
         // print welcome message
-        Util.printWelcomeMessage();
+        ClientUtil.printWelcomeMessage();
 
         // infinite main loop
         while (true) {
-            Util.printMainMenu();
+            ClientUtil.printMainMenu();
             final String command = scanner.nextLine();
             parseCommand(command);
         }
@@ -57,7 +57,7 @@ public class Client {
                 System.exit(0);
                 break;
             default:
-                Util.print("Invalid command.\n\n");
+                ClientUtil.print("Invalid command.\n\n");
                 break;
         }
     }
@@ -71,7 +71,7 @@ public class Client {
     private static boolean login() {
         String command;
         do {
-            Util.print("Insert username and password divided by a space, or q to go back to main menu:\n");
+            ClientUtil.print("Insert username and password divided by a space, or q to go back to main menu:\n");
             command = scanner.nextLine();
             if (command.equals("q"))
                 return false;

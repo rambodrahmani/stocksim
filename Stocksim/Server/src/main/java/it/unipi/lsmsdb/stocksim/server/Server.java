@@ -1,5 +1,7 @@
 package it.unipi.lsmsdb.stocksim.server;
 
+import it.unipi.lsmsdb.stocksim.util.Util;
+
 import java.util.Scanner;
 
 /**
@@ -25,14 +27,14 @@ public class Server {
      */
     public static void main(final String[] args) {
         // print welcome message
-        Util.printWelcomeMessage();
+        ServerUtil.printWelcomeMessage();
 
         // automatically update the database on startup
         dbManager.updateDB();
 
         // infinite main loop
         while (true) {
-            Util.printMainMenu();
+            ServerUtil.printMainMenu();
             final String command = scanner.nextLine();
             parseCommand(command);
         }

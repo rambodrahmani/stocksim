@@ -9,22 +9,17 @@ import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
-import jdk.jfr.Period;
+import it.unipi.lsmsdb.stocksim.util.Util;
 import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
