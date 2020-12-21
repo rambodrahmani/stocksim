@@ -1,11 +1,13 @@
 package it.unipi.lsmsdb.stocksim.client;
 
+import it.unipi.lsmsdb.stocksim.util.Util;
+
 /**
  * General purpose utility methods.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class ClientUtil {
+public class ClientUtil extends Util{
     /**
      * Prints the main menu for the Server usage.
      */

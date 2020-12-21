@@ -2,8 +2,8 @@ package it.unipi.lsmsdb.stocksim.client.app;
 
 import it.unipi.lsmsdb.stocksim.client.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.persistence.DBManager;
-import it.unipi.lsmsdb.stocksim.client.user.*;
-import org.bson.Document;
+import it.unipi.lsmsdb.stocksim.client.entities.User;
+import it.unipi.lsmsdb.stocksim.util.Util;
 
 import java.util.Scanner;
 
@@ -12,7 +12,9 @@ import java.util.Scanner;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class Client {
+public class
+
+Client {
     /**
      * Default input scanner.
      */
@@ -21,7 +23,7 @@ public class Client {
     /**
      * Stocksim Server DB Manager.
      */
-    final static DBManager dbManager = new DBManager();
+    final static DBManager factory = new DBManager();
 
     /**
      * Logged user information, no user is logged in
@@ -57,7 +59,7 @@ public class Client {
                 System.exit(0);
                 break;
             default:
-                ClientUtil.print("Invalid command.\n\n");
+                Util.print("Invalid command.\n\n");
                 break;
         }
     }
@@ -71,11 +73,11 @@ public class Client {
     private static boolean login() {
         String command;
         do {
-            ClientUtil.print("Insert username and password divided by a space, or q to go back to main menu:\n");
+            Util.print("Insert username and password divided by a space, or q to go back to main menu:\n");
             command = scanner.nextLine();
             if (command.equals("q"))
                 return false;
-        } while((loggedUser=dbManager.login(
+        } while((loggedUser=factory.login(
                 command.split(" ")[0],
                 command.split(" ")[1])
         )!=null);

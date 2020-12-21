@@ -7,7 +7,7 @@ import it.unipi.lsmsdb.stocksim.util.Util;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class ServerUtil {
+public class ServerUtil extends Util{
     /**
      * Prints the main menu for the Server usage.
      */
