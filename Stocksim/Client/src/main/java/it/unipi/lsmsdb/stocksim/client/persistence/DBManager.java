@@ -1,13 +1,10 @@
 package it.unipi.lsmsdb.stocksim.client.persistence;
 
-import com.datastax.oss.driver.api.core.cql.ResultSet;
-import com.datastax.oss.driver.api.core.cql.Row;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
-import it.unipi.lsmsdb.stocksim.client.user.Portfolio;
-import it.unipi.lsmsdb.stocksim.client.user.Stock;
-import it.unipi.lsmsdb.stocksim.client.user.User;
-import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
+import it.unipi.lsmsdb.stocksim.client.entities.Portfolio;
+import it.unipi.lsmsdb.stocksim.client.entities.Stock;
+import it.unipi.lsmsdb.stocksim.client.entities.User;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
@@ -17,9 +14,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.and;
@@ -58,9 +53,9 @@ public class DBManager {
     private CassandraDB getCassandraDB() {
         if (cassandraDB == null) {
             cassandraDB = cassandraDBFactory.getCassandraDB("192.168.2.133", 9042, "datacenter1");
-            cassandraDB.connect();
-        }
 
+        }
+        cassandraDB.connect();
         return cassandraDB;
     }
 
@@ -136,6 +131,9 @@ public class DBManager {
         finally {
             db.disconnect();
         }
+        if(ret){
+            port.getComposition().add(new TitleImpl(stock, share)); //update entity
+        }
         return  ret;
     }
 
@@ -149,7 +147,6 @@ public class DBManager {
         MongoCollection<Document> userColl = db.getCollection(StocksimCollection.USERS.getCollectionName());
         Bson filter = and(eq("username", username), eq("password", password));
         Document user=null;
-        User u=null;
         try {
            user = db.findOne(filter, userColl);
         }
@@ -159,8 +156,10 @@ public class DBManager {
         finally {
             db.disconnect();
         }
-        // todo
-        return u;
+        if(user!=null)
+            return new UserImpl(user, this);
+        else
+            return null;
     }
 
 }

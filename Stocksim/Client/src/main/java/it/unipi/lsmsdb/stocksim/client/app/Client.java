@@ -1,6 +1,7 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
 import it.unipi.lsmsdb.stocksim.client.ClientUtil;
+import it.unipi.lsmsdb.stocksim.client.entities.Portfolio;
 import it.unipi.lsmsdb.stocksim.client.persistence.DBManager;
 import it.unipi.lsmsdb.stocksim.client.entities.User;
 import it.unipi.lsmsdb.stocksim.util.Util;
@@ -65,9 +66,16 @@ Client {
     }
 
     private static void register() {
+        // todo register a new user
     }
 
     private static void dashboard() {
+        // todo print user dashboard
+        Util.println(loggedUser.getUsername());
+        for (Portfolio portfolio : loggedUser.getPortfolios()) {
+            Util.println(portfolio.getName()+" "+portfolio.getType()+" "+portfolio.getTotalInvestment());
+        }
+
     }
 
     private static boolean login() {
@@ -80,7 +88,7 @@ Client {
         } while((loggedUser=factory.login(
                 command.split(" ")[0],
                 command.split(" ")[1])
-        )!=null);
+        )==null);
         return true;
     }
 }

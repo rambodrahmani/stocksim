@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.stocksim.client.user;
+package it.unipi.lsmsdb.stocksim.client.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +13,7 @@ public  abstract class Portfolio {
     protected  Portfolio(){
 
     }
-    public Portfolio(User owner, ArrayList<Title> composition, String name, String type) {
+    protected Portfolio(User owner, ArrayList<Title> composition, String name, String type) {
         this.owner = owner;
         this.composition = composition;
         this.name = name;

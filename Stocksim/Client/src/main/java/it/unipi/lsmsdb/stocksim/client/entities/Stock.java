@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.stocksim.client.user;
+package it.unipi.lsmsdb.stocksim.client.entities;
 
 import java.net.URL;
 import java.util.TimeZone;

@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.stocksim.client.user;
+package it.unipi.lsmsdb.stocksim.client.entities;
 
 import java.util.ArrayList;
 /**
@@ -6,7 +6,7 @@ import java.util.ArrayList;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public    class User {
+public  abstract   class User {
 
     protected  String username;
     protected String email;
@@ -29,7 +29,7 @@ public    class User {
     public  ArrayList<Portfolio> getPortfolios(){
         return portfolios;
     }
-    public  Portfolio getPortfolioByName(){
+    public  Portfolio getPortfolioByName(final String name){
         return null;
     }
     public  Portfolio addPortfolio(String name, String Type){
