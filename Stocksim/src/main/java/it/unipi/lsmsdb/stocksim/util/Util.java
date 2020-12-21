@@ -6,8 +6,13 @@ package it.unipi.lsmsdb.stocksim.util;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class Util {
-   /* MongoDBManager dbm;
-    public  final static MongoDBManager getMongo(){
-
-    }*/
+    /**
+     * Prints the given message to the console.
+     *
+     * @param message the String message to be printed.
+     */
+    public final static void print(final String message) {
+        System.out.print(message);
+    }
 }
+

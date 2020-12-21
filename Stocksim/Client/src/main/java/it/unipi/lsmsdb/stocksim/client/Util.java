@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.stocksim.server;
+package it.unipi.lsmsdb.stocksim.client;
 
 /**
  * General purpose utility methods.
@@ -7,12 +7,11 @@ package it.unipi.lsmsdb.stocksim.server;
  */
 public class Util extends it.unipi.lsmsdb.stocksim.util.Util {
 
-
     /**
      * Prints the main menu for the Server usage.
      */
     public final static void printWelcomeMessage() {
-        print("Welcome to the StockSim Server.\n\n");
+        print("Welcome to the StockSim Client.\n\n");
     }
 
     /**
@@ -20,9 +19,9 @@ public class Util extends it.unipi.lsmsdb.stocksim.util.Util {
      */
     public final static void printMainMenu() {
         print("Available Commands:\n");
-        print(String.format("%-6s %5s %-40s%n", "login", " ", "check databases status."));
-        print(String.format("%-6s %5s %-40s%n", "register", " ", "update databases historical data."));
-        print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit Stocksim server."));
+        print(String.format("%-6s %5s %-40s%n", "login", " ", "login to your account."));
+        print(String.format("%-6s %5s %-40s%n", "register", " ", "register a new account."));
+        print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit Stocksim client."));
         print("> ");
     }
 }
