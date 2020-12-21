@@ -1,6 +1,6 @@
 import os
 os.system("mongo < wipe_mongoDB.js")
-os.system("mongoimport  --jsonArray --db StockSim --collection stocks --file stocks_coll.json")
+os.system("mongoimport  --jsonArray --db stocksim --collection stocks --file stocks_coll.json")
 #os.system("mongoimport -h=172.16.3.94:27017 --jsonArray --db StokSim --collection stocks --file stocks_coll.json")
 
 # usage:

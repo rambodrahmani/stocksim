@@ -28,12 +28,15 @@ public class Util extends it.unipi.lsmsdb.stocksim.util.Util {
      * Prints the main menu for the Server usage.
      */
     public final static void printMainMenu() {
+<<<<<<< HEAD
         println("Available Commands:");
         print(String.format("%-6s %5s %-40s%n", "status", " ", "check databases status."));
         print(String.format("%-6s %5s %-40s%n", "update", " ", "update databases historical data."));
+=======
         print("Available Commands:\n");
         print(String.format("%-6s %5s %-40s%n", "login", " ", "check databases status."));
         print(String.format("%-6s %5s %-40s%n", "register", " ", "update databases historical data."));
+>>>>>>> 3456855b693daec88fe82b121618c5aa809a375b
         print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit Stocksim server."));
         print("> ");
     }
