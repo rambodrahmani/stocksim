@@ -27,6 +27,9 @@ public class Server {
         // print welcome message
         Util.printWelcomeMessage();
 
+        // automatically update the database on startup
+        dbManager.updateDB();
+
         // infinite main loop
         while (true) {
             Util.printMainMenu();
@@ -35,14 +38,18 @@ public class Server {
         }
     }
 
+    /**
+     *
+     * @param command
+     */
     public static void parseCommand(final String command) {
         switch (command) {
             case "status":
                 final boolean consistent = dbManager.consistencyCheck();
                 if (!consistent) {
-                    Util.print("DATA CONSISTENCY CHECK FAILED.\n");
+                    Util.println("DATA CONSISTENCY CHECK FAILED.\n");
                 } else {
-                    Util.print("DATA CONSISTENCY CHECK SUCCESS.\n");
+                    Util.println("DATA CONSISTENCY CHECK SUCCESS.\n");
                 }
                 break;
             case "update":
@@ -51,7 +58,7 @@ public class Server {
                 System.exit(0);
                 break;
             default:
-                Util.print("Invalid command.\n\n");
+                Util.println("Invalid command.\n");
                 break;
         }
     }

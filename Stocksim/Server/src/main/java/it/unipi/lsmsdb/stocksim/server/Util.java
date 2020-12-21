@@ -16,6 +16,15 @@ public class Util {
     }
 
     /**
+     * Prints the given message to the console ending with a new line.
+     *
+     * @param message the String message to be printed.
+     */
+    public final static void println(final String message) {
+        System.out.println(message);
+    }
+
+    /**
      * Prints the main menu for the Server usage.
      */
     public final static void printWelcomeMessage() {
@@ -26,7 +35,7 @@ public class Util {
      * Prints the main menu for the Server usage.
      */
     public final static void printMainMenu() {
-        print("Available Commands:\n");
+        println("Available Commands:");
         print(String.format("%-6s %5s %-40s%n", "status", " ", "check databases status."));
         print(String.format("%-6s %5s %-40s%n", "update", " ", "update databases historical data."));
         print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit Stocksim server."));

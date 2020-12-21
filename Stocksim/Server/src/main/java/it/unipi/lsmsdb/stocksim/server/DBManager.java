@@ -9,14 +9,24 @@ import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
-import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
-import yahoofinance.histquotes.HistoricalQuote;
-import yahoofinance.histquotes.Interval;
+import jdk.jfr.Period;
+import org.apache.commons.io.IOUtils;
+import org.bson.Document;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
-import java.util.Calendar;
+import java.net.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 /**
  * Sotcksim Server DB Manager.
@@ -55,7 +65,7 @@ public class DBManager {
         try {
             final ResultSet resultSet = getCassandraDB().query("SELECT DISTINCT symbol FROM stocksim.tickers;");
             final int cassandraTickersCount = resultSet.all().size();
-            final MongoCollection mongoTickersCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+            final MongoCollection<Document> mongoTickersCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
             final int mongoTickersCount = (int) mongoTickersCollection.countDocuments();
 
             ret = (cassandraTickersCount == mongoTickersCount);
@@ -71,50 +81,95 @@ public class DBManager {
     }
 
     /**
-     *
+     * Executes a data consistency check and then updates Cassandra historical data.
      */
     public void updateDB() {
-        // data consistency check
         try {
-            final ResultSet resultSet = getCassandraDB().query("SELECT DISTINCT symbol FROM stocksim.tickers;");
-            final int cassandraTickersCount = resultSet.all().size();
-            final MongoCollection mongoTickersCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
-            final int mongoTickersCount = (int) mongoTickersCollection.countDocuments();
-            if (cassandraTickersCount != mongoTickersCount) {
-                System.out.println("DATA CONSISTENCY CHECK FAILED.");
-                System.out.println("Cassandra Tickers count: " + cassandraTickersCount);
-                System.out.println("Mongo Tickers count: " + mongoTickersCount);
+            // data consistency check
+            if (!consistencyCheck()) {
+                Util.println("DATA CONSISTENCY CHECK FAILED. UNABLE TO PROCEED WITH UPDATE.\n");
             } else {
-                // update tickers historical data
-                for (final Row row : resultSet) {
-                    final String table = row.getString("symbol");
-                    System.out.println(table);
+                // consistency check success, start historical data update
+                Util.println("DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.\n");
 
-                    Calendar from = Calendar.getInstance();
-                    Calendar to = Calendar.getInstance();
-                    to.add(Calendar.DATE, 1);
-                    Stock google = YahooFinance.get(table);
-                    List<HistoricalQuote> histQuotes = google.getHistory(from, to, Interval.DAILY);
-                    for (HistoricalQuote historicalQuote : histQuotes) {
-                        System.out.println(historicalQuote.getDate().getTime());
-                        System.out.println(historicalQuote.getOpen());
-                        System.out.println(historicalQuote.getHigh());
-                        System.out.println(historicalQuote.getLow());
-                        System.out.println(historicalQuote.getClose());
-                        System.out.println(historicalQuote.getAdjClose());
-                        System.out.println(historicalQuote.getVolume());
+                // query tickers list from cassandra
+                final ResultSet tickersResultSet = getCassandraDB().query("SELECT DISTINCT symbol FROM stocksim.tickers;");
+
+                // for each ticker symbol
+                for (final Row row : tickersResultSet) {
+                    // retrieve ticker symbol
+                    final String symbol = row.getString("symbol");
+                    Util.println("Updating historical data for: " + symbol + ".");
+
+                    // query symbol last update date
+                    final ResultSet dateResultSet = getCassandraDB().query("SELECT date FROM stocksim.tickers WHERE symbol='" + symbol + "' ORDER BY date DESC;");
+
+                    // needed for unix timestamp extraction
+                    ZoneId zoneId = ZoneId.systemDefault();
+
+                    // get last update date and timestamp
+                    final LocalDate lastUpdateDate = dateResultSet.one().getLocalDate("date");
+                    Util.println("Last update date: " + lastUpdateDate.toString() + ".");
+
+                    // add one day before calculating timestamp
+                    long lastUpdateTimestamp = lastUpdateDate.plusDays(1).atTime(LocalTime.NOON).atZone(ZoneId.systemDefault()).toEpochSecond();
+
+                    // get current date and timestamp
+                    final LocalDate now = LocalDate.now();
+                    long nowTimestamp = now.atStartOfDay(zoneId).toEpochSecond();
+
+                    // get days since last update
+                    int daysBetween = (int) DAYS.between(lastUpdateDate, now);
+
+                    // print number of days since last data update for this ticker
+                    Util.println("Days since last update " + String.valueOf(daysBetween) + ".");
+
+                    // historical data already up to date
+                    if (daysBetween == 0) {
+                        Util.println("Historical data for " + symbol + " already up to date. Moving on.");
+                    } else {
+                        final String YFinanceURL = "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol + "?"
+                                + "period1=" + lastUpdateTimestamp
+                                + "&period2=" + nowTimestamp
+                                + "&interval=1d"
+                                + "&events=history";
+                        Util.println("Request URL: " + YFinanceURL);
+                        try {
+                            final JSONObject historicalData = new JSONObject(IOUtils.toString(new URL(YFinanceURL), StandardCharsets.UTF_8));
+                            final JSONArray timestamp = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONArray("timestamp");
+                            final JSONObject quote = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("quote").getJSONObject(0);
+                            final JSONArray adjclose = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("adjclose").getJSONObject(0).getJSONArray("adjclose");
+
+                            for (int i = 0 ; i < timestamp.length(); i++) {
+                                final int epochSecs = timestamp.getInt(i);
+                                final LocalDate updateDate = Instant.ofEpochSecond(epochSecs).atZone(ZoneId.systemDefault()).toLocalDate();
+                                final String date = updateDate.toString();
+                                final double adj_close = adjclose.getDouble(i);
+                                final double close = quote.getJSONArray("close").getDouble(i);
+                                final double high = quote.getJSONArray("high").getDouble(i);
+                                final double low = quote.getJSONArray("low").getDouble(i);
+                                final double open = quote.getJSONArray("open").getDouble(i);
+                                final double volume = quote.getJSONArray("volume").getDouble(i);
+
+                                Util.println(symbol + "|" + date + "|" + adj_close + "|" + close + "|" + high + "|" + low + "|" + open + "|" + volume);
+                            }
+
+                            Util.println("Historical data updated for " + symbol + ". Moving on.\n");
+                        } catch (final IOException | JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
-        } catch (final CQLSessionException | IOException e) {
+        } catch (final CQLSessionException e) {
             e.printStackTrace();
         }
 
+        // update terminated
+        Util.println("Historical data update terminated without errors.");
+
         // close Cassandra DB connection
         disconnectCassandraDB();
-
-        // close Mongo DB connection
-        disconnectMongoDB();
     }
 
     /**
