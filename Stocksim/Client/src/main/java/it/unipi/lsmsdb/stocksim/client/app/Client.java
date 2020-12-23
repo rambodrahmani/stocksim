@@ -5,7 +5,6 @@ import it.unipi.lsmsdb.stocksim.client.entities.Portfolio;
 import it.unipi.lsmsdb.stocksim.client.persistence.DBManager;
 import it.unipi.lsmsdb.stocksim.client.entities.User;
 import it.unipi.lsmsdb.stocksim.util.Util;
-
 import java.util.Scanner;
 
 /**
@@ -13,9 +12,7 @@ import java.util.Scanner;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class
-
-Client {
+public class Client {
     /**
      * Default input scanner.
      */
@@ -47,6 +44,7 @@ Client {
             parseCommand(command);
         }
     }
+
     public static void parseCommand(final String command) {
         switch (command) {
             case "login":
@@ -66,11 +64,11 @@ Client {
     }
 
     private static void register() {
-        // todo register a new user
+        // TODO: register a new user
     }
 
     private static void dashboard() {
-        // todo print user dashboard
+        // TODO: print user dashboard
         Util.println(loggedUser.getUsername());
         for (Portfolio portfolio : loggedUser.getPortfolios()) {
             Util.println(portfolio.getName()+" "+portfolio.getType()+" "+portfolio.getTotalInvestment());

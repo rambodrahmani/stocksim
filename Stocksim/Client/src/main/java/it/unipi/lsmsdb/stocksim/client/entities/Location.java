@@ -40,4 +40,3 @@ public  class Location  {
         return phone;
     }
 }
-

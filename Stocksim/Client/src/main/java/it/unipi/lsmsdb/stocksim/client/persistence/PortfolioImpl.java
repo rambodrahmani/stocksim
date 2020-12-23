@@ -5,17 +5,15 @@ import it.unipi.lsmsdb.stocksim.client.entities.Stock;
 import it.unipi.lsmsdb.stocksim.client.entities.Title;
 import it.unipi.lsmsdb.stocksim.client.entities.User;
 import org.bson.Document;
-
 import java.util.ArrayList;
 import java.util.Date;
+
 /**
  * portfolio implemented from the document db
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 class PortfolioImpl extends Portfolio {
-
-
      protected PortfolioImpl(final User owner, final Document doc, final DBManager dbManager) {
          super();
          this.totalInvestment = 0.0;
@@ -40,8 +38,6 @@ class PortfolioImpl extends Portfolio {
        // todo
 
     }
-
-
 
      public void setTotalInvestment(final Double totalInvestment) {
         //TODO RESCALE

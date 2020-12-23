@@ -3,6 +3,9 @@ package it.unipi.lsmsdb.stocksim.client.entities;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
+ */
 public  abstract class Portfolio {
     protected User owner;
     protected ArrayList<Title> composition;
@@ -11,8 +14,8 @@ public  abstract class Portfolio {
     protected Double totalInvestment;
 
     protected  Portfolio(){
-
     }
+
     protected Portfolio(User owner, ArrayList<Title> composition, String name, String type) {
         this.owner = owner;
         this.composition = composition;
@@ -36,8 +39,8 @@ public  abstract class Portfolio {
         return totalInvestment;
     }
 
-
     public abstract boolean add(Title title);
+
     public abstract boolean add(Stock stock, Double share);
 
     public User getOwner() {
@@ -47,6 +50,6 @@ public  abstract class Portfolio {
     public ArrayList<Title> getComposition() {
         return composition;
     }
-    public abstract void Simulate(Date start, Date end);
 
+    public abstract void Simulate(Date start, Date end);
 }

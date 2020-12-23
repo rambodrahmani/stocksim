@@ -1,11 +1,10 @@
 package it.unipi.lsmsdb.stocksim.client.persistence;
 
-
 import it.unipi.lsmsdb.stocksim.client.entities.Portfolio;
 import it.unipi.lsmsdb.stocksim.client.entities.User;
 import org.bson.Document;
-
 import java.util.ArrayList;
+
 /**
  * User implemented from the document db
  *
@@ -26,14 +25,9 @@ public class UserImpl extends User {
         }
     }
 
-
     @Override
     public Portfolio getPortfolioByName(final String name) {
-
         //todo
         return null;
     }
-
-
-
 }

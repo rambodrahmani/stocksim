@@ -1,7 +1,5 @@
 package it.unipi.lsmsdb.stocksim.server;
 
-import it.unipi.lsmsdb.stocksim.util.Util;
-
 import java.util.Scanner;
 
 /**
@@ -49,9 +47,9 @@ public class Server {
             case "status":
                 final boolean consistent = dbManager.consistencyCheck();
                 if (!consistent) {
-                    Util.println("DATA CONSISTENCY CHECK FAILED.\n");
+                    ServerUtil.println("DATA CONSISTENCY CHECK FAILED.\n");
                 } else {
-                    Util.println("DATA CONSISTENCY CHECK SUCCESS.\n");
+                    ServerUtil.println("DATA CONSISTENCY CHECK SUCCESS.\n");
                 }
                 break;
             case "update":
@@ -60,7 +58,7 @@ public class Server {
                 System.exit(0);
                 break;
             default:
-                Util.println("Invalid command.\n");
+                ServerUtil.println("Invalid command.\n");
                 break;
         }
     }

@@ -12,11 +12,8 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-
-
 import java.util.Arrays;
 import java.util.List;
-
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
@@ -45,7 +42,6 @@ public class DBManager {
      * Mongo DB shared instance.
      */
     private MongoDB mongoDB;
-
 
     /**
      * @return Cassandra DB shared instance;
@@ -161,5 +157,4 @@ public class DBManager {
         else
             return null;
     }
-
 }

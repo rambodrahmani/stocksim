@@ -2,13 +2,13 @@ package it.unipi.lsmsdb.stocksim.client.entities;
 
 import java.net.URL;
 import java.util.TimeZone;
+
 /**
  * Stock generic data structure
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public abstract class Stock {
-
     protected String ticker;
     protected String sector;
     protected String industry;
@@ -44,9 +44,7 @@ public abstract class Stock {
     }
 
     protected Stock() {
-
     }
-
 
     public abstract void setSector(String sector);
 
@@ -138,5 +136,3 @@ public abstract class Stock {
         return logo_url;
     }
 }
-
-

@@ -3,7 +3,6 @@ package it.unipi.lsmsdb.stocksim.client.persistence;
 import it.unipi.lsmsdb.stocksim.client.entities.Location;
 import it.unipi.lsmsdb.stocksim.client.entities.Stock;
 import org.bson.Document;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.TimeZone;
@@ -26,21 +25,25 @@ import java.util.TimeZone;
          URL website;
          TimeZone timeZone;
          URL logo;
+
          try {
              website=new URL(doc.getString("sector"));
          } catch (MalformedURLException e) {
              website=null;
          }
+
          try {
              timeZone=TimeZone.getTimeZone(doc.getString("exchangeTimeZoneShortName")) ;
          } catch (Exception e) {
              timeZone=null;
          }
+
          try {
              logo=new URL(doc.getString("logoURL"));
          } catch (MalformedURLException e) {
              logo=null;
          }
+
         this.ticker = doc.getString("ticker");
         this.sector = doc.getString("sector");
         this.industry = doc.getString("industry");
@@ -84,7 +87,6 @@ import java.util.TimeZone;
      public void setLocation(Location location) {
 
      }
-
 
      @Override
      public void setWebsite(URL website) {
@@ -141,5 +143,3 @@ import java.util.TimeZone;
 
      }
  }
-
-
