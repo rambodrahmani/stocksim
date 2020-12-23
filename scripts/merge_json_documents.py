@@ -40,6 +40,8 @@ for json_file in files:
     }
 
     # optional fields: might or might not be present in the original json file
+    try_fetch_attr(ticket_object,estractedFields, "marketCap")
+    try_fetch_attr(ticket_object,estractedFields, "trailingPE")
     try_fetch_attr(ticket_object,estractedFields, "sector")
     try_fetch_attr(ticket_object,estractedFields, "city")
     try_fetch_attr(ticket_object,estractedFields, "website")
