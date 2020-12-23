@@ -12,6 +12,8 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import static com.mongodb.client.model.Filters.and;
@@ -156,5 +158,47 @@ public class DBManager {
             return new UserImpl(user, this);
         else
             return null;
+    }
+
+    /** create a new portfolio if possible
+     * @param owner the owner of the new portfolio
+     * @param name the name of the new portfolio
+     * @param type the type of the new portfolio
+     * @return the instance of the new portfolio, null if something(s) went wrong
+     */
+    public Portfolio createPortfolio(User owner, String name, String type) {
+        MongoDB db = getMongoDB(); //get the database and the collection
+        MongoCollection<Document> userColl = db.getCollection(StocksimCollection.USERS.getCollectionName());
+        Bson filter1=eq("username", owner.getUsername());
+        Bson filter2=and(filter1, eq("portfolios.name",name));
+        Document existent=null;
+        try {
+            // verify if exists another portfolio with the same name
+            existent = db.findOne(filter2, userColl);
+        }
+        catch (final Exception e){
+            db.disconnect();
+            return null;
+        }
+        if(existent!= null){
+            db.disconnect();
+            return null;
+        }
+        Document newdoc=new Document();
+        newdoc.append("name", name).append("type", type).append("composition", new ArrayList<Document>());
+        Boolean res=false;
+        try {
+            // insert the new portfolio in the database
+            res=db.insertInArray(filter1, "portfolios",newdoc, userColl );
+        }
+        catch (final Exception e){
+            return null;
+        }
+        finally {
+            db.disconnect();
+        }
+        if(res) // create the new instance
+            return new PortfolioImpl(owner,newdoc,this);
+        return null;
     }
 }

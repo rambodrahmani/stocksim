@@ -2,6 +2,8 @@ package it.unipi.lsmsdb.stocksim.client.app;
 
 import it.unipi.lsmsdb.stocksim.client.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.entities.Portfolio;
+import it.unipi.lsmsdb.stocksim.client.entities.Stock;
+import it.unipi.lsmsdb.stocksim.client.entities.Title;
 import it.unipi.lsmsdb.stocksim.client.persistence.DBManager;
 import it.unipi.lsmsdb.stocksim.client.entities.User;
 import it.unipi.lsmsdb.stocksim.util.Util;
@@ -36,7 +38,8 @@ public class Client {
     public static void main(String[] args) {
         // print welcome message
         ClientUtil.printWelcomeMessage();
-
+        loggedUser=factory.login("TWOWS", "abcd1234");
+        dashboard();
         // infinite main loop
         while (true) {
             ClientUtil.printMainMenu();
@@ -63,19 +66,90 @@ public class Client {
         }
     }
 
+    /**
+     * Register a new user
+     */
     private static void register() {
         // TODO: register a new user
     }
 
+    /**
+     * Show logged user portfolios summaries
+     */
     private static void dashboard() {
-        // TODO: print user dashboard
-        Util.println(loggedUser.getUsername());
-        for (Portfolio portfolio : loggedUser.getPortfolios()) {
-            Util.println(portfolio.getName()+" "+portfolio.getType()+" "+portfolio.getTotalInvestment());
+        ClientUtil.printDashboard(loggedUser);
+        String command=scanner.nextLine();
+        while(loggedUser!=null) {
+            switch (command) {
+                case "q":
+                    logout();
+                    break;
+                case "p":
+                    ClientUtil.printProfile(loggedUser);
+                    break;
+                case "n":
+                    createNewPortfolio();
+                    break;
+                default:
+                    Portfolio p = loggedUser.getPortfolioByName(command);
+                    if (p != null)
+                        showPortfolio(p);
+                    else
+                        Util.print("Invalid command.\n\n");
+                    break;
+            }
+            command = scanner.nextLine();
         }
 
     }
 
+    /**
+     * Show portfolio's details
+     */
+    private static void showPortfolio(Portfolio p) {
+        ClientUtil.printPortfolio(p);
+        String command=scanner.nextLine();
+        while(command!="q") {
+            switch (command) {
+                case "p":
+                    ClientUtil.printProfile(loggedUser);
+                    break;
+                case "n":
+                    createNewPortfolio();
+                    break;
+                default:
+                    Title t = p.getTitleByTicker(command);
+                    if (t != null)
+                        showTitleDetails(t, p.getTotalInvestment());
+                    else
+                        Util.print("Invalid command.\n\n");
+                    break;
+            }
+            command=scanner.nextLine();
+        }
+    }
+
+    /**
+     * Show title's details
+     */
+    private static void showTitleDetails(Title t, Double portfolioTotInv) {
+        //todo
+    }
+
+    /**
+     * Allow a user to create a new portfolio inserting details from terminal
+     */
+    private static void createNewPortfolio() {
+        // this is for test
+        // todo
+        Portfolio newp=loggedUser.addPortfolio("ClientPort", "client");
+        if(newp!=null)
+            newp.add(factory.getStockByTicker("AAPL"), 100.00);
+    }
+
+    /**
+     * Login procedure
+     */
     private static boolean login() {
         String command;
         do {
@@ -89,4 +163,11 @@ public class Client {
         )==null);
         return true;
     }
+    /**
+     * Logout procedure
+     */
+    private static void logout() {
+        loggedUser=null;
+    }
+
 }

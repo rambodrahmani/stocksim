@@ -29,13 +29,21 @@ public  abstract   class User {
         return portfolios;
     }
 
-    public  Portfolio getPortfolioByName(final String name){
+    /**
+     * find a portfolio by it's name, null if it does not exists
+     *
+     * @param name the name of the requested portfolio
+     * @return a portfolio object, can be null
+     */
+    public Portfolio getPortfolioByName(final String name) {
+        for (Portfolio portfolio : this.portfolios) {
+            if(portfolio.getName()==name)
+                return portfolio;
+        }
         return null;
     }
 
-    public  Portfolio addPortfolio(String name, String Type){
-        return  null;
-    }
+    public  abstract  Portfolio addPortfolio(String name, String Type);
 
     public String getUsername() {
         return username;

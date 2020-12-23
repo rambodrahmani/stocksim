@@ -25,9 +25,16 @@ public class UserImpl extends User {
         }
     }
 
+
+    /**
+     * create a new portfolio if possible
+     * @param name the name of the new portfolio
+     * @param type the type of the new portfolio
+     * @return the instance of the new portfolio, null if something(s) went wrong
+     */
     @Override
-    public Portfolio getPortfolioByName(final String name) {
-        //todo
-        return null;
+    public Portfolio addPortfolio(String name, String type) {
+        DBManager dbManager=new DBManager();
+        return  dbManager.createPortfolio(this, name, type);
     }
 }

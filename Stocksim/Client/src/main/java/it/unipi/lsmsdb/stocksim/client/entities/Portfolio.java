@@ -51,5 +51,19 @@ public  abstract class Portfolio {
         return composition;
     }
 
+    /**
+     * find a title in a portfolio by the ticker of the stock
+     *
+     * @param ticker the ticker of the requested stock
+     * @return a title object, can be null
+     */
+    public Title getTitleByTicker(String ticker){
+        for (Title title : this.composition) {
+            if(title.getStock().getTicker()==ticker)
+                return title;
+        }
+        return null;
+    }
+
     public abstract void Simulate(Date start, Date end);
 }
