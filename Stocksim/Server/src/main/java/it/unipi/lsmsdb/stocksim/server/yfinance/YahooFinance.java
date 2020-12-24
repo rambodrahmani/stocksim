@@ -21,29 +21,19 @@ import java.util.ArrayList;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class YahooFinance {
-    /**
-     * Yahoo Finance API base URL.
-     */
+    // Yahoo Finance API base URL
     private final static String BASE_URL = "https://query1.finance.yahoo.com/v8/finance/chart/";
 
-    /**
-     * Ticker symbol.
-     */
+    // Ticker symbol
     private final String symbol;
 
-    /**
-     * Yahoo Finance period1 parameter (start date).
-     */
+    // Yahoo Finance period1 parameter (start date)
     private final long period1;
 
-    /**
-     * Yahoo Finance period2 parameter (end date).
-     */
+    // Yahoo Finance period2 parameter (end date)
     private final long period2;
 
-    /**
-     * Yahoo Finance API full URL.
-     */
+    // Yahoo Finance API full URL
     private final String YFinanceURL;
 
     /**

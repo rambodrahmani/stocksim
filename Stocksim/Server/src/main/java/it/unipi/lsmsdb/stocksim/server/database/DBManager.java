@@ -30,30 +30,17 @@ import static java.time.temporal.ChronoUnit.DAYS;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class DBManager {
-    /**
-     * Cassandra DB Factory.
-     */
+    // Cassandra DB Factory
     final CassandraDBFactory cassandraDBFactory = CassandraDBFactory.create();
 
-    /**
-     * Cassandra DB instance.
-     */
+    // Cassandra DB instance
     private CassandraDB cassandraDB;
 
-    /**
-     * Mongo DB Factory.
-     */
+    // Mongo DB Factory
     final MongoDBFactory mongoDBFactory = MongoDBFactory.create();
 
-    /**
-     * Mongo DB shared instance.
-     */
+    // Mongo DB shared instance
     private MongoDB mongoDB;
-
-    /**
-     * Cassandra CQL insert query used during historical data update.
-     */
-    private final String INSERT_QUERY = "INSERT INTO stocksim.tickers (symbol, date, adj_close, close, high, low, open, volume) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     /**
      * Checks databases data consistency.
@@ -85,14 +72,14 @@ public class DBManager {
      * Executes a data consistency check and then updates Cassandra historical data.
      */
     public void updateDB() {
+        // save starting time to calculate elapsed time
+        final long startTimeMillis = System.currentTimeMillis();
+
         // exceptions counter during the update process
         int exceptionsCounter = 0;
 
         // list of the failed symbol updates
         final ArrayList<String> exceptions = new ArrayList<>();
-
-        // save starting time to calculate elapsed time
-        final long startTimeMillis = System.currentTimeMillis();
 
         try {
             // data consistency check
@@ -103,7 +90,7 @@ public class DBManager {
                 ServerUtil.println("DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.\n");
 
                 // query tickers list from cassandra
-                final ResultSet tickersResultSet = getCassandraDB().query("SELECT DISTINCT symbol FROM stocksim.tickers;");
+                final ResultSet tickersResultSet = getCassandraDB().query(CassandraQueryBuilder.getTickerSymbolsQuery());
 
                 // for each ticker symbol
                 for (final Row row : tickersResultSet) {
@@ -112,7 +99,7 @@ public class DBManager {
                     ServerUtil.println("Updating historical data for: " + symbol + ".");
 
                     // query symbol last update date
-                    final ResultSet dateResultSet = getCassandraDB().query("SELECT date FROM stocksim.tickers WHERE symbol='" + symbol + "' ORDER BY date DESC;");
+                    final ResultSet dateResultSet = getCassandraDB().query(CassandraQueryBuilder.getLastUpdateDate(symbol));
 
                     // needed for unix timestamp extraction
                     final ZoneId nyZoneId = ZoneId.of("America/New_York");
@@ -148,7 +135,7 @@ public class DBManager {
                         try {
                             final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
                             for (final YFHistoricalData historicalData : yfHistoricalData) {
-                                final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(INSERT_QUERY);
+                                final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(CassandraQueryBuilder.getUpdateInsertQuery());
                                 final BoundStatement bounded = preparedStatement.bind(symbol, historicalData.getDate(), historicalData.getAdjClose(),
                                         historicalData.getClose(), historicalData.getHigh(), historicalData.getLow(),
                                         historicalData.getOpen(), historicalData.getVolume());

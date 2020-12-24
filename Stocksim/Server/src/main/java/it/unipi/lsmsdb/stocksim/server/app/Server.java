@@ -12,14 +12,10 @@ import java.util.Scanner;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class Server {
-    /**
-     * Default input scanner.
-     */
+    // Default input scanner used to read input commands
     final static Scanner scanner = new Scanner(System.in);
 
-    /**
-     * Stocksim Server DB Manager.
-     */
+    // Stocksim Server DB Manager
     final static DBManager dbManager = new DBManager();
 
     /**
