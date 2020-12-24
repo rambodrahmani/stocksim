@@ -166,7 +166,7 @@ public class MongoDB implements DB {
      *
      * @return true if a document has been updated, false otherwise.
      */
-    public Boolean updateOne(final Bson filter, final  Bson updates, final MongoCollection<Document> collection) throws MongoException {
+    public Boolean updateOne(final Bson filter, final Bson updates, final MongoCollection<Document> collection) throws MongoException {
         UpdateResult upRes = collection.updateOne(filter, updates);
         return (upRes.wasAcknowledged() && upRes.getMatchedCount() == 0);
     }

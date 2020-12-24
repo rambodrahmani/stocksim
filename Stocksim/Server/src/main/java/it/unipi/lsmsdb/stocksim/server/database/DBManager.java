@@ -5,6 +5,7 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Updates;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
@@ -13,8 +14,10 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
 import it.unipi.lsmsdb.stocksim.server.app.ServerUtil;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YFHistoricalData;
+import it.unipi.lsmsdb.stocksim.server.yfinance.YFSummaryData;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YahooFinance;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -22,6 +25,8 @@ import java.time.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 /**
@@ -92,6 +97,9 @@ public class DBManager {
                 // query tickers list from cassandra
                 final ResultSet tickersResultSet = getCassandraDB().query(CassandraQueryBuilder.getTickerSymbolsQuery());
 
+                // connect to mongodb
+                getMongoDB();
+
                 // for each ticker symbol
                 for (final Row row : tickersResultSet) {
                     // retrieve ticker symbol
@@ -126,12 +134,26 @@ public class DBManager {
                     ServerUtil.println("Days since last update: " + String.valueOf(daysBetween) + ".");
 
                     // historical data already up to date
-                    if (daysBetween == 0 || (daysBetween == 1 && currentTime < 20)) {
+                    if (daysBetween == 0 ) {
                         ServerUtil.println("Historical data for " + symbol + " already up to date. Moving on.\n");
                     } else {
                         try {
                             // build yahoo finance object for current ticker symbol
                             final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, currentTimestamp);
+
+                            // get summary data from yahoo finance
+                            ServerUtil.println("Request URL: " + yahooFinance.getV10URL());
+                            YFSummaryData yfSummaryData = yahooFinance.getSummaryData();
+
+                            // first update mongo db fields
+                            final MongoCollection<Document> stocksCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+                            final Bson stockFilter = eq("ticker", symbol);
+                            final Bson updateTrailingPE = Updates.set("trailingPE", yfSummaryData.getTrailingPE());
+                            final Bson updateMarketCap = Updates.set("marketCap", yfSummaryData.getMarketCap());
+                            final Bson updateSet = Updates.combine(updateTrailingPE, updateMarketCap);
+                            getMongoDB().updateOne(stockFilter, updateSet, stocksCollection);
+
+                            // update historical data
                             ServerUtil.println("Request URL: " + yahooFinance.getV8URL());
                             final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
                             for (final YFHistoricalData historicalData : yfHistoricalData) {
@@ -170,6 +192,9 @@ public class DBManager {
         ServerUtil.println(elapsedTime);
         ServerUtil.println("Exceptions during update process: " + exceptionsCounter + ".");
         ServerUtil.println("Failed updates: " + exceptions.toString() + ".\n");
+
+        // close Mongo DB connection
+        disconnectMongoDB();
 
         // close Cassandra DB connection
         disconnectCassandraDB();

@@ -35,7 +35,7 @@ public class Main {
         user2.replace("username", "TWOWS44");
         user2.remove("_id");
         dbManager.insertOne(user2, collection );
-        Bson filter2=and(eq("username","TWOWS44"));
+        Bson filter2 = and(eq("username","TWOWS44"));
         user2 = dbManager.findOne(filter2, collection);
         System.out.println(user2.toJson());
 
@@ -45,8 +45,8 @@ public class Main {
         dbManager.insertInArray(filter2,"portfolios", port1, collection);
 
         // update a user info field
-        Bson up1 = Updates.set("email","test@test.it");
-        dbManager.updateOne(filter2, up1,collection);
+        Bson up1 = Updates.set("email", "test@test.it");
+        dbManager.updateOne(filter2, up1, collection);
         user2 = dbManager.findOne(filter2, collection);
         System.out.println(user2.toJson());
 

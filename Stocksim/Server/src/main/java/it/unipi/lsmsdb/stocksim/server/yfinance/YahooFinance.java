@@ -72,21 +72,62 @@ public class YahooFinance {
     }
 
     /**
-     * Retrieve historical data.
+     * @return the full Yahoo Finance v10 API URL.
+     */
+    public String getV10URL() {
+        return V10URL;
+    }
+
+    /**
+     * Retrieves summary details data.
      *
-     * @return retrieved {@link ArrayList} if {@link YFHistoricalData}.
+     * @return retrieved {@link YFSummaryData}.
+     *
+     * @throws JSONException
+     * @throws IOException
+     */
+    public YFSummaryData getSummaryData() throws JSONException, IOException {
+        final YFSummaryData ret = new YFSummaryData();
+
+        // fetch summary details for market capitalization and trailing PE
+        final JSONObject summaryDetails = new JSONObject(IOUtils.toString(new URL(V10URL), StandardCharsets.UTF_8));
+        final JSONObject summaryDetail = summaryDetails.getJSONObject("quoteSummary").getJSONArray("result").getJSONObject(0).getJSONObject("summaryDetail");
+
+        if (summaryDetail.has("trailingPE")) {
+            final JSONObject trailingPE = summaryDetail.getJSONObject("trailingPE");
+            if (summaryDetail.has("raw")) {
+                ret.setTrailingPE(trailingPE.getDouble("raw"));
+            } else {
+                ret.setTrailingPE(0);
+            }
+        } else {
+            ret.setTrailingPE(0);
+        }
+
+        if (summaryDetail.has("marketCap")) {
+            final JSONObject marketCap = summaryDetail.getJSONObject("marketCap");
+            if (marketCap.has("raw")) {
+                ret.setMarketCap(marketCap.getDouble("raw"));
+            } else {
+                ret.setMarketCap(0);
+            }
+        } else {
+            ret.setMarketCap(0);
+        }
+
+        return ret;
+    }
+
+    /**
+     * Retrieves historical data.
+     *
+     * @return retrieved {@link ArrayList} of {@link YFHistoricalData}.
      *
      * @throws JSONException
      * @throws IOException
      */
     public ArrayList<YFHistoricalData> getHistoricalData() throws JSONException, IOException {
         final ArrayList<YFHistoricalData> ret = new ArrayList<>();
-
-        // fetch summary details for market capitalization and trailing PE
-        final JSONObject summaryDetails = new JSONObject(IOUtils.toString(new URL(V10URL), StandardCharsets.UTF_8));
-        final JSONObject summaryDetail = summaryDetails.getJSONObject("quoteSummary").getJSONArray("result").getJSONObject(0).getJSONObject("summaryDetail");
-        final JSONObject trailingPE = summaryDetail.getJSONObject("trailingPE");
-        final JSONObject marketCap = summaryDetail.getJSONObject("marketCap");
 
         // fetch historical data
         final JSONObject historicalData = new JSONObject(IOUtils.toString(new URL(V8URL), StandardCharsets.UTF_8));
