@@ -12,7 +12,7 @@ public class Util {
      * @param message the String message to be printed.
      */
     public final static void print(final String message) {
-        System.out.println(message);
+        System.out.print(message);
     }
 
     /**

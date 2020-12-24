@@ -1,5 +1,8 @@
 package it.unipi.lsmsdb.stocksim.server;
 
+import it.unipi.lsmsdb.stocksim.util.ArgsParser;
+import org.apache.commons.cli.*;
+
 import java.util.Scanner;
 
 /**
@@ -27,8 +30,28 @@ public class Server {
         // print welcome message
         ServerUtil.printWelcomeMessage();
 
-        // automatically update the database on startup
-        dbManager.updateDB();
+        Option noUpdate = Option.builder("n")
+                .longOpt("no-update")
+                .argName("noupdate")
+                .desc("Do not run database historical data update at startup.")
+                .required(false)
+                .hasArg(false)
+                .build();
+
+        // build and args parser with single option
+        final ArgsParser argsParser = new ArgsParser(noUpdate);
+
+        try {
+            final CommandLine commandLine = argsParser.getCommandLine(args);
+
+            if (!commandLine.hasOption("no-update")) {
+                // automatically update the database on startup
+                dbManager.updateDB();
+            }
+        } catch (final ParseException e) {
+            argsParser.printHelp("./stocksim --no-update");
+            System.exit(1);
+        }
 
         // infinite main loop
         while (true) {
@@ -39,8 +62,7 @@ public class Server {
     }
 
     /**
-     *
-     * @param command
+     * @param command the command to be executed, if valid.
      */
     public static void parseCommand(final String command) {
         switch (command) {
@@ -53,6 +75,7 @@ public class Server {
                 }
                 break;
             case "update":
+                dbManager.updateDB();
                 break;
             case "quit":
                 System.exit(0);

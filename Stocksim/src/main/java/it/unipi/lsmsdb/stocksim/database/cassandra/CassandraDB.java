@@ -1,10 +1,13 @@
 package it.unipi.lsmsdb.stocksim.database.cassandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
+import com.datastax.oss.driver.api.core.cql.Statement;
 import it.unipi.lsmsdb.stocksim.database.DB;
 
+import javax.swing.plaf.nimbus.State;
 import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.util.*;
@@ -85,6 +88,25 @@ public class CassandraDB implements DB {
     }
 
     /**
+     * Executes the given CQL statement using the current CQL session.
+     *
+     * @param statement the CQL statement to be executed.
+     *
+     * @return the result set for the given CQL statement.
+     */
+    public ResultSet execute(final Statement statement) throws CQLSessionException {
+        ResultSet ret = null;
+
+        if (cqlSession != null) {
+            ret = cqlSession.execute(statement);
+        } else {
+            throw new CQLSessionException("CQL Session not initialized.");
+        }
+
+        return ret;
+    }
+
+    /**
      * Executes the given CQL Query using the current CQL session.
      *
      * @param query the CQL query to be executed.
@@ -96,7 +118,7 @@ public class CassandraDB implements DB {
 
         if (cqlSession != null) {
             final SimpleStatement simpleStatement = SimpleStatement.newInstance(query);
-            ret = cqlSession.execute(simpleStatement);
+            ret = execute(simpleStatement);
         } else {
             throw new CQLSessionException("CQL Session not initialized.");
         }
@@ -117,7 +139,26 @@ public class CassandraDB implements DB {
 
         if (cqlSession != null) {
             final SimpleStatement simpleStatement = SimpleStatement.builder(query).setTimeout(Duration.ofSeconds(timeout)).build();
-            ret = cqlSession.execute(simpleStatement);
+            ret = execute(simpleStatement);
+        } else {
+            throw new CQLSessionException("CQL Session not initialized.");
+        }
+
+        return ret;
+    }
+
+    /**
+     * Prepares the given CQL statement to be executed.
+     *
+     * @param statement the CQL statement string.
+     *
+     * @return the prepared CQL statement.
+     */
+    public PreparedStatement prepareStatement(final String statement) throws CQLSessionException {
+        PreparedStatement ret = null;
+
+        if (cqlSession != null) {
+            ret = cqlSession.prepare(statement);
         } else {
             throw new CQLSessionException("CQL Session not initialized.");
         }
