@@ -16,62 +16,61 @@ import static com.mongodb.client.model.Filters.*;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class Main {
-    private static  final MongoDBFactory factory = MongoDBFactory.create();
+    // mongo db factory
+    private static  final MongoDBFactory mongoDBFactory = MongoDBFactory.create();
 
     public static void main(String[] args) {
-        //connect and get the collection
-        MongoDB dbManager = factory.getMongoDBManager("stocksim");
+        // connect and get the collection
+        MongoDB dbManager = mongoDBFactory.getMongoDBManager("stocksim");
         System.out.println(dbManager.connect());
-        com.mongodb.client.MongoCollection collection = dbManager.getCollection(StocksimCollection.USERS.getCollectionName());
+        final MongoCollection<Document> collection = dbManager.getCollection(StocksimCollection.USERS.getCollectionName());
 
-        //get a user
-        Bson filter=and(eq("username","TWOWS"));
-        Document user1=dbManager.findOne(filter, collection);
+        // get info for a given user
+        Bson filter = and(eq("username","TWOWS"));
+        final Document user1 = dbManager.findOne(filter, collection);
         System.out.println(user1.toJson());
 
-        //insert a new user
-        Document user2=user1;
+        // insert a new user
+        Document user2 = user1;
         user2.replace("username", "TWOWS44");
         user2.remove("_id");
-        dbManager.insertOne(user2,collection );
+        dbManager.insertOne(user2, collection );
         Bson filter2=and(eq("username","TWOWS44"));
-        user2=dbManager.findOne(filter2, collection);
+        user2 = dbManager.findOne(filter2, collection);
         System.out.println(user2.toJson());
 
-        //insert a new portfolio
-        Document port1= ((ArrayList<Document>) user1.get("portfolios")).get(0);
+        // insert a new portfolio
+        Document port1 = ((ArrayList<Document>) user1.get("portfolios")).get(0);
         port1.replace("name", "test3");
         dbManager.insertInArray(filter2,"portfolios", port1, collection);
 
-        // update a user filed
-        Bson up1=Updates.set("email","test@test.it");
+        // update a user info field
+        Bson up1 = Updates.set("email","test@test.it");
         dbManager.updateOne(filter2, up1,collection);
-        user2=dbManager.findOne(filter2, collection);
+        user2 = dbManager.findOne(filter2, collection);
         System.out.println(user2.toJson());
 
-        //update one in nested array
-        List<Bson> arrayFilters=Arrays.asList(eq("port.name","test3"));
-        Bson updates= Updates.set("portfolios.$[port].type", "prov333");
+        // update user info in nested array
+        List<Bson> arrayFilters = Arrays.asList(eq("port.name","test3"));
+        Bson updates = Updates.set("portfolios.$[port].type", "prov333");
         dbManager.updateOneInNestedArray(filter2,  arrayFilters, updates, collection);
-        user2=dbManager.findOne(filter2, collection);
+        user2 = dbManager.findOne(filter2, collection);
         System.out.println(user2.toJson());
 
-        //delete from array
+        // delete user portfolio from array
         Bson filter3=eq("name", "test3");
         dbManager.deleteFromArray(filter2, "portfolios", filter3, collection);
-        user2=dbManager.findOne(filter2, collection);
+        user2 = dbManager.findOne(filter2, collection);
         System.out.println(user2.toJson());
 
-        //delete a user
+        // delete a user
         System.out.println(dbManager.deleteOne(filter2, collection));
 
-        //find stocks
+        // find user stocks
         MongoCollection<Document> collection1 = dbManager.getCollection(StocksimCollection.STOCKS.getCollectionName());
-        Bson filter4=eq("quoteType", "ETF");
-        for (Document document : dbManager.findMany(filter4, collection1)) {
+        final Bson filter4 = eq("quoteType", "ETF");
+        for (final Document document : dbManager.findMany(filter4, collection1)) {
             System.out.println(document.toJson());
         }
-
     }
-
 }

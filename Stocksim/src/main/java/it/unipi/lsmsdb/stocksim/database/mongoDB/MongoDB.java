@@ -3,16 +3,13 @@ package it.unipi.lsmsdb.stocksim.database.mongoDB;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
-
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.lsmsdb.stocksim.database.DB;
-
 import org.bson.Document;
 import org.bson.conversions.Bson;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,15 +21,22 @@ import static com.mongodb.client.model.Filters.eq;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class MongoDB implements DB {
+    // mongo db connection uri string
     private final ConnectionString uri;
-    protected MongoClient mongoClient;
-    protected MongoDatabase db;
-    private String databaseName;
+
+    // mongo database name
+    private final String databaseName;
+
+    // connection to mongo db
+    private MongoClient mongoClient;
+
+    // database retrieved using the mongo client
+    private MongoDatabase mongoDatabase;
 
     /**
      * Default constructor: prepares the connection to localhost.
      *
-     * @param databaseName
+     * @param databaseName Mongo database name.
      */
     protected MongoDB(final String databaseName) {
         this.uri = new ConnectionString("mongodb://127.0.0.1:27017");
@@ -42,8 +46,8 @@ public class MongoDB implements DB {
     /**
      * Prepares the connection to a single server.
      *
-     * @param host server dotted ip address
-     * @param port server port
+     * @param host server dotted ip address.
+     * @param port server port.
      */
     protected MongoDB(final String host, final int port, final String databaseName) {
         this.uri = new ConnectionString("mongodb://" + host + ":" + String.valueOf(port));
@@ -53,7 +57,7 @@ public class MongoDB implements DB {
     /**
      * Prepares the connection to a cluster.
      *
-     * @param servers  list of servers ip address ad port
+     * @param servers list of Mongo Servers in the cluster.
      */
     protected MongoDB(final List<MongoServer> servers, final String databaseName) {
         this.uri = new ConnectionString("mongodb://" + buildConnectionString(servers));
@@ -63,8 +67,8 @@ public class MongoDB implements DB {
     /**
      * Prepares the connection to a cluster with explicit preferences.
      *
-     * @param servers list of Mongo Servers.
-     * @param preferences preferences string for the cluster
+     * @param servers list of Mongo Servers in the cluster.
+     * @param preferences preferences string for the cluster.
      */
     protected MongoDB(final List<MongoServer>servers , final String preferences, final String databaseName) {
         uri = new ConnectionString("mongodb://" + buildConnectionString(servers) + "?" + preferences);
@@ -72,11 +76,11 @@ public class MongoDB implements DB {
     }
 
     /**
-     * Builds the string for cluster connection.
+     * Builds the string for the cluster connection.
      *
-     * @param servers list of the Mongo Servers in the cluster.
+     * @param servers list of Mongo Servers in the cluster.
      *
-     * @return the connection string.
+     * @return the prepared connection string.
      */
     private String buildConnectionString(final List<MongoServer> servers) {
         String s = "";
@@ -87,16 +91,16 @@ public class MongoDB implements DB {
     }
 
     /**
-     * setup the connection to the server, if possible
-     * will not start to communicate to the server
+     * Setup the connection to the server, if possible.
+     * No communication to the server is actually performed.
      *
-     * @return  true if everything's ok, false otherwise
+     * @return true if the connection is successful, false otherwise.
      */
     @Override
     public boolean connect() {
         try {
             mongoClient = MongoClients.create(uri);
-            db = mongoClient.getDatabase(databaseName);
+            mongoDatabase = mongoClient.getDatabase(databaseName);
         } catch (final Exception  e){
             mongoClient.close();
             mongoClient = null;
@@ -115,25 +119,37 @@ public class MongoDB implements DB {
     }
 
     /**
-     * connect to a specific connection, if possible
-     * function open must has been called with positive outcome
+     * Retrieves the mongo collection with the given name.
      *
-     * @return  the collection object if everything's ok, null otherwise
+     * @return the collection object if retrieved, null otherwise.
      */
     public MongoCollection<Document> getCollection(final String collectionName) {
-        if (db != null) {
-            return db.getCollection(collectionName);
+        if (mongoDatabase != null) {
+            return mongoDatabase.getCollection(collectionName);
         }
         return  null;
     }
 
     /**
-     * find a document in a collection
+     * Finds one document in the given collection.
      *
-     * @param filter filters in bson format
-     * @param collection the collection where to perform the find
+     * @param filter the filter in bson format to be used.
+     * @param collection the collection where to perform the search.
      *
-     * @return  the documents that satisfy the filters, an empty array if there aren't any
+     * @return the first document that satisfies the given filter.
+     */
+    public Document findOne(final Bson filter, final MongoCollection<Document> collection) throws MongoException{
+        return collection.find(filter).first();
+    }
+
+    /**
+     * Finds the documents in the given collection.
+     *
+     * @param filter the filter in bson format to be used.
+     * @param collection the collection where to perform the search.
+     *
+     * @return the documents that satisfy the given filter,
+     *         might be an empty list, but never null.
      */
     public ArrayList<Document> findMany(final Bson filter, final MongoCollection<Document> collection) throws MongoException {
         ArrayList<Document> result = new ArrayList<>();
@@ -142,27 +158,16 @@ public class MongoDB implements DB {
     }
 
     /**
-     * find a document in a collection
+     * Updates the document found using the given filter.
      *
-     * @param filter filters in bson format
-     * @param collection the collection where to perform the find
+     * @param filter the filter in bson format to be used.
+     * @param collection the collection where to perform the search.
+     * @param updates updates to be performed.
      *
-     * @return  the first document that satisfy the filters, null if there aren't any
+     * @return true if a document has been updated, false otherwise.
      */
-    public Document findOne(final Bson filter, final MongoCollection<Document> collection) throws MongoException{
-        return collection.find(filter).first();
-    }
-
-    /**
-     * update a document, if possible
-     *
-     * @param collection the collection where to perform the operation
-     * @param updates updates to be performed
-     *
-     * @return  true if everything's ok and document has been updated, false otherwise
-     */
-    public Boolean updateOne(final Bson filter,final  Bson updates, final MongoCollection<Document> collection) throws MongoException{
-        UpdateResult upRes=collection.updateOne(filter, updates);
+    public Boolean updateOne(final Bson filter, final  Bson updates, final MongoCollection<Document> collection) throws MongoException {
+        UpdateResult upRes = collection.updateOne(filter, updates);
         return (upRes.wasAcknowledged() && upRes.getMatchedCount() == 0);
     }
 

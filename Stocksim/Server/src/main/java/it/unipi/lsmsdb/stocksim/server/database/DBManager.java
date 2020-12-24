@@ -31,13 +31,13 @@ import static java.time.temporal.ChronoUnit.DAYS;
  */
 public class DBManager {
     // Cassandra DB Factory
-    final CassandraDBFactory cassandraDBFactory = CassandraDBFactory.create();
+    private final CassandraDBFactory cassandraDBFactory = CassandraDBFactory.create();
 
     // Cassandra DB instance
     private CassandraDB cassandraDB;
 
     // Mongo DB Factory
-    final MongoDBFactory mongoDBFactory = MongoDBFactory.create();
+    private final MongoDBFactory mongoDBFactory = MongoDBFactory.create();
 
     // Mongo DB shared instance
     private MongoDB mongoDB;
@@ -129,10 +129,10 @@ public class DBManager {
                     if (daysBetween == 0 || (daysBetween == 1 && currentTime < 20)) {
                         ServerUtil.println("Historical data for " + symbol + " already up to date. Moving on.\n");
                     } else {
-                        // build yahoo finance object for current ticker symbol
-                        final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, currentTimestamp);
-                        ServerUtil.println("Request URL: " + yahooFinance.getURL());
                         try {
+                            // build yahoo finance object for current ticker symbol
+                            final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, currentTimestamp);
+                            ServerUtil.println("Request URL: " + yahooFinance.getV8URL());
                             final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
                             for (final YFHistoricalData historicalData : yfHistoricalData) {
                                 final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(CassandraQueryBuilder.getUpdateInsertQuery());

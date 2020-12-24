@@ -21,8 +21,11 @@ import java.util.ArrayList;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class YahooFinance {
-    // Yahoo Finance API base URL
-    private final static String BASE_URL = "https://query1.finance.yahoo.com/v8/finance/chart/";
+    // Yahoo Finance v8 API base URL
+    private final static String BASE_URL_V8 = "https://query1.finance.yahoo.com/v8/finance/chart/";
+
+    // Yahoo Finance v10 API base URL
+    private final static String BASE_URL_V10 = "https://query1.finance.yahoo.com/v10/finance/quoteSummary/";
 
     // Ticker symbol
     private final String symbol;
@@ -33,8 +36,11 @@ public class YahooFinance {
     // Yahoo Finance period2 parameter (end date)
     private final long period2;
 
-    // Yahoo Finance API full URL
-    private final String YFinanceURL;
+    // Yahoo Finance v8 API full URL
+    private final String V8URL;
+
+    // Yahoo Finance v10 API full URL
+    private final String V10URL;
 
     /**
      * Default constructor.
@@ -48,18 +54,21 @@ public class YahooFinance {
         this.period1 = period1;
         this.period2 = period2;
 
-        YFinanceURL = BASE_URL + symbol + "?"
+        V8URL = BASE_URL_V8 + symbol + "?"
                 + "period1=" + this.period1
                 + "&period2=" + this.period2
                 + "&interval=1d"
                 + "&events=history";
+
+        V10URL = BASE_URL_V10 + symbol + "?"
+                + "modules=summaryDetail";
     }
 
     /**
-     * @return the full Yahoo Finance API URL.
+     * @return the full Yahoo Finance v8 API URL.
      */
-    public String getURL() {
-        return YFinanceURL;
+    public String getV8URL() {
+        return V8URL;
     }
 
     /**
@@ -73,7 +82,14 @@ public class YahooFinance {
     public ArrayList<YFHistoricalData> getHistoricalData() throws JSONException, IOException {
         final ArrayList<YFHistoricalData> ret = new ArrayList<>();
 
-        final JSONObject historicalData = new JSONObject(IOUtils.toString(new URL(YFinanceURL), StandardCharsets.UTF_8));
+        // fetch summary details for market capitalization and trailing PE
+        final JSONObject summaryDetails = new JSONObject(IOUtils.toString(new URL(V10URL), StandardCharsets.UTF_8));
+        final JSONObject summaryDetail = summaryDetails.getJSONObject("quoteSummary").getJSONArray("result").getJSONObject(0).getJSONObject("summaryDetail");
+        final JSONObject trailingPE = summaryDetail.getJSONObject("trailingPE");
+        final JSONObject marketCap = summaryDetail.getJSONObject("marketCap");
+
+        // fetch historical data
+        final JSONObject historicalData = new JSONObject(IOUtils.toString(new URL(V8URL), StandardCharsets.UTF_8));
         final JSONArray timestamp = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONArray("timestamp");
         final JSONObject quote = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("quote").getJSONObject(0);
         final JSONArray adjclose = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("adjclose").getJSONObject(0).getJSONArray("adjclose");

@@ -5,7 +5,10 @@ package it.unipi.lsmsdb.stocksim.database.mongoDB;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class MongoServer {
+    // mongo server ip address
     public String hostname;
+
+    // mongo server port number
     public String port;
 
     /**
