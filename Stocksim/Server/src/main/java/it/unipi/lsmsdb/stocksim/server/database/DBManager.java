@@ -1,12 +1,9 @@
-package it.unipi.lsmsdb.stocksim.server;
+package it.unipi.lsmsdb.stocksim.server.database;
 
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
-import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
-import com.datastax.oss.driver.api.querybuilder.insert.Insert;
-import com.datastax.oss.driver.api.querybuilder.insert.InsertInto;
 import com.mongodb.client.MongoCollection;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
@@ -14,20 +11,15 @@ import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
-import it.unipi.lsmsdb.stocksim.util.Util;
-import org.apache.commons.io.IOUtils;
+import it.unipi.lsmsdb.stocksim.server.app.ServerUtil;
+import it.unipi.lsmsdb.stocksim.server.yfinance.YFHistoricalData;
+import it.unipi.lsmsdb.stocksim.server.yfinance.YahooFinance;
 import org.bson.Document;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.net.*;
-import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -57,6 +49,11 @@ public class DBManager {
      * Mongo DB shared instance.
      */
     private MongoDB mongoDB;
+
+    /**
+     * Cassandra CQL insert query used during historical data update.
+     */
+    private final String INSERT_QUERY = "INSERT INTO stocksim.tickers (symbol, date, adj_close, close, high, low, open, volume) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     /**
      * Checks databases data consistency.
@@ -129,7 +126,7 @@ public class DBManager {
 
                     // get current date and timestamp
                     final LocalDate now = LocalDate.now();
-                    long nowTimestamp = now.atStartOfDay(nyZoneId).toEpochSecond();
+                    long currentTimestamp = now.atStartOfDay(nyZoneId).toEpochSecond();
 
                     // get clock time
                     final Instant instant = Clock.systemDefaultZone().instant();
@@ -145,31 +142,17 @@ public class DBManager {
                     if (daysBetween == 0 || (daysBetween == 1 && currentTime < 20)) {
                         ServerUtil.println("Historical data for " + symbol + " already up to date. Moving on.\n");
                     } else {
-                        final String YFinanceURL = "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol + "?"
-                                + "period1=" + lastUpdateTimestamp
-                                + "&period2=" + nowTimestamp
-                                + "&interval=1d"
-                                + "&events=history";
-                        ServerUtil.println("Request URL: " + YFinanceURL);
+                        // build yahoo finance object for current ticker symbol
+                        final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, currentTimestamp);
+                        ServerUtil.println("Request URL: " + yahooFinance.getURL());
                         try {
-                            final JSONObject historicalData = new JSONObject(IOUtils.toString(new URL(YFinanceURL), StandardCharsets.UTF_8));
-                            final JSONArray timestamp = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONArray("timestamp");
-                            final JSONObject quote = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("quote").getJSONObject(0);
-                            final JSONArray adjclose = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("adjclose").getJSONObject(0).getJSONArray("adjclose");
-
-                            for (int i = 0 ; i < timestamp.length(); i++) {
-                                final int epochSecs = timestamp.getInt(i);
-                                final LocalDate updateDate = Instant.ofEpochSecond(epochSecs).atZone(ZoneId.systemDefault()).toLocalDate();
-                                final BigDecimal adj_close = new BigDecimal(adjclose.getDouble(i), MathContext.DECIMAL64);
-                                final BigDecimal close = new BigDecimal(quote.getJSONArray("close").getDouble(i), MathContext.DECIMAL64);
-                                final BigDecimal high = new BigDecimal(quote.getJSONArray("high").getDouble(i), MathContext.DECIMAL64);
-                                final BigDecimal low = new BigDecimal(quote.getJSONArray("low").getDouble(i), MathContext.DECIMAL64);
-                                final BigDecimal open = new BigDecimal(quote.getJSONArray("open").getDouble(i), MathContext.DECIMAL64);
-                                final BigDecimal volume = new BigDecimal(quote.getJSONArray("volume").getDouble(i), MathContext.DECIMAL64);
-
-                                final PreparedStatement preparedStatement = getCassandraDB().prepareStatement("INSERT INTO stocksim.tickers (symbol, date, adj_close, close, high, low, open, volume) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                                final BoundStatement bound = preparedStatement.bind(symbol, updateDate, adj_close, close, high, low, open, volume);
-                                getCassandraDB().execute(bound);
+                            final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
+                            for (final YFHistoricalData historicalData : yfHistoricalData) {
+                                final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(INSERT_QUERY);
+                                final BoundStatement bounded = preparedStatement.bind(symbol, historicalData.getDate(), historicalData.getAdjClose(),
+                                        historicalData.getClose(), historicalData.getHigh(), historicalData.getLow(),
+                                        historicalData.getOpen(), historicalData.getVolume());
+                                getCassandraDB().execute(bounded);
                             }
 
                             ServerUtil.println("Historical data updated for " + symbol + ". Moving on.\n");

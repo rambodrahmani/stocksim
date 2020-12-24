@@ -1,5 +1,6 @@
-package it.unipi.lsmsdb.stocksim.server;
+package it.unipi.lsmsdb.stocksim.server.app;
 
+import it.unipi.lsmsdb.stocksim.server.database.DBManager;
 import it.unipi.lsmsdb.stocksim.util.ArgsParser;
 import org.apache.commons.cli.*;
 
