@@ -39,9 +39,11 @@ public class ArgsParser {
     }
 
     /**
+     * @param args list of arguments to be parsed against the Options descriptor;
      *
-     * @param args
-     * @return
+     * @return the {@link CommandLine} obtained parsing the list of arguments
+     * against the Options descriptor;
+     *
      * @throws ParseException
      */
     public CommandLine getCommandLine(final String[] args) throws ParseException {
@@ -49,19 +51,20 @@ public class ArgsParser {
     }
 
     /**
-     *
-     * @return
+     * @return the formatter of help messages for command line option.
      */
     public HelpFormatter getHelpFormatter() {
         return this.helpFormatter;
     }
 
     /**
+     * Print the help for the Options descriptor with the specified command
+     * line syntax.
      *
-     * @param cmdLineSyntax
+     * @param cmdLineSyntax the specified command line syntax.
      */
     public void printHelp(final String cmdLineSyntax) {
-        this.helpFormatter.printHelp(cmdLineSyntax, options);
+        getHelpFormatter().printHelp(cmdLineSyntax, options);
     }
 
     /**
@@ -74,7 +77,7 @@ public class ArgsParser {
                 .longOpt("no-update")
                 .argName("noupdate")
                 .desc("Do not run database historical data update at startup.")
-                .required(false)
+                .required(true)
                 .hasArg(false)
                 .build();
 
