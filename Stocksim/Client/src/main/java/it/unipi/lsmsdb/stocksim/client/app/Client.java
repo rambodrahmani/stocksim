@@ -7,7 +7,11 @@ import it.unipi.lsmsdb.stocksim.client.entities.Title;
 import it.unipi.lsmsdb.stocksim.client.persistence.DBManager;
 import it.unipi.lsmsdb.stocksim.client.entities.User;
 import it.unipi.lsmsdb.stocksim.util.Util;
+import jnr.ffi.Struct;
+
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.function.Function;
 
 /**
  * Sotcksim Client implementation.
@@ -38,8 +42,7 @@ public class Client {
     public static void main(String[] args) {
         // print welcome message
         ClientUtil.printWelcomeMessage();
-        loggedUser=factory.login("TWOWS", "abcd1234");
-        dashboard();
+
         // infinite main loop
         while (true) {
             ClientUtil.printMainMenu();
@@ -78,9 +81,19 @@ public class Client {
      */
     private static void dashboard() {
         ClientUtil.printDashboard(loggedUser);
-        String command=scanner.nextLine();
+        String command="";
         while(loggedUser!=null) {
+            ClientUtil.println("write the name of a portfolio to see it's details\n");
+            ClientUtil.println("s to browse stocks\n");
+            ClientUtil.println("p to see profile details\n");
+            ClientUtil.println("n to create a new portfolio\n");
+            ClientUtil.println("q to logout\n");
+            ClientUtil.println("> ");
+            command=scanner.nextLine();
             switch (command) {
+                case "s":
+                    browseStocks();
+                    break;
                 case "q":
                     logout();
                     break;
@@ -98,10 +111,76 @@ public class Client {
                         Util.print("Invalid command.\n\n");
                     break;
             }
-            command = scanner.nextLine();
         }
 
     }
+
+    private static void browseStocks() {
+        ArrayList<Function> f=new ArrayList<>();
+        String command;
+        ClientUtil.println("available search methods:\n");
+        ClientUtil.println("1. by ticker\n");
+        ClientUtil.println("2. by currency\n");
+        ClientUtil.println("3. by capitalization range\n");
+        ClientUtil.println("4. by PE ratio range\n");
+        ClientUtil.println("5. by Sector\n");
+        ClientUtil.println("6. by Quote Type (Equity/ETF)\n");
+        ClientUtil.println("7. by Industry\n");
+        ClientUtil.println("> ");
+        while(true){
+            command = scanner.nextLine();
+            switch (command) {
+                case "1":
+                    searchBy("ticker");
+                    break;
+                case "2":
+                    searchBy("currency");
+                    break;
+                case "3":
+                    searchIn("marketCap");
+                    break;
+                case "4":
+                    searchIn("trailingPE");
+                    break;
+                case "5":
+                    searchBy("sector");
+                    break;
+                case "6":
+                    searchBy("quoteType");
+                    break;
+                case "7":
+                    searchBy("industry");
+                    break;
+            }
+        }
+
+        
+    }
+
+    private static void searchIn(String attribute) {
+        ClientUtil.println("insert min from research:");
+        String min = scanner.nextLine();
+        ClientUtil.println("insert max from research:");
+        String max= scanner.nextLine();
+        try {
+            ClientUtil.printStocks(
+                    factory.getStockByAttribute(attribute,
+                            Double.parseDouble(min), Double.parseDouble(max))
+            );
+        }catch (Exception e)
+        {
+
+        }
+    }
+
+    private static void searchBy(String attribute) {
+        ClientUtil.println("insert value from research:\n");
+        String command = scanner.nextLine();
+        ClientUtil.printStocks(factory.getStockByAttribute(attribute, command));
+
+    }
+
+
 
     /**
      * Show portfolio's details
@@ -133,7 +212,12 @@ public class Client {
      * Show title's details
      */
     private static void showTitleDetails(Title t, Double portfolioTotInv) {
-        //todo
+        ClientUtil.println(
+                String.format( "%-6f%% of the portfolio %5s %-6f",
+                        t.getShare()*100/portfolioTotInv,
+                        " ", t.getShare())
+        );
+        ClientUtil.printStock(t.getStock());
     }
 
     /**
@@ -157,10 +241,16 @@ public class Client {
             command = scanner.nextLine();
             if (command.equals("q"))
                 return false;
-        } while((loggedUser=factory.login(
-                command.split(" ")[0],
-                command.split(" ")[1])
-        )==null);
+            try {
+                loggedUser=factory.login(
+                        command.split(" ")[0],
+                        command.split(" ")[1]);
+            }
+            catch (Exception e)
+            {
+                loggedUser=null;
+            }
+        } while(loggedUser==null);
         return true;
     }
     /**

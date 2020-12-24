@@ -24,8 +24,10 @@ public abstract class Stock {
     protected String exchange_time_zone_desc;
     protected String quoteType;
     protected URL logo_url;
+    protected double PE_ratio;
+    protected int market_cap;
 
-    protected Stock(String ticker, String sector, String industry, String summary, Location location, URL website, String market, String currency, String exchange, String short_name, String long_name, TimeZone exchange_time_zone, String exchange_time_zone_desc, String quoteType, URL logo_url) {
+    public Stock(String ticker, String sector, String industry, String summary, Location location, URL website, String market, String currency, String exchange, String short_name, String long_name, TimeZone exchange_time_zone, String exchange_time_zone_desc, String quoteType, URL logo_url, double PE_ratio, int market_cap) {
         this.ticker = ticker;
         this.sector = sector;
         this.industry = industry;
@@ -41,7 +43,21 @@ public abstract class Stock {
         this.exchange_time_zone_desc = exchange_time_zone_desc;
         this.quoteType = quoteType;
         this.logo_url = logo_url;
+        this.PE_ratio = PE_ratio;
+        this.market_cap = market_cap;
     }
+
+    public double getPE_ratio() {
+        return PE_ratio;
+    }
+
+    public abstract void setPE_ratio(double PE_ratio);
+
+    public int getMarket_cap() {
+        return market_cap;
+    }
+
+    public abstract void setMarket_cap(int market_cap);
 
     protected Stock() {
     }

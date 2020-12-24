@@ -1,9 +1,12 @@
 package it.unipi.lsmsdb.stocksim.client;
 
 import it.unipi.lsmsdb.stocksim.client.entities.Portfolio;
+import it.unipi.lsmsdb.stocksim.client.entities.Stock;
 import it.unipi.lsmsdb.stocksim.client.entities.Title;
 import it.unipi.lsmsdb.stocksim.client.entities.User;
 import it.unipi.lsmsdb.stocksim.util.Util;
+
+import java.util.List;
 
 /**
  * General purpose utility methods.
@@ -38,7 +41,7 @@ public class ClientUtil extends Util{
         print(String.format("Portfolio %5s %-40s%n"," ",p.getName()));
         for (Title title : p.getComposition()) {
             print(String.format(
-                    "%-6a %5s %-6s %5s %-40s%n",
+                    "%-6f %5s %-6s %5s %-40s%n",
                     title.getShare(), " ",
                     title.getStock().getTicker()," ",
                     title.getStock().getShort_name()));
@@ -47,26 +50,49 @@ public class ClientUtil extends Util{
         print("> ");
     }
 
-
+    /**
+     * Prints user dashboard
+     */
     public final static void printDashboard(final User u){
         if(u==null)
             return;
         print(String.format("Welcome %5s %-40s!%n"," ",u.getUsername()));
         for (Portfolio portfolio : u.getPortfolios()) {
             print(String.format(
-                    "%-6a %5s %-20s %5s %-20s%n",
+                    "%-6f %5s %-20s %5s %-20s%n",
                     portfolio.getTotalInvestment(), " ",
                     portfolio.getName()," ",
                     portfolio.getName()));
         }
-        print("write the name of a portfolio to see it's details\n");
-        print("q to logout\n");
-        print("p to see profile details\n");
-        print("n to create a new portfolio\n");
-        print("> ");
     }
 
     public static void printProfile(final User u) {
+        // todo to be completed
         print(String.format("Profile of %5s %-40s%n"," ",u.getUsername()));
+    }
+
+    public static void printStock(final Stock stock){
+        print(String.format(
+                "%-6s %5s %-20s %5s %-20s%n",
+                stock.getTicker(), " ",
+                stock.getShort_name()," ",
+                stock.getQuoteType()));
+    }
+    public static void printStockDetails(final Stock stock) {
+        // todo to be completed
+        if(stock==null)
+            return;
+        printStock(stock);
+        print(String.format(
+                "%-6s %5s %-20s %5s %-20s%n",
+                stock.getCurrency(), " ",
+                stock.getMarket_cap()," ",
+                stock.getPE_ratio()));
+    }
+
+    public static void printStocks(List<Stock> stocks) {
+        for (Stock stock : stocks) {
+            printStock(stock);
+        }
     }
 }

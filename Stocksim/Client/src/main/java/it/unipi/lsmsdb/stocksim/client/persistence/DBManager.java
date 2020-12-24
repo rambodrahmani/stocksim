@@ -10,14 +10,19 @@ import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import java.security.AlgorithmConstraints;
+import java.security.AlgorithmParameters;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
+
+import static com.mongodb.client.model.Filters.*;
 
 /**
  * Sotcksim Server DB Manager.
@@ -98,11 +103,64 @@ public class DBManager {
         catch (final Exception e){
 
         }finally {
-            db.disconnect();
+            disconnectMongoDB();
         }
         if(res!=null)
             return new StockImpl(res); //return stock instance
         return null;
+    }
+
+
+    /**
+     * @param attribute the ticker name in capital letters
+     * @return a list of stocks, can be empty
+     */
+    public List<Stock> getStockByAttribute(final String attribute, final String value) {
+        MongoDB db=getMongoDB(); //get the database and the collection
+        MongoCollection<Document> stocksColl=db.getCollection(StocksimCollection.STOCKS.getCollectionName());
+        Bson filter=eq(attribute,value);    //prepare query
+        ArrayList<Document> resultSet=null;
+        ArrayList<Stock> res=new ArrayList<>();
+        try {
+            resultSet=db.findMany(filter, stocksColl); //get resultSet
+        }
+        catch (final Exception e){
+
+        }finally {
+            disconnectMongoDB();
+        }
+        if(resultSet==null)
+            return res;
+        for (Document doc : resultSet) {
+            res.add(new StockImpl(doc));
+        }
+        return  res; //return stock instance
+    }
+
+    /**
+     * @param attribute the ticker name in capital letters
+     * @return a list of stocks, can be empty
+     */
+    public ArrayList<Stock> getStockByAttribute(String attribute, double min, double max) {
+        MongoDB db=getMongoDB(); //get the database and the collection
+        MongoCollection<Document> stocksColl=db.getCollection(StocksimCollection.STOCKS.getCollectionName());
+        Bson filter=and(gt(attribute,min), lt(attribute, max));    //prepare query
+        ArrayList<Document> resultSet=null;
+        ArrayList<Stock> res=new ArrayList<>();
+        try {
+            resultSet=db.findMany(filter, stocksColl); //get resultSet
+        }
+        catch (final Exception e){
+
+        }finally {
+            disconnectMongoDB();
+        }
+        if(resultSet==null)
+            return res;
+        for (Document doc : resultSet) {
+            res.add(new StockImpl(doc));
+        }
+        return  res; //return stock instance
     }
 
     /**
@@ -126,9 +184,7 @@ public class DBManager {
         }
         catch (final Exception e){
         }
-        finally {
-            db.disconnect();
-        }
+        disconnectMongoDB();
         if(ret){
             port.getComposition().add(new TitleImpl(stock, share)); //update entity
         }
@@ -143,17 +199,23 @@ public class DBManager {
     public User login(final String username, final String password) {
         MongoDB db = getMongoDB(); //get the database and the collection
         MongoCollection<Document> userColl = db.getCollection(StocksimCollection.USERS.getCollectionName());
-        Bson filter = and(eq("username", username), eq("password", password));
+        MessageDigest messageDigest=null;
+        try {
+            messageDigest=MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+        Bson filter = and(eq("username", username),
+                eq("password", DigestUtils.sha256Hex(password)));
         Document user=null;
         try {
            user = db.findOne(filter, userColl);
         }
         catch (final Exception e){
+            disconnectMongoDB();
             return null;
         }
-        finally {
-            db.disconnect();
-        }
+        disconnectMongoDB();;
         if(user!=null)
             return new UserImpl(user, this);
         else
@@ -167,23 +229,11 @@ public class DBManager {
      * @return the instance of the new portfolio, null if something(s) went wrong
      */
     public Portfolio createPortfolio(User owner, String name, String type) {
+        if(owner.getPortfolioByName("name")!=null)
+            return null;
         MongoDB db = getMongoDB(); //get the database and the collection
         MongoCollection<Document> userColl = db.getCollection(StocksimCollection.USERS.getCollectionName());
         Bson filter1=eq("username", owner.getUsername());
-        Bson filter2=and(filter1, eq("portfolios.name",name));
-        Document existent=null;
-        try {
-            // verify if exists another portfolio with the same name
-            existent = db.findOne(filter2, userColl);
-        }
-        catch (final Exception e){
-            db.disconnect();
-            return null;
-        }
-        if(existent!= null){
-            db.disconnect();
-            return null;
-        }
         Document newdoc=new Document();
         newdoc.append("name", name).append("type", type).append("composition", new ArrayList<Document>());
         Boolean res=false;
@@ -192,13 +242,95 @@ public class DBManager {
             res=db.insertInArray(filter1, "portfolios",newdoc, userColl );
         }
         catch (final Exception e){
+            disconnectMongoDB();
             return null;
         }
-        finally {
-            db.disconnect();
-        }
+        disconnectMongoDB();
         if(res) // create the new instance
             return new PortfolioImpl(owner,newdoc,this);
         return null;
     }
+
+    /** verify if a username is available
+     * @param username the owner of the new portfolio
+     * @return true if it's available, false otherwise
+     */
+    public  boolean checkUsername(String username){
+        MongoDB db = getMongoDB(); //get the database and the collection
+        MongoCollection<Document> userColl = db.getCollection(StocksimCollection.USERS.getCollectionName());
+        Bson filter1=eq("username", username);
+        Document existent=null;
+        try {
+            // verify if exists another portfolio with the same name
+            existent = db.findOne(filter1, userColl);
+        }
+        catch (final Exception e){
+            disconnectMongoDB();
+            return false;
+        }
+        disconnectMongoDB();
+        if(existent!= null){
+            return false;
+        }
+        return true;
+    }
+
+    /** verify if an email is available
+     * @param email the owner of the new portfolio
+     * @return true if it's available, false otherwise
+     */
+    public  boolean checkEmail(String email){
+        MongoDB db = getMongoDB(); //get the database and the collection
+        MongoCollection<Document> userColl = db.getCollection(StocksimCollection.USERS.getCollectionName());
+        Bson filter1=eq("email", email);
+        Document existent=null;
+        try {
+            // verify if exists another portfolio with the same name
+            existent = db.findOne(filter1, userColl);
+        }
+        catch (final Exception e){
+            disconnectMongoDB();
+            return false;
+        }
+        disconnectMongoDB();
+        if(existent!= null){
+            return false;
+        }
+        return true;
+    }
+
+    /** verify if an email is available
+     * @param email the owner of the new portfolio
+     * @return true if it's available, false otherwise
+     */
+    public User registerNewUser(String name, String surname, String username, String email, String password){
+        MongoDB db = getMongoDB(); //get the database and the collection
+        MongoCollection<Document> userColl = db.getCollection(StocksimCollection.USERS.getCollectionName());
+        Document newDoc=new Document();
+        MessageDigest messageDigest=null;
+        try {
+            messageDigest=MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+        newDoc.append("name", name).append("surname", surname).append("email",email).append("username", username)
+                .append("password",  DigestUtils.sha256Hex(password))
+        .append("portfolios", new ArrayList<Document>());
+        User ret=null;
+        try {
+            if(!db.insertOne(newDoc,userColl )){
+                disconnectMongoDB();
+                return null;
+            }
+        }
+        catch (Exception e){
+            disconnectMongoDB();
+            return null;
+        }
+        disconnectMongoDB();
+            return new UserImpl(newDoc, this);
+
+    }
+
+
 }

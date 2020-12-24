@@ -28,19 +28,19 @@ import java.util.TimeZone;
 
          try {
              website=new URL(doc.getString("sector"));
-         } catch (MalformedURLException e) {
+         } catch (final MalformedURLException e) {
              website=null;
          }
 
          try {
              timeZone=TimeZone.getTimeZone(doc.getString("exchangeTimeZoneShortName")) ;
-         } catch (Exception e) {
+         } catch (final Exception e) {
              timeZone=null;
          }
 
          try {
              logo=new URL(doc.getString("logoURL"));
-         } catch (MalformedURLException e) {
+         } catch (final MalformedURLException e) {
              logo=null;
          }
 
@@ -59,15 +59,36 @@ import java.util.TimeZone;
         this.exchange_time_zone_desc = doc.getString("exchangeTimeZoneName");
         this.quoteType = doc.getString("quoteType");
         this.logo_url= logo;
+         try {
+             market_cap=doc.getInteger("marketCap");
+         } catch (final Exception e) {
+             market_cap=0;
+         }
+         try {
+             PE_ratio=doc.getDouble("trailingPE");
+         } catch (final Exception e) {
+             PE_ratio=0.0;
+         }
     }
+
+
 
     /**
      * Setters to be performed also in the database
      *
      * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
      */
-
     // todo
+    @Override
+    public void setPE_ratio(double PE_ratio) {
+
+    }
+
+    @Override
+    public void setMarket_cap(int market_cap) {
+
+    }
+
      @Override
      public void setSector(String sector) {
 
