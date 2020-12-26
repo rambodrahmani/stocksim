@@ -6,10 +6,10 @@ package it.unipi.lsmsdb.stocksim.database.mongoDB;
  */
 public class MongoServer {
     // mongo server ip address
-    public String hostname;
+    private String hostname;
 
     // mongo server port number
-    public int port;
+    private int port;
 
     /**
      * Default constructor.
@@ -20,5 +20,19 @@ public class MongoServer {
     public MongoServer(final String hostname, final int port) {
         this.hostname = hostname;
         this.port = port;
+    }
+
+    /**
+     * @return mongo server hostname address.
+     */
+    public String getHostname() {
+        return hostname;
+    }
+
+    /**
+     * @return mongo server port.
+     */
+    public int getPort() {
+        return port;
     }
 }

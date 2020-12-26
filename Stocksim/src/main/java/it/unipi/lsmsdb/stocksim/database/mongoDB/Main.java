@@ -16,10 +16,15 @@ import static com.mongodb.client.model.Filters.*;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class Main {
-    // mongo db factory
-    private static  final MongoDBFactory mongoDBFactory = MongoDBFactory.create();
-
+    /**
+     * Developer harness test entry point.
+     *
+     * @param args command line arguments.
+     */
     public static void main(String[] args) {
+        // mongo db factory
+        final MongoDBFactory mongoDBFactory = MongoDBFactory.create();
+
         // connect and get the collection
         MongoDB dbManager = mongoDBFactory.getMongoDB("stocksim");
         System.out.println(dbManager.connect());

@@ -5,7 +5,6 @@ import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
 
 /**
  * DB Manager interface.
- *
  * All DB Managers should implement this interface.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.

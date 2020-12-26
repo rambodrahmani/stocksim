@@ -85,7 +85,7 @@ public class MongoDB implements DB {
     private String buildConnectionString(final List<MongoServer> servers) {
         String s = "";
         for (final MongoServer server : servers) {
-            s += server.hostname + ":" + server.port + ",";
+            s += server.getHostname() + ":" + server.getPort() + ",";
         }
         return  s.substring(0, s.length()-1);
     }
@@ -172,14 +172,14 @@ public class MongoDB implements DB {
     }
 
     /**
-     * insert a document in an array, if possible
+     * Inserts the given document in the given collection.
      *
-     * @param collection the collection where to perform the operation
-     * @param newDoc the document to be inserted
+     * @param collection the collection where to perform the operation;
+     * @param newDoc the document to be inserted;
      *
-     * @return  true if everything's ok, false otherwise
+     * @return true if the new document is inserted without errors, false otherwise.
      */
-    public Boolean insertOne(Document newDoc, MongoCollection<Document> collection) throws MongoException{
+    public Boolean insertOne(final Document newDoc, final MongoCollection<Document> collection) throws MongoException{
         return collection.insertOne(newDoc).wasAcknowledged();
     }
 
@@ -207,7 +207,8 @@ public class MongoDB implements DB {
      * @param arrayFilters filters to be applied at the array(s) field(s)
      * @return  true if everything's ok and one document has been updated, false otherwise
      */
-    public Boolean updateOneInNestedArray(final Bson filter,final List<Bson> arrayFilters, final Bson updates, final MongoCollection<Document> collection) {
+    public Boolean updateOneInNestedArray(final Bson filter, final List<Bson> arrayFilters, final Bson updates,
+                                          final MongoCollection<Document> collection) {
         UpdateOptions uo=new UpdateOptions();
         uo.arrayFilters(arrayFilters);
         UpdateResult upRes=collection.updateOne(filter, updates, uo);
@@ -216,15 +217,15 @@ public class MongoDB implements DB {
 
 
     /**
-     * delete one document witch match filters, if possible
+     * Deletes the document which matches the given filter from the given collection.
      *
-     * @param collection the collection where to perform the operation
-     * @param filter filters to find the document
+     * @param collection the collection where to perform the operation;
+     * @param filter filter to be used to find the document.
      *
-     * @return  true if everything's ok and one document has been deleted, false otherwise
+     * @return true if the document is deleted without errors, false otherwise.
      */
-    public Boolean deleteOne(Bson filter, MongoCollection<Document> collection) {
-        DeleteResult deleteResult = collection.deleteOne(filter);
+    public Boolean deleteOne(final Bson filter, final MongoCollection<Document> collection) {
+        final DeleteResult deleteResult = collection.deleteOne(filter);
         return (deleteResult.wasAcknowledged() && deleteResult.getDeletedCount() > 0);
     }
 
@@ -238,21 +239,21 @@ public class MongoDB implements DB {
      *
      * @return  true if everything's ok and at least one document has been deleted, false otherwise
      */
-    public Boolean deleteFromArray(final Bson filter,final String arrayName, final Bson arrayFilter, final MongoCollection<Document> collection) {
-        UpdateResult upRes=collection.updateOne(filter, Updates.pull(arrayName,arrayFilter));
+    public Boolean deleteFromArray(final Bson filter, final String arrayName, final Bson arrayFilter, final MongoCollection<Document> collection) {
+        final UpdateResult upRes = collection.updateOne(filter, Updates.pull(arrayName, arrayFilter));
         return (upRes.wasAcknowledged() && upRes.getMatchedCount() > 0);
     }
 
     /**
-     * delete documents witch match filters, if possible
+     * Deletes the documents which matches the given filter from the given collection.
      *
-     * @param collection the collection where to perform the operation
-     * @param filter filters to find the documents
+     * @param collection the collection where to perform the operation;
+     * @param filter filter to be used to find the documents.
      *
-     * @return  the number of documents deleted. In case of error(s) return 0
+     * @return the number of deleted documents, 0 in case of error.
      */
-    public int deleteMany(Bson filter, MongoCollection<Document> collection) {
-        DeleteResult deleteResult = collection.deleteMany(filter);
+    public int deleteMany(final Bson filter, final MongoCollection<Document> collection) {
+        final DeleteResult deleteResult = collection.deleteMany(filter);
 
         if (deleteResult.wasAcknowledged()) {
             return (int) deleteResult.getDeletedCount();

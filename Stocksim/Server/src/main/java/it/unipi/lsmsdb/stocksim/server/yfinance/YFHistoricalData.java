@@ -41,31 +41,52 @@ public class YFHistoricalData {
         this.volume = volume;
     }
 
+    /**
+     * @return this.date.
+     */
     public LocalDate getDate() {
-        return date;
+        return this.date;
     }
 
+    /**
+     * @return this.adj_close.
+     */
     public BigDecimal getAdjClose() {
-        return adj_close;
+        return this.adj_close;
     }
 
+    /**
+     * @return this.close.
+     */
     public BigDecimal getClose() {
-        return close;
+        return this.close;
     }
 
+    /**
+     * @return this.high.
+     */
     public BigDecimal getHigh() {
-        return high;
+        return this.high;
     }
 
+    /**
+     * @return this.low.
+     */
     public BigDecimal getLow() {
-        return low;
+        return this.low;
     }
 
+    /**
+     * @return this.open.
+     */
     public BigDecimal getOpen() {
-        return open;
+        return this.open;
     }
 
+    /**
+     * @return this.volume.
+     */
     public BigDecimal getVolume() {
-        return volume;
+        return this.volume;
     }
 }

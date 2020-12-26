@@ -12,13 +12,13 @@ import java.util.Arrays;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class Main {
-
     /**
-     * Entry point.
+     * Developer harness test entry point.
      *
      * @param args command line arguments.
      */
     public static void main(final String[] args) {
+        // cassandra db factory
         final CassandraDBFactory cassandraDBFactory = CassandraDBFactory.create();
 
         // default constructor: empty Cassandra DB

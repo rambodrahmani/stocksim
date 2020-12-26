@@ -1,7 +1,7 @@
 package it.unipi.lsmsdb.stocksim.database.mongoDB;
 
 /**
- * MongoDB Collections names.
+ * MongoDB Collections names for the StockSim application.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
