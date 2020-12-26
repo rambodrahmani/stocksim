@@ -93,6 +93,7 @@ public class YahooFinance {
         final JSONObject summaryDetails = new JSONObject(IOUtils.toString(new URL(V10URL), StandardCharsets.UTF_8));
         final JSONObject summaryDetail = summaryDetails.getJSONObject("quoteSummary").getJSONArray("result").getJSONObject(0).getJSONObject("summaryDetail");
 
+        // check if the required field is available
         if (summaryDetail.has("trailingPE")) {
             final JSONObject trailingPE = summaryDetail.getJSONObject("trailingPE");
             if (summaryDetail.has("raw")) {
@@ -104,6 +105,7 @@ public class YahooFinance {
             ret.setTrailingPE(0);
         }
 
+        // check if the required field is available
         if (summaryDetail.has("marketCap")) {
             final JSONObject marketCap = summaryDetail.getJSONObject("marketCap");
             if (marketCap.has("raw")) {

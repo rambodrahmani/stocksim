@@ -7,7 +7,7 @@ import org.apache.commons.cli.*;
 import java.util.Scanner;
 
 /**
- * Sotcksim Server implementation.
+ * SotckSim Server implementation.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */

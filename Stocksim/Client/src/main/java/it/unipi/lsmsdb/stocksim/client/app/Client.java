@@ -36,7 +36,7 @@ public class Client {
                 .longOpt("admin")
                 .argName("admin")
                 .desc("Run StockSim client in admin mode.")
-                .required(true)
+                .required(false)
                 .hasArg(false)
                 .build();
 
@@ -46,7 +46,7 @@ public class Client {
         try {
             final CommandLine commandLine = argsParser.getCommandLine(args);
 
-            if (!commandLine.hasOption("admin")) {
+            if (commandLine.hasOption("admin")) {
                 new ClientAdmin().run();
             } else {
                 new ClientUser().run();
