@@ -1,7 +1,5 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
-import it.unipi.lsmsdb.stocksim.client.database.DBManager;
-import it.unipi.lsmsdb.stocksim.util.Util;
 import java.util.Scanner;
 
 /**
@@ -12,9 +10,6 @@ import java.util.Scanner;
 public class ClientUser {
     // Default input scanner.
     private final Scanner scanner = new Scanner(System.in);
-
-    // StockSim Client user mode DB Manager.
-    private final DBManager dbManager = new DBManager();
 
     /**
      * StockSim Client user mode run main loop.
@@ -59,6 +54,6 @@ public class ClientUser {
         // ask for password username
         final String password = scanner.nextLine();
 
-        // do th login
+        // do the login
     }
 }

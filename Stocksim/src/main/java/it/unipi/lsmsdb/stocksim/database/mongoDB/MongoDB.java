@@ -136,7 +136,7 @@ public class MongoDB implements DB {
      * @param filter the filter in bson format to be used.
      * @param collection the collection where to perform the search.
      *
-     * @return the first document that satisfies the given filter.
+     * @return the first document that satisfies the given filter, null otherwise.
      */
     public Document findOne(final Bson filter, final MongoCollection<Document> collection) throws MongoException{
         return collection.find(filter).first();

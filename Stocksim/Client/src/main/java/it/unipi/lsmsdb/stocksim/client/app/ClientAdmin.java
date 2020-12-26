@@ -1,7 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
 import it.unipi.lsmsdb.stocksim.client.admin.Admin;
-import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 
 import java.util.Scanner;
 
@@ -12,23 +11,24 @@ import java.util.Scanner;
  */
 public class ClientAdmin {
     // Default input scanner.
-    private final Scanner scanner = new Scanner(System.in);
-
-    // StockSim Client admin mode DB Manager.
-    private final DBManager dbManager = new DBManager();
+    private static final Scanner scanner = new Scanner(System.in);
 
     // StockSim admin
-    private Admin admin = null;
+    private static Admin admin = null;
 
     /**
      * StockSim Client admin mode run main loop.
      */
-    public void run() {
+    public static void run() {
         ClientUtil.println("*** [RUNNING IN ADMIN MODE] ***\n");
 
         // infinite main loop
         while (true) {
-            ClientUtil.printAdminMainMenu();
+            if (isLoggedIn()) {
+                ClientUtil.printAdminMainMenu();
+            } else {
+                ClientUtil.printAdminLoginMenu();
+            }
             final String command = scanner.nextLine();
             parseCommand(command);
         }
@@ -39,10 +39,19 @@ public class ClientAdmin {
      *
      * @param command the command to be executed, if valid.
      */
-    private void parseCommand(final String command) {
+    private static void parseCommand(final String command) {
         switch (command) {
             case "login":
-                login();
+                if (login()) {
+                    ClientUtil.println("Admin login executed correctly.");
+                    ClientUtil.println("Welcome " + admin.getName() + " " + admin.getSurname() + ".\n");
+                } else {
+                    ClientUtil.println("Admin login failed.\n");
+                }
+                break;
+            case "logout":
+                logout();
+                ClientUtil.println("Admin logged out.\n");
                 break;
             case "quit":
                 System.exit(0);
@@ -56,18 +65,39 @@ public class ClientAdmin {
     /**
      * Admin login.
      */
-    private void login() {
+    private static boolean login() {
+        boolean ret = true;
+
         // ask for admin username
+        ClientUtil.print("Username: ");
         final String username = scanner.nextLine();
 
         // ask for password username
+        ClientUtil.print("Password: ");
         final String password = scanner.nextLine();
 
-        // do the login
-        if (admin == null) {
-            admin = new Admin(username, password);
+        // do the login if not already logged in
+        if (isLoggedIn()) {
+            ClientUtil.println("Admin login already executed.");
         } else {
-            ClientUtil.println("Admin login already executed/");
+            admin = new Admin(username, password);
+            ret = admin.login();
         }
+
+        return ret;
+    }
+
+    /**
+     * Admin logout.
+     */
+    private static void logout() {
+        admin = admin.logout();
+    }
+
+    /**
+     * @return if the admin has been allocated and logged in.
+     */
+    private static boolean isLoggedIn() {
+        return admin != null && admin.isLoggedIn();
     }
 }
