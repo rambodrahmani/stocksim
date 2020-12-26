@@ -19,7 +19,7 @@ public class Server {
     final static DBManager dbManager = new DBManager();
 
     /**
-     * Server entry point.
+     * StockSim Server entry point.
      *
      * @param args command line arguments.
      */
@@ -27,8 +27,7 @@ public class Server {
         // print welcome message
         ServerUtil.printWelcomeMessage();
 
-        // parse command line arguments and run historical data update
-        // if needed
+        // parse command line arguments and run historical data update if needed
         parseArguments(args);
 
         // infinite main loop
@@ -45,6 +44,7 @@ public class Server {
      * @param args the command line arguments to be parsed.
      */
     private static void parseArguments(final String[] args) {
+        // prepare args parser option
         final Option noUpdate = Option.builder("n")
                 .longOpt("no-update")
                 .argName("noupdate")
@@ -53,7 +53,7 @@ public class Server {
                 .hasArg(false)
                 .build();
 
-        // build and args parser with single option
+        // build an args parser with single option
         final ArgsParser argsParser = new ArgsParser(noUpdate);
 
         try {
@@ -64,7 +64,7 @@ public class Server {
                 dbManager.updateDB();
             }
         } catch (final ParseException e) {
-            argsParser.printHelp("./stocksim --no-update");
+            argsParser.printHelp("./server --no-update");
             System.exit(1);
         }
     }

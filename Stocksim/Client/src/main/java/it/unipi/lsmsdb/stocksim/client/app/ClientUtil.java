@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.stocksim.client;
+package it.unipi.lsmsdb.stocksim.client.app;
 
 import it.unipi.lsmsdb.stocksim.client.entities.Portfolio;
 import it.unipi.lsmsdb.stocksim.client.entities.Stock;
@@ -18,7 +18,7 @@ public class ClientUtil extends Util{
      * Prints the main menu for the Server usage.
      */
     public final static void printWelcomeMessage() {
-        print("Welcome to the StockSim Client.\n\n");
+        println("Welcome to the StockSim Client.\n");
     }
 
     /**
