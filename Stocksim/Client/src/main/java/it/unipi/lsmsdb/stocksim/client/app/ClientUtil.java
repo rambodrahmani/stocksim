@@ -39,12 +39,21 @@ public class ClientUtil extends Util{
     }
 
     /**
-     * Prints the main menu for the Client usage in user mode.
+     * Prints the login menu for the Client usage in admin mode.
+     */
+    public final static void printUserLoginMenu() {
+        print("Available Commands:\n");
+        print(String.format("%-6s %5s %-40s%n", "login", " ", "login to your admin account."));
+        print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit StockSim client."));
+        print("> ");
+    }
+
+    /**
+     * Prints the main menu for the Client usage in admin mode.
      */
     public final static void printUserMainMenu() {
         print("Available Commands:\n");
-        print(String.format("%-6s %5s %-40s%n", "login", " ", "login to your user account."));
-        print(String.format("%-6s %5s %-40s%n", "register", " ", "register a new user account."));
+        print(String.format("%-6s %5s %-40s%n", "logout", " ", "login to your admin account."));
         print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit StockSim client."));
         print("> ");
     }

@@ -1,5 +1,7 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
+import it.unipi.lsmsdb.stocksim.client.user.User;
+
 import java.util.Scanner;
 
 /**
@@ -9,17 +11,24 @@ import java.util.Scanner;
  */
 public class ClientUser {
     // Default input scanner.
-    private final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+
+    // StockSim user
+    private static User user = null;
 
     /**
      * StockSim Client user mode run main loop.
      */
-    public void run() {
+    public static void run() {
         ClientUtil.println("*** [RUNNING IN USER MODE] ***\n");
 
         // infinite main loop
         while (true) {
-            ClientUtil.printUserMainMenu();
+            if (isLoggedIn()) {
+                ClientUtil.printUserMainMenu();
+            } else {
+                ClientUtil.printUserLoginMenu();
+            }
             final String command = scanner.nextLine();
             parseCommand(command);
         }
@@ -30,10 +39,19 @@ public class ClientUser {
      *
      * @param command the command to be executed, if valid.
      */
-    public void parseCommand(final String command) {
+    private static void parseCommand(final String command) {
         switch (command) {
             case "login":
-                login();
+                if (login()) {
+                    ClientUtil.println("User login executed correctly.");
+                    ClientUtil.println("Welcome " + user.getName() + " " + user.getSurname() + ".\n");
+                } else {
+                    ClientUtil.println("User login failed.\n");
+                }
+                break;
+            case "logout":
+                logout();
+                ClientUtil.println("User logged out.\n");
                 break;
             case "quit":
                 System.exit(0);
@@ -47,13 +65,39 @@ public class ClientUser {
     /**
      * User login.
      */
-    private void login() {
-        // ask for admin username
+    private static boolean login() {
+        boolean ret = true;
+
+        // ask for user username
+        ClientUtil.print("Username: ");
         final String username = scanner.nextLine();
 
         // ask for password username
+        ClientUtil.print("Password: ");
         final String password = scanner.nextLine();
 
-        // do the login
+        // do the login if not already logged in
+        if (isLoggedIn()) {
+            ClientUtil.println("User login already executed.");
+        } else {
+            user = new User(username, password);
+            ret = user.login();
+        }
+
+        return ret;
+    }
+
+    /**
+     * User logout.
+     */
+    private static void logout() {
+        user = user.logout();
+    }
+
+    /**
+     * @return if the user has been allocated and logged in.
+     */
+    private static boolean isLoggedIn() {
+        return user != null && user.isLoggedIn();
     }
 }
