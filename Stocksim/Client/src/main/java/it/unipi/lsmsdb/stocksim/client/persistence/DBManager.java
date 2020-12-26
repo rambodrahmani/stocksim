@@ -74,7 +74,7 @@ public class DBManager {
      */
     private MongoDB getMongoDB() {
         if (mongoDB == null) {
-            mongoDB = mongoDBFactory.getMongoDBManager( "stocksim");
+            mongoDB = mongoDBFactory.getMongoDB("stocksim");
         }
         mongoDB.connect();
 

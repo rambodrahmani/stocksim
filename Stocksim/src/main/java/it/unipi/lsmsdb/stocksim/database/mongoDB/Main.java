@@ -21,7 +21,7 @@ public class Main {
 
     public static void main(String[] args) {
         // connect and get the collection
-        MongoDB dbManager = mongoDBFactory.getMongoDBManager("stocksim");
+        MongoDB dbManager = mongoDBFactory.getMongoDB("stocksim");
         System.out.println(dbManager.connect());
         final MongoCollection<Document> collection = dbManager.getCollection(StocksimCollection.USERS.getCollectionName());
 

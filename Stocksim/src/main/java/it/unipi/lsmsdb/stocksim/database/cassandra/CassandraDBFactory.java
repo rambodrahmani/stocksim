@@ -11,7 +11,6 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class CassandraDBFactory implements DBFactory {
-
     /**
      * Default constructor.
      */

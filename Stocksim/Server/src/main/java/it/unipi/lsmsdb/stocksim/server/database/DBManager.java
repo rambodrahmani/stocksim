@@ -11,6 +11,7 @@ import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
+import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoServer;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
 import it.unipi.lsmsdb.stocksim.server.app.ServerUtil;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YFHistoricalData;
@@ -23,9 +24,10 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -56,7 +58,7 @@ public class DBManager {
         boolean ret = false;
 
         try {
-            final ResultSet resultSet = getCassandraDB().query("SELECT DISTINCT symbol FROM stocksim.tickers;");
+            final ResultSet resultSet = getCassandraDB().query(CassandraQueryBuilder.getTickerSymbolsQuery());
             final int cassandraTickersCount = resultSet.all().size();
             final MongoCollection<Document> mongoTickersCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
             final int mongoTickersCount = (int) mongoTickersCollection.countDocuments();
@@ -205,7 +207,9 @@ public class DBManager {
      */
     private CassandraDB getCassandraDB() {
         if (cassandraDB == null) {
-            cassandraDB = cassandraDBFactory.getCassandraDB("192.168.2.133", 9042, "datacenter1");
+            final ArrayList<String> hostnames = new ArrayList<String>(Arrays.asList("172.16.3.94", "172.16.3.95", "172.16.3.96"));
+            final ArrayList<Integer> ports = new ArrayList<Integer>(Arrays.asList(9042, 9042, 9042));
+            cassandraDB = cassandraDBFactory.getCassandraDB(hostnames, ports, "datacenter1");
             cassandraDB.connect();
         }
 
@@ -224,7 +228,12 @@ public class DBManager {
      */
     private MongoDB getMongoDB() {
         if (mongoDB == null) {
-            mongoDB = mongoDBFactory.getMongoDBManager("192.168.2.133", 27017, "stocksim");
+            final MongoServer mongoServer1 = new MongoServer("172.16.3.94", 27017);
+            final MongoServer mongoServer2 = new MongoServer("172.16.3.95", 27017);
+            final MongoServer mongoServer3 = new MongoServer("172.16.3.96", 27017);
+            final ArrayList<MongoServer> servers = new ArrayList<>(Arrays.asList(mongoServer1, mongoServer2, mongoServer3));
+
+            mongoDB = mongoDBFactory.getMongoDB(servers, "stocksim");
             mongoDB.connect();
         }
 

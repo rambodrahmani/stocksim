@@ -9,7 +9,7 @@ public class MongoServer {
     public String hostname;
 
     // mongo server port number
-    public String port;
+    public int port;
 
     /**
      * Default constructor.
@@ -17,7 +17,7 @@ public class MongoServer {
      * @param hostname the address of the MongoDB Server.
      * @param port the port of the MongoDB Server.
      */
-    public MongoServer(final String hostname, final String port) {
+    public MongoServer(final String hostname, final int port) {
         this.hostname = hostname;
         this.port = port;
     }
