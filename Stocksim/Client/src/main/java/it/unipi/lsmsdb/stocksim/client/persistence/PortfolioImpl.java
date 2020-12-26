@@ -53,7 +53,14 @@ class PortfolioImpl extends Portfolio {
          return dbm.addStockToPortfolio(stock, share, this);
      }
 
-     protected void setComposition(final ArrayList<Title> composition) {
+    @Override
+    public boolean remove(Title title) {
+         if(this.composition.remove(title))
+             return new DBManager().removeStockFromPortfolio(title.getStock(), this);
+         return false;
+    }
+
+    protected void setComposition(final ArrayList<Title> composition) {
             // todo
      }
 

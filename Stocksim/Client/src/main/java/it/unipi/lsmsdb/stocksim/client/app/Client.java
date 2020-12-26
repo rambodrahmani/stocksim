@@ -115,6 +115,9 @@ public class Client {
 
     }
 
+    /**
+     * Browse the stocks' collection
+     */
     private static void browseStocks() {
         ArrayList<Function> f=new ArrayList<>();
         String command;
@@ -157,6 +160,10 @@ public class Client {
         
     }
 
+    /**
+     * Search by a parameter in a particular range
+     * @param attribute the attribute which to perform the search
+     */
     private static void searchIn(String attribute) {
         ClientUtil.println("insert min from research:");
         String min = scanner.nextLine();
@@ -168,18 +175,23 @@ public class Client {
                             Double.parseDouble(min), Double.parseDouble(max))
             );
         }catch (Exception e)
-        {
-
-        }
+        {        }
     }
 
+    /**
+     * Search by a parameter having an exact value
+     * @param attribute the attribute which to perform the search
+     */
     private static void searchBy(String attribute) {
         ClientUtil.println("insert value from research:\n");
         String command = scanner.nextLine();
-        ClientUtil.printStocks(factory.getStockByAttribute(attribute, command));
+        try {
+            ClientUtil.printStocks(factory.getStockByAttribute(attribute, command));
+        }
+        catch (Exception e)
+        {        }
 
     }
-
 
 
     /**
@@ -229,6 +241,13 @@ public class Client {
         Portfolio newp=loggedUser.addPortfolio("ClientPort", "client");
         if(newp!=null)
             newp.add(factory.getStockByTicker("AAPL"), 100.00);
+    }
+
+    /**
+     * Delete a portfolio if exists
+     */
+    private static void deletePortfolio(Portfolio p) {
+        factory.deletePortfolio(p);
     }
 
     /**

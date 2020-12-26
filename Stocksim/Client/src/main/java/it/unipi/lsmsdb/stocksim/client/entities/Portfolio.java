@@ -43,6 +43,8 @@ public  abstract class Portfolio {
 
     public abstract boolean add(Stock stock, Double share);
 
+    public abstract boolean remove(Title title);
+
     public User getOwner() {
         return owner;
     }
