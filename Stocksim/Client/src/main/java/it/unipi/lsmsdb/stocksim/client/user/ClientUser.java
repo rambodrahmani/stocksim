@@ -1,5 +1,6 @@
-package it.unipi.lsmsdb.stocksim.client.app;
+package it.unipi.lsmsdb.stocksim.client.user;
 
+import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.user.User;
 
 import java.util.Scanner;

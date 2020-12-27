@@ -1,5 +1,7 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
+import it.unipi.lsmsdb.stocksim.client.admin.ClientAdmin;
+import it.unipi.lsmsdb.stocksim.client.user.ClientUser;
 import it.unipi.lsmsdb.stocksim.util.ArgsParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -47,9 +49,9 @@ public class Client {
             final CommandLine commandLine = argsParser.getCommandLine(args);
 
             if (commandLine.hasOption("admin")) {
-                new ClientAdmin().run();
+                ClientAdmin.run();
             } else {
-                new ClientUser().run();
+                ClientUser.run();
             }
         } catch (final ParseException e) {
             argsParser.printHelp("./client --admin");

@@ -1,9 +1,9 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
+import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
+import it.unipi.lsmsdb.stocksim.client.user.UserMenuAction;
 import it.unipi.lsmsdb.stocksim.util.Util;
 import org.apache.commons.codec.digest.DigestUtils;
-
-import java.util.List;
 
 /**
  * General purpose utility methods.
@@ -23,8 +23,8 @@ public class ClientUtil extends Util{
      */
     public final static void printAdminLoginMenu() {
         print("Available Commands:\n");
-        print(String.format("%-6s %5s %-40s%n", "login", " ", "login to your admin account."));
-        print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit StockSim client."));
+        print(String.format("%-6s %5s %-40s%n", AdminMenuAction.LOGIN.getActionName(), " ", AdminMenuAction.LOGIN.getActionDescription()));
+        print(String.format("%-6s %5s %-40s%n", AdminMenuAction.QUIT.getActionName(), " ", AdminMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 
@@ -33,8 +33,11 @@ public class ClientUtil extends Util{
      */
     public final static void printAdminMainMenu() {
         print("Available Commands:\n");
-        print(String.format("%-6s %5s %-40s%n", "logout", " ", "login to your admin account."));
-        print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit StockSim client."));
+        print(String.format("%-12s %5s %-40s%n", AdminMenuAction.ADD_TICKER.getActionName(), " ", AdminMenuAction.ADD_TICKER.getActionDescription()));
+        print(String.format("%-12s %5s %-40s%n", AdminMenuAction.ADD_ADMIN.getActionName(), " ", AdminMenuAction.ADD_ADMIN.getActionDescription()));
+        print(String.format("%-12s %5s %-40s%n", AdminMenuAction.REMOVE_USER.getActionName(), " ", AdminMenuAction.REMOVE_USER.getActionDescription()));
+        print(String.format("%-12s %5s %-40s%n", AdminMenuAction.LOGOUT.getActionName(), " ", AdminMenuAction.LOGOUT.getActionDescription()));
+        print(String.format("%-12s %5s %-40s%n", AdminMenuAction.QUIT.getActionName(), " ", AdminMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 
@@ -43,8 +46,8 @@ public class ClientUtil extends Util{
      */
     public final static void printUserLoginMenu() {
         print("Available Commands:\n");
-        print(String.format("%-6s %5s %-40s%n", "login", " ", "login to your admin account."));
-        print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit StockSim client."));
+        print(String.format("%-12s %5s %-40s%n", UserMenuAction.LOGIN.getActionName(), " ", UserMenuAction.LOGIN.getActionDescription()));
+        print(String.format("%-12s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 
@@ -53,8 +56,8 @@ public class ClientUtil extends Util{
      */
     public final static void printUserMainMenu() {
         print("Available Commands:\n");
-        print(String.format("%-6s %5s %-40s%n", "logout", " ", "login to your admin account."));
-        print(String.format("%-6s %5s %-40s%n", "quit", " ", "quit StockSim client."));
+        print(String.format("%-12s %5s %-40s%n", UserMenuAction.LOGOUT.getActionName(), " ", UserMenuAction.LOGOUT.getActionDescription()));
+        print(String.format("%-12s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 

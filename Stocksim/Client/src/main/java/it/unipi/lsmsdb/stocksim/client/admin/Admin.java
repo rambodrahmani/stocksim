@@ -47,6 +47,20 @@ public class Admin {
         return loggedIn;
     }
 
+    public boolean addTicker(final String symbol, final String csvPath) {
+        boolean ret  = true;
+
+        // check if symbol is not already present in the db
+
+        // load the csv
+
+        // check csv format
+
+        // add ticker to db
+
+        return ret;
+    }
+
     /**
      * Executes admin logout.
      *
@@ -74,7 +88,7 @@ public class Admin {
     /**
      * @param surname the surname retrieved from the db.
      */
-    public void setSurname(String surname) {
+    public void setSurname(final String surname) {
         this.surname = surname;
     }
 

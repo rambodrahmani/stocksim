@@ -117,6 +117,19 @@ public class DBManager {
     }
 
     /**
+     * Checks if historical data is available for the given symbol.
+     *
+     * @param symbol
+     *
+     * @return
+     */
+    public boolean checkTickerExists(final String symbol) {
+        boolean ret = true;
+
+        return ret;
+    }
+
+    /**
      * Executes a user login.
      *
      * @param user user to be logged in.
