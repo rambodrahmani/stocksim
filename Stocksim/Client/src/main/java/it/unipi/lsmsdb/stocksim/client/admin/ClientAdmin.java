@@ -220,7 +220,12 @@ public class ClientAdmin {
     private static boolean removeUser() {
         boolean ret = true;
 
-        // TODO: implement
+        // ask for new user account email
+        ClientUtil.print("User account email: ");
+        final String email = scanner.nextLine();
+
+        // remove the user with the given email
+        ret = admin.removeUserAccount(email);
 
         return ret;
     }

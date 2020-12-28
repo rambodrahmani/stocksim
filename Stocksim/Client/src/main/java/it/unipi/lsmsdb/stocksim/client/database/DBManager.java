@@ -192,6 +192,28 @@ public class DBManager {
     }
 
     /**
+     * Deletes the user account with the given email.
+     *
+     * @param email admin account email.
+     *
+     * @return true if the user account is found and deleted, false otherwise.
+     */
+    public boolean deleteUserAccount(final String email) {
+        boolean ret = false;
+
+        // retrieve admins collection
+        final MongoCollection<Document> users = getMongoDB().getCollection(StocksimCollection.USERS.getCollectionName());
+
+        // filter to find the required admin
+        final Bson emailFilter = eq("email", email);
+
+        // try to delete admin credentials from the database
+        ret = getMongoDB().deleteOne(emailFilter, users);
+
+        return ret;
+    }
+
+    /**
      * Executes a user login.
      *
      * @param user user to be logged in.

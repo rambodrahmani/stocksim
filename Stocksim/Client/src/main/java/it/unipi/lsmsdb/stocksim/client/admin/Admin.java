@@ -2,6 +2,7 @@ package it.unipi.lsmsdb.stocksim.client.admin;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
+import it.unipi.lsmsdb.stocksim.client.user.User;
 
 /**
  * This class represents a StockSim Client Admin.
@@ -115,7 +116,7 @@ public class Admin {
      * @param username admin account username;
      * @param password admin account password.
      *
-     * @return true if the admin account is created without errors, false otherwise.
+     * @return true if the admin account is deleted without errors, false otherwise.
      */
     public boolean removeAdminAccount(final String username, final String password) {
         boolean ret = true;
@@ -126,6 +127,22 @@ public class Admin {
         } else {
             ret = false;
         }
+
+        return ret;
+    }
+
+    /**
+     * Deletes the user account with the given email.
+     *
+     * @param email admin account email.
+     *
+     * @return true if the user account is deleted without errors, false otherwise.
+     */
+    public boolean removeUserAccount(final String email) {
+        boolean ret = true;
+
+        // delete user account using email address
+        dbManager.deleteUserAccount(email);
 
         return ret;
     }
