@@ -13,6 +13,7 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoServer;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,6 +114,9 @@ public class DBManager {
             ret = false;
         }
 
+        // disconnect from mongodb
+        disconnectMongoDB();
+
         return ret;
     }
 
@@ -125,6 +129,64 @@ public class DBManager {
      */
     public boolean checkTickerExists(final String symbol) {
         boolean ret = true;
+
+        return ret;
+    }
+
+    /**
+     * Registers an admin account for the given {@link Admin}.
+     *
+     * @param admin the {@link Admin} to be registered.
+     *
+     * @return true if the admin is added to the database without errors,
+     *         false otherwise.
+     */
+    public boolean createAdminAccount(final Admin admin) {
+        boolean ret = true;
+
+        // retrieve admins collection
+        final MongoCollection<Document> admins = getMongoDB().getCollection(StocksimCollection.ADMINS.getCollectionName());
+
+        // create new admin document
+        final Document adminDocument = new Document("_id", new ObjectId());
+        adminDocument.append("username", admin.getUsername())
+                .append("password", ClientUtil.SHA256Hash(admin.getPassword()))
+                .append("name", admin.getName())
+                .append("surname", admin.getSurname());
+
+        // insert the new admin document in the collection
+        ret = getMongoDB().insertOne(adminDocument, admins);
+
+        // disconnect from mongodb
+        disconnectMongoDB();
+
+        return ret;
+    }
+
+    /**
+     * Deletes the admin account with the given username and password.
+     *
+     * @param username admin account username;
+     * @param password admin account password.
+     *
+     * @return true if the admin account is found and deleted, false otherwise.
+     */
+    public boolean deleteAdminAccount(final String username, final String password) {
+        boolean ret = false;
+
+        // retrieve admins collection
+        final MongoCollection<Document> admins = getMongoDB().getCollection(StocksimCollection.ADMINS.getCollectionName());
+
+        // get password hash
+        final String hashedPwd = ClientUtil.SHA256Hash(password);
+
+        // filter to find the required admin
+        final Bson usernameFilter = eq("username", username);
+        final Bson passwordFilter = eq("password", hashedPwd);
+        final Bson loginFilter = Filters.and(usernameFilter, passwordFilter);
+
+        // try to delete admin credentials from the database
+        ret = getMongoDB().deleteOne(loginFilter, admins);
 
         return ret;
     }
@@ -158,6 +220,9 @@ public class DBManager {
         } else {
             ret = false;
         }
+
+        // disconnect from mongodb
+        disconnectMongoDB();
 
         return ret;
     }

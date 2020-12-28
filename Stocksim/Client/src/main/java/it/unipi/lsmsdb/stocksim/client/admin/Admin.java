@@ -1,5 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.admin;
 
+import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 
 /**
@@ -38,6 +39,21 @@ public class Admin {
     }
 
     /**
+     * Default constructor.
+     *
+     * @param name admin account name;
+     * @param surname admin account surname;
+     * @param username admin login username;
+     * @param password admin login password.
+     */
+    public Admin(final String name, final String surname, final String username, final String password) {
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.password = password;
+    }
+
+    /**
      * Executes admin login.
      *
      * @return true if the login is successful, false otherwise.
@@ -47,6 +63,12 @@ public class Admin {
         return loggedIn;
     }
 
+    /**
+     *
+     * @param symbol
+     * @param csvPath
+     * @return
+     */
     public boolean addTicker(final String symbol, final String csvPath) {
         boolean ret  = true;
 
@@ -57,6 +79,53 @@ public class Admin {
         // check csv format
 
         // add ticker to db
+
+        return ret;
+    }
+
+    /**
+     * Creates a new admin account with the given name, surname, username and
+     * password.
+     *
+     * @param name admin account name;
+     * @param surname admin account surname;
+     * @param username admin account username;
+     * @param password admin account password.
+     *
+     * @return true if the admin account is created without errors, false otherwise.
+     */
+    public boolean createAdminAccount(final String name, final String surname,
+                                      final String username, final String password) {
+        boolean ret = true;
+
+        // check if an admin account with the given credentials already exists
+        if (dbManager.adminLogin(new Admin(username, password))) {
+            ret = false;
+        } else {
+            final Admin newAdmin = new Admin(name, surname, username, password);
+            ret = dbManager.createAdminAccount(newAdmin);
+        }
+
+        return ret;
+    }
+
+    /**
+     * Deletes the admin account with the given username and password.
+     *
+     * @param username admin account username;
+     * @param password admin account password.
+     *
+     * @return true if the admin account is created without errors, false otherwise.
+     */
+    public boolean removeAdminAccount(final String username, final String password) {
+        boolean ret = true;
+
+        // check if an admin account with the given credentials actually exists
+        if (dbManager.adminLogin(new Admin(username, password))) {
+            ret = dbManager.deleteAdminAccount(username, password);
+        } else {
+            ret = false;
+        }
 
         return ret;
     }

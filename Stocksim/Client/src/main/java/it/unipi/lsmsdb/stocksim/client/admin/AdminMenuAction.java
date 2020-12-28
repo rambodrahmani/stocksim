@@ -9,6 +9,7 @@ public enum AdminMenuAction {
     LOGIN("login", "login to your admin account."),
     ADD_TICKER("add-ticker", "add a new ticker symbol to the database."),
     ADD_ADMIN("add-admin", "create new admin account."),
+    REMOVE_ADMIN("remove-admin", "delete admin account."),
     REMOVE_USER("remove-user", "delete user account."),
     LOGOUT("logout", "logout from current admin account."),
     QUIT("quit", "quit StockSim client.");

@@ -77,6 +77,17 @@ public class ClientAdmin {
                         ClientUtil.println("You need to login first.\n");
                     }
                     break;
+                case REMOVE_ADMIN:
+                    if (isLoggedIn()) {
+                        if (removeAdmin()) {
+                            ClientUtil.println("Admin account deleted.\n");
+                        } else {
+                            ClientUtil.println("Could not delete admin account.\n");
+                        }
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
                 case REMOVE_USER:
                     if (isLoggedIn()) {
                         if (removeUser()) {
@@ -150,18 +161,61 @@ public class ClientAdmin {
     }
 
     /**
-     * Add admin.
+     * Add admin account.
      */
     private static boolean addAdmin() {
         boolean ret = true;
 
-        // TODO: implement
+        // ask for new admin account name
+        ClientUtil.print("Admin account name: ");
+        final String name = scanner.nextLine();
+
+        // ask for new admin account surname
+        ClientUtil.print("Admin account surname: ");
+        final String surname = scanner.nextLine();
+
+        // ask for new admin account username
+        ClientUtil.print("Admin account username: ");
+        final String username = scanner.nextLine();
+
+        // ask for new admin account password
+        ClientUtil.print("Admin account password: ");
+        final String password = scanner.nextLine();
+
+        // do create the admin account
+        ret = admin.createAdminAccount(name, surname, username, password);
 
         return ret;
     }
 
     /**
-     * Remove user.
+     * Remove admin account.
+     */
+    private static boolean removeAdmin() {
+        boolean ret = true;
+
+        // ask for new admin account username
+        ClientUtil.print("Admin account username: ");
+        final String username = scanner.nextLine();
+
+        // ask for new admin account password
+        ClientUtil.print("Admin account password: ");
+        final String password = scanner.nextLine();
+
+        // check if we are trying to delete the currently logged in admin account
+        if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
+            ClientUtil.println("Could not delete currently logged in admin account.");
+            ret = false;
+        } else {
+            // do create the admin account
+            ret = admin.removeAdminAccount(username, password);
+        }
+
+        return ret;
+    }
+
+    /**
+     * Remove user account.
      */
     private static boolean removeUser() {
         boolean ret = true;

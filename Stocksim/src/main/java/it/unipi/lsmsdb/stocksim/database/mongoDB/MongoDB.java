@@ -179,7 +179,7 @@ public class MongoDB implements DB {
      *
      * @return true if the new document is inserted without errors, false otherwise.
      */
-    public Boolean insertOne(final Document newDoc, final MongoCollection<Document> collection) throws MongoException{
+    public boolean insertOne(final Document newDoc, final MongoCollection<Document> collection) throws MongoException{
         return collection.insertOne(newDoc).wasAcknowledged();
     }
 
