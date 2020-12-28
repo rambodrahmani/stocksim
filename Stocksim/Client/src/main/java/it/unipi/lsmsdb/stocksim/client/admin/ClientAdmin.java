@@ -141,7 +141,7 @@ public class ClientAdmin {
     }
 
     /**
-     * Add ticker.
+     * Add new ticker symbol.
      */
     private static boolean addTicker() {
         boolean ret = true;
