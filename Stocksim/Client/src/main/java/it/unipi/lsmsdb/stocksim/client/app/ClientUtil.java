@@ -1,5 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
+import ch.qos.logback.classic.Level;
 import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
 import it.unipi.lsmsdb.stocksim.client.user.UserMenuAction;
 import it.unipi.lsmsdb.stocksim.util.Util;
@@ -69,5 +70,21 @@ public class ClientUtil extends Util{
      */
     public final static String SHA256Hash(final String string) {
         return DigestUtils.sha256Hex(string);
+    }
+
+    /**
+     * Sets the logging level for SLF4J, MongoDB and Cassandra.
+     *
+     * @param logLevel the log {@link Level} to be used.
+     */
+    public final static void setLogLevel(final Level logLevel) {
+        // set log level for SLF4J
+        setNettyLogLevel(logLevel);
+
+        // set log level for the mongodb driver
+        setMongoLogLevel(logLevel);
+
+        // set log level for the cassandra driver
+        setCassandraLogLevel(logLevel);
     }
 }

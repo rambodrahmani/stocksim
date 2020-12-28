@@ -1,5 +1,6 @@
 package it.unipi.lsmsdb.stocksim.server.app;
 
+import ch.qos.logback.classic.Level;
 import it.unipi.lsmsdb.stocksim.server.database.DBManager;
 import it.unipi.lsmsdb.stocksim.util.ArgsParser;
 import org.apache.commons.cli.*;
@@ -24,6 +25,9 @@ public class Server {
      * @param args command line arguments.
      */
     public static void main(final String[] args) {
+        // set log level to be used globally by StockSim Server
+        ServerUtil.setLogLevel(Level.OFF);
+
         // print welcome message
         ServerUtil.printWelcomeMessage();
 

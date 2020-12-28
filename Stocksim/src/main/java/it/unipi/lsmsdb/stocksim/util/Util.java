@@ -1,5 +1,10 @@
 package it.unipi.lsmsdb.stocksim.util;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import org.slf4j.LoggerFactory;
+
 /**
  * General purpose utility methods.
  *
@@ -22,5 +27,38 @@ public class Util {
      */
     public final static void println(final String message) {
         System.out.println(message);
+    }
+
+    /**
+     * Sets the logging {@link Level} to be used by the SLF4J.
+     *
+     * @param logLevel the log {@link Level} for the SLF4J.
+     */
+    public final static void setNettyLogLevel(final Level logLevel) {
+        final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        final Logger rootLogger = loggerContext.getLogger("io.netty");
+        rootLogger.setLevel(logLevel);
+    }
+
+    /**
+     * Sets the logging {@link Level} to be used by the MongoDB Sync Driver.
+     *
+     * @param logLevel the log {@link Level} for the MongoDB Sync Driver.
+     */
+    public final static void setMongoLogLevel(final Level logLevel) {
+        final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        final Logger rootLogger = loggerContext.getLogger("org.mongodb");
+        rootLogger.setLevel(logLevel);
+    }
+
+    /**
+     * Sets the logging {@link Level} to be used by the Cassandra Datastax Driver.
+     *
+     * @param logLevel the log {@link Level} for the Cassandra Datastax Driver.
+     */
+    public final static void setCassandraLogLevel(final Level logLevel) {
+        final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        final Logger rootLogger = loggerContext.getLogger("com.datastax");
+        rootLogger.setLevel(logLevel);
     }
 }
