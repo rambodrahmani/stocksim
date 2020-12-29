@@ -75,11 +75,11 @@ public class Admin {
 
         // check if symbol is not already present in the db
 
-        // load the csv
+        // retrieve summary data
 
-        // check csv format
+        // retrieve historical data
 
-        // add ticker to db
+        // all retrieved correctly, load in the database
 
         return ret;
     }

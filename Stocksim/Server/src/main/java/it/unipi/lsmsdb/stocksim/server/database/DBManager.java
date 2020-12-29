@@ -177,7 +177,7 @@ public class DBManager {
                     ServerUtil.println("Updating historical data for: " + symbol + ".");
 
                     // query symbol last update date
-                    final ResultSet dateResultSet = getCassandraDB().query(CassandraQueryBuilder.getLastUpdateDate(symbol));
+                    final ResultSet dateResultSet = getCassandraDB().query(CassandraQueryBuilder.getLastUpdateDateQuery(symbol));
 
                     // needed for unix timestamp extraction
                     final ZoneId nyZoneId = ZoneId.of("America/New_York");
@@ -252,10 +252,13 @@ public class DBManager {
 
         // calculate elapsed time in millis
         final long timeElapsedMillis = finishTimeMillis - startTimeMillis;
+        final long hours = TimeUnit.MILLISECONDS.toHours(timeElapsedMillis);
+        final long minutes = TimeUnit.MILLISECONDS.toMinutes(timeElapsedMillis) - hours * 60;
+        final long seconds = TimeUnit.MILLISECONDS.toSeconds(timeElapsedMillis) - minutes * 60;
         final String elapsedTime = String.format("Elapsed time: %d hrs, %d mins, %d secs.",
-                TimeUnit.MILLISECONDS.toHours(timeElapsedMillis),
-                TimeUnit.MILLISECONDS.toMinutes(timeElapsedMillis),
-                TimeUnit.MILLISECONDS.toSeconds(timeElapsedMillis));
+                hours,
+                minutes,
+                seconds);
 
         // update terminated: print statistics
         ServerUtil.println("Historical data update terminated.");

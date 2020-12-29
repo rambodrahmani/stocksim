@@ -1,7 +1,7 @@
 package it.unipi.lsmsdb.stocksim.server.database;
 
 /**
- * Cassandra DB Query Builder.
+ * StockSim Server Cassandra DB Query Builder.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
@@ -16,7 +16,7 @@ public class CassandraQueryBuilder {
         return TICKER_SYMBOLS;
     }
 
-    public final static String getLastUpdateDate(final String symbol) {
+    public final static String getLastUpdateDateQuery(final String symbol) {
         return "SELECT date FROM stocksim.tickers WHERE symbol='" + symbol + "' ORDER BY date DESC;";
     }
 
