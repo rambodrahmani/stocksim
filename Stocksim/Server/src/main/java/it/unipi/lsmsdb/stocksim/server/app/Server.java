@@ -26,7 +26,7 @@ public class Server {
      */
     public static void main(final String[] args) {
         // set log level to be used globally by StockSim Server
-        ServerUtil.setLogLevel(Level.OFF);
+        ServerUtil.setLogLevel(Level.ERROR);
 
         // print welcome message
         ServerUtil.printWelcomeMessage();

@@ -140,12 +140,12 @@ public class YahooFinance {
         for (int i = 0 ; i < timestamp.length(); i++) {
             final int epochSecs = timestamp.getInt(i);
             final LocalDate updateDate = Instant.ofEpochSecond(epochSecs).atZone(ZoneId.systemDefault()).toLocalDate();
-            final BigDecimal adj_close = new BigDecimal(adjclose.getDouble(i), MathContext.DECIMAL64);
-            final BigDecimal close = new BigDecimal(quote.getJSONArray("close").getDouble(i), MathContext.DECIMAL64);
-            final BigDecimal high = new BigDecimal(quote.getJSONArray("high").getDouble(i), MathContext.DECIMAL64);
-            final BigDecimal low = new BigDecimal(quote.getJSONArray("low").getDouble(i), MathContext.DECIMAL64);
-            final BigDecimal open = new BigDecimal(quote.getJSONArray("open").getDouble(i), MathContext.DECIMAL64);
-            final BigDecimal volume = new BigDecimal(quote.getJSONArray("volume").getDouble(i), MathContext.DECIMAL64);
+            final double adj_close = adjclose.getDouble(i);
+            final double close = quote.getJSONArray("close").getDouble(i);
+            final double high = quote.getJSONArray("high").getDouble(i);
+            final double low = quote.getJSONArray("low").getDouble(i);
+            final double open = quote.getJSONArray("open").getDouble(i);
+            final double volume = quote.getJSONArray("volume").getDouble(i);
 
             ret.add(new YFHistoricalData(updateDate, adj_close, close, high, low, open, volume));
         }

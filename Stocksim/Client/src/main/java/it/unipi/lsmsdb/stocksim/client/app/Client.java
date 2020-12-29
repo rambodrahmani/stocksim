@@ -24,7 +24,7 @@ public class Client {
      */
     public static void main(final String[] args) {
         // set log level to be used globally by StockSim Client
-        ClientUtil.setLogLevel(Level.OFF);
+        ClientUtil.setLogLevel(Level.ERROR);
 
         // print welcome message
         ClientUtil.printWelcomeMessage();

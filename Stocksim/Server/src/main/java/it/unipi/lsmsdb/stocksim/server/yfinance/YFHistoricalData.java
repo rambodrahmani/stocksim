@@ -11,12 +11,12 @@ import java.time.LocalDate;
  */
 public class YFHistoricalData {
     private final LocalDate date;
-    private final BigDecimal adj_close;
-    private final BigDecimal close;
-    private final BigDecimal high;
-    private final BigDecimal low;
-    private final BigDecimal open;
-    private final BigDecimal volume;
+    private final double adj_close;
+    private final double close;
+    private final double high;
+    private final double low;
+    private final double open;
+    private final double volume;
 
     /**
      * Default constructor.
@@ -29,9 +29,9 @@ public class YFHistoricalData {
      * @param open stock opening price;
      * @param volume stock trade volume;
      */
-    public YFHistoricalData(final LocalDate date, final BigDecimal adj_close, final BigDecimal close,
-                            final BigDecimal high, final BigDecimal low, final BigDecimal open,
-                            final BigDecimal volume) {
+    public YFHistoricalData(final LocalDate date, final double adj_close, final double close,
+                            final double high, final double low, final double open,
+                            final double volume) {
         this.date = date;
         this.adj_close = adj_close;
         this.close = close;
@@ -51,42 +51,42 @@ public class YFHistoricalData {
     /**
      * @return this.adj_close.
      */
-    public BigDecimal getAdjClose() {
+    public double getAdjClose() {
         return this.adj_close;
     }
 
     /**
      * @return this.close.
      */
-    public BigDecimal getClose() {
+    public double getClose() {
         return this.close;
     }
 
     /**
      * @return this.high.
      */
-    public BigDecimal getHigh() {
+    public double getHigh() {
         return this.high;
     }
 
     /**
      * @return this.low.
      */
-    public BigDecimal getLow() {
+    public double getLow() {
         return this.low;
     }
 
     /**
      * @return this.open.
      */
-    public BigDecimal getOpen() {
+    public double getOpen() {
         return this.open;
     }
 
     /**
      * @return this.volume.
      */
-    public BigDecimal getVolume() {
+    public double getVolume() {
         return this.volume;
     }
 }

@@ -4,7 +4,10 @@ import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
@@ -13,10 +16,12 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoServer;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
+import it.unipi.lsmsdb.stocksim.server.app.Server;
 import it.unipi.lsmsdb.stocksim.server.app.ServerUtil;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YFHistoricalData;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YFSummaryData;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YahooFinance;
+import it.unipi.lsmsdb.stocksim.util.Util;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.JSONException;
@@ -103,10 +108,32 @@ public class DBManager {
         boolean ret = false;
 
         try {
-            final ResultSet resultSet = getCassandraDB().query(CassandraQueryBuilder.getTickerSymbolsQuery());
-            final int cassandraTickersCount = resultSet.all().size();
-            final MongoCollection<Document> mongoTickersCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
-            final int mongoTickersCount = (int) mongoTickersCollection.countDocuments();
+            final ResultSet tickersResultSet = getCassandraDB().query(CassandraQueryBuilder.getTickerSymbolsQuery());
+            final List<Row> tickersResultSetRows = tickersResultSet.all();
+            final int cassandraTickersCount = tickersResultSetRows.size();
+            final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+            final int mongoTickersCount = (int) mongoDBStocks.countDocuments();
+
+            // if the tickers count does not match, print additional debugging info
+            if (cassandraTickersCount != mongoTickersCount) {
+                // print debugging info
+                ServerUtil.println("Cassandra DB Tickers Count: " + cassandraTickersCount);
+                ServerUtil.println("MongoDB DB Tickers Count: " + mongoTickersCount);
+
+                // create cassandra ticker symbols list as string
+                List<String> symbolsStringList = new ArrayList<>();
+                for (final Row row : tickersResultSetRows) {
+                    final String symbol = row.getString("symbol");
+                    symbolsStringList.add(symbol);
+                }
+
+                // find stocks documents missing in cassandra db
+                final Bson stockFilter = Filters.nin("ticker", symbolsStringList);
+                final ArrayList<Document> missingStocks = getMongoDB().findMany(stockFilter, mongoDBStocks);
+                for (final Document missingStock : missingStocks) {
+                    ServerUtil.println("Data consistency check failed for: " + missingStock.getString("ticker"));
+                }
+            }
 
             ret = (cassandraTickersCount == mongoTickersCount);
 
