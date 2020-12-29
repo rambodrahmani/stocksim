@@ -4,9 +4,7 @@ import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
@@ -16,12 +14,10 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoServer;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
-import it.unipi.lsmsdb.stocksim.server.app.Server;
 import it.unipi.lsmsdb.stocksim.server.app.ServerUtil;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YFHistoricalData;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YFSummaryData;
 import it.unipi.lsmsdb.stocksim.server.yfinance.YahooFinance;
-import it.unipi.lsmsdb.stocksim.util.Util;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.JSONException;
@@ -217,7 +213,7 @@ public class DBManager {
 
                             // get summary data from yahoo finance
                             ServerUtil.println("Request URL: " + yahooFinance.getV10URL());
-                            YFSummaryData yfSummaryData = yahooFinance.getSummaryData();
+                            final YFSummaryData yfSummaryData = yahooFinance.getSummaryData();
 
                             // first update mongo db fields
                             final MongoCollection<Document> stocksCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
@@ -232,9 +228,9 @@ public class DBManager {
                             final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
                             for (final YFHistoricalData historicalData : yfHistoricalData) {
                                 final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(CassandraQueryBuilder.getUpdateInsertQuery());
-                                final BoundStatement bounded = preparedStatement.bind(symbol, historicalData.getDate(), historicalData.getAdjClose(),
-                                        historicalData.getClose(), historicalData.getHigh(), historicalData.getLow(),
-                                        historicalData.getOpen(), historicalData.getVolume());
+                                final BoundStatement bounded = preparedStatement.bind(symbol, historicalData.getDate(), (float) historicalData.getAdjClose(),
+                                        (float) historicalData.getClose(), (float) historicalData.getHigh(), (float) historicalData.getLow(),
+                                        (float) historicalData.getOpen(), (float) historicalData.getVolume());
                                 getCassandraDB().execute(bounded);
                             }
 
@@ -256,7 +252,7 @@ public class DBManager {
 
         // calculate elapsed time in millis
         final long timeElapsedMillis = finishTimeMillis - startTimeMillis;
-        final String elapsedTime = String.format("Elapsed time %d hrs, %d mins, %d secs",
+        final String elapsedTime = String.format("Elapsed time: %d hrs, %d mins, %d secs.",
                 TimeUnit.MILLISECONDS.toHours(timeElapsedMillis),
                 TimeUnit.MILLISECONDS.toMinutes(timeElapsedMillis),
                 TimeUnit.MILLISECONDS.toSeconds(timeElapsedMillis));

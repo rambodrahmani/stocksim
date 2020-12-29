@@ -1,6 +1,5 @@
 package it.unipi.lsmsdb.stocksim.server.yfinance;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**

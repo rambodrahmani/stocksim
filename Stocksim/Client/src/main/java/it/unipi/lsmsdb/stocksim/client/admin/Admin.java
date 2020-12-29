@@ -1,8 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.admin;
 
-import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
-import it.unipi.lsmsdb.stocksim.client.user.User;
 
 /**
  * This class represents a StockSim Client Admin.

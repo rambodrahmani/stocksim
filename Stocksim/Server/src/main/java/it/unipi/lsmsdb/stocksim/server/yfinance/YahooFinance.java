@@ -6,8 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;

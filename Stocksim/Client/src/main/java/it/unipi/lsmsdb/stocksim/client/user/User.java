@@ -1,6 +1,5 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
-import it.unipi.lsmsdb.stocksim.client.admin.Admin;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 
 /**
