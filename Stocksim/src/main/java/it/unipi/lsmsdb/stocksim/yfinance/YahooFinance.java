@@ -19,6 +19,11 @@ import java.util.ArrayList;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class YahooFinance {
+    // Yahoo Finance v7 API base URL
+    private final static String BASE_URL_V7 = "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&symbols=";
+
+    // https://query1.finance.yahoo.com/v10/finance/quoteSummary/AAPL?modules=assetProfile,financialData,defaultKeyStatistics,calendarEvents,incomeStatementHistory,cashflowStatementHistory,balanceSheetHistory
+
     // Yahoo Finance v8 API base URL
     private final static String BASE_URL_V8 = "https://query1.finance.yahoo.com/v8/finance/chart/";
 
@@ -33,6 +38,9 @@ public class YahooFinance {
 
     // Yahoo Finance period2 parameter (end date)
     private final long period2;
+
+    // Yahoo Finance v8 API full URL
+    private final String V7URL;
 
     // Yahoo Finance v8 API full URL
     private final String V8URL;
@@ -52,6 +60,8 @@ public class YahooFinance {
         this.period1 = period1;
         this.period2 = period2;
 
+        V7URL = BASE_URL_V7 + symbol;
+
         V8URL = BASE_URL_V8 + symbol + "?"
                 + "period1=" + this.period1
                 + "&period2=" + this.period2
@@ -60,6 +70,13 @@ public class YahooFinance {
 
         V10URL = BASE_URL_V10 + symbol + "?"
                 + "modules=summaryDetail";
+    }
+
+    /**
+     * @return the full Yahoo Finance v7 API URL.
+     */
+    public String getV7URL() {
+        return V7URL;
     }
 
     /**
@@ -86,6 +103,34 @@ public class YahooFinance {
      */
     public YFSummaryData getSummaryData() throws JSONException, IOException {
         final YFSummaryData ret = new YFSummaryData();
+
+        // fetch summary details for market capitalization and trailing PE
+        final JSONObject quoteResponse = new JSONObject(IOUtils.toString(new URL(V7URL), StandardCharsets.UTF_8));
+        final JSONObject quoteResponseResult = quoteResponse.getJSONObject("quoteResponse").getJSONArray("result").getJSONObject(0);
+
+        ret.setCurrency(quoteResponseResult.getString("currency"));
+        ret.setShortName(quoteResponseResult.getString("shortName"));
+        ret.setLongName(quoteResponseResult.getString("longName"));
+        ret.setExchangeTimezoneName(quoteResponseResult.getString("exchangeTimezoneName"));
+        ret.setExchangeTimezoneShortName(quoteResponseResult.getString("exchangeTimezoneShortName"));
+        ret.setQuoteType(quoteResponseResult.getString("quoteType"));
+        ret.setTicker(quoteResponseResult.getString("symbol"));
+        ret.setMarket(quoteResponseResult.getString("market"));
+        ret.setMarketCap(quoteResponseResult.getString("marketCap"));
+
+        return ret;
+    }
+
+    /**
+     * Retrieves summary update data.
+     *
+     * @return retrieved {@link YFSummaryDataUpdate}.
+     *
+     * @throws JSONException
+     * @throws IOException
+     */
+    public YFSummaryDataUpdate getSummaryDataUpdate() throws JSONException, IOException {
+        final YFSummaryDataUpdate ret = new YFSummaryDataUpdate();
 
         // fetch summary details for market capitalization and trailing PE
         final JSONObject summaryDetails = new JSONObject(IOUtils.toString(new URL(V10URL), StandardCharsets.UTF_8));

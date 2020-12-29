@@ -1,7 +1,10 @@
 package it.unipi.lsmsdb.stocksim.client.admin;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
+import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -57,10 +60,14 @@ public class ClientAdmin {
                     break;
                 case ADD_TICKER:
                     if (isLoggedIn()) {
-                        if (addTicker()) {
-                            ClientUtil.println("New ticker added.\n");
-                        } else {
-                            ClientUtil.println("Could not add new ticker.\n");
+                        try {
+                            if (addTicker()) {
+                                ClientUtil.println("New ticker added.\n");
+                            } else {
+                                ClientUtil.println("Could not add new ticker.\n");
+                            }
+                        } catch (final CQLSessionException | IOException | JSONException e) {
+                            e.printStackTrace();
                         }
                     } else {
                         ClientUtil.println("You need to login first.\n");
@@ -143,7 +150,7 @@ public class ClientAdmin {
     /**
      * Add new ticker symbol.
      */
-    private static boolean addTicker() {
+    private static boolean addTicker() throws CQLSessionException, IOException, JSONException {
         boolean ret = true;
 
         // ask for admin username
@@ -151,7 +158,7 @@ public class ClientAdmin {
         final String symbol = scanner.nextLine();
 
         // add new ticker
-        admin.addTicker(symbol);
+        ret = admin.addTicker(symbol);
 
         return ret;
     }

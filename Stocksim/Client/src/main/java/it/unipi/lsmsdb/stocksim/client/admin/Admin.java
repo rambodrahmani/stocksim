@@ -1,6 +1,16 @@
 package it.unipi.lsmsdb.stocksim.client.admin;
 
+import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
+import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
+import it.unipi.lsmsdb.stocksim.yfinance.YFHistoricalData;
+import it.unipi.lsmsdb.stocksim.yfinance.YFSummaryDataUpdate;
+import it.unipi.lsmsdb.stocksim.yfinance.YahooFinance;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.time.*;
+import java.util.ArrayList;
 
 /**
  * This class represents a StockSim Client Admin.
@@ -70,14 +80,41 @@ public class Admin {
      *
      * @return
      */
-    public boolean addTicker(final String symbol) {
+    public boolean addTicker(final String symbol) throws CQLSessionException, IOException, JSONException {
         boolean ret  = true;
 
         // check if symbol is not already present in the db
+        final boolean tickerExists = dbManager.checkTickerExists(symbol);
+        if (tickerExists) {
+            return false;
+        }
 
-        // retrieve summary data
+        // otherwise, retrieve summary data
+        // needed for unix timestamp extraction
+        final ZoneId nyZoneId = ZoneId.of("America/New_York");
+
+        // get current date and timestamp
+        final LocalDate nowDate = LocalDate.now();
+        final long nowTimestamp = nowDate.atStartOfDay(nyZoneId).toEpochSecond();
+
+        // get last update date and timestamp
+        final LocalDate lastUpdateDate = nowDate.minusYears(10);
+        final long lastUpdateTimestamp = lastUpdateDate.atStartOfDay(nyZoneId).toEpochSecond();
+
+        // build yahoo finance object for current ticker symbol
+        final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, nowTimestamp);
+
+        ClientUtil.println(yahooFinance.getV8URL());
+        ClientUtil.println(yahooFinance.getV10URL());
+
+        // get summary data from yahoo finance
+        ClientUtil.println("Request URL: " + yahooFinance.getV10URL());
+        final YFSummaryDataUpdate yfSummaryData = yahooFinance.getSummaryDataUpdate();
 
         // retrieve historical data
+        final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
+
+        // retrieve summary update
 
         // all retrieved correctly, load in the database
 

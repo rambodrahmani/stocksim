@@ -1,10 +1,12 @@
 package it.unipi.lsmsdb.stocksim.client.database;
 
+import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import it.unipi.lsmsdb.stocksim.client.admin.Admin;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.user.User;
+import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDB;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CassandraDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
@@ -120,14 +122,25 @@ public class DBManager {
     }
 
     /**
-     * Checks if historical data is available for the given symbol.
+     * Checks if historical and summary data is available for the given symbol.
      *
-     * @param symbol
+     * @param symbol the ticker symbol to be searched for.
      *
-     * @return
+     * @return true if historical and summary data is available in the db,
+     *         false otherwise.
      */
-    public boolean checkTickerExists(final String symbol) {
+    public boolean checkTickerExists(final String symbol) throws CQLSessionException {
         boolean ret = true;
+
+        // query symbol available historical data
+        final ResultSet resultSet = getCassandraDB().query(CassandraQueryBuilder.getTickerQuery(symbol));
+
+        // find summary data in mongodb
+        final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+        final Document stock = getMongoDB().findOne(Filters.eq("ticker", symbol), mongoDBStocks);
+
+        // check if historical and summary data was found
+        ret = (resultSet != null && stock != null);
 
         return ret;
     }

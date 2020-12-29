@@ -16,7 +16,7 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoServer;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
 import it.unipi.lsmsdb.stocksim.server.app.ServerUtil;
 import it.unipi.lsmsdb.stocksim.yfinance.YFHistoricalData;
-import it.unipi.lsmsdb.stocksim.yfinance.YFSummaryData;
+import it.unipi.lsmsdb.stocksim.yfinance.YFSummaryDataUpdate;
 import it.unipi.lsmsdb.stocksim.yfinance.YahooFinance;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -187,11 +187,11 @@ public class DBManager {
                     ServerUtil.println("Last update date: " + lastUpdateDate.toString() + ".");
 
                     // add one day before calculating timestamp
-                    long lastUpdateTimestamp = lastUpdateDate.plusDays(1).atTime(LocalTime.MIDNIGHT).atZone(nyZoneId).toEpochSecond();
+                    final long lastUpdateTimestamp = lastUpdateDate.plusDays(1).atTime(LocalTime.MIDNIGHT).atZone(nyZoneId).toEpochSecond();
 
                     // get current date and timestamp
                     final LocalDate now = LocalDate.now();
-                    long currentTimestamp = now.atStartOfDay(nyZoneId).toEpochSecond();
+                    final long currentTimestamp = now.atStartOfDay(nyZoneId).toEpochSecond();
 
                     // get clock time
                     final Instant instant = Clock.systemDefaultZone().instant();
@@ -213,7 +213,7 @@ public class DBManager {
 
                             // get summary data from yahoo finance
                             ServerUtil.println("Request URL: " + yahooFinance.getV10URL());
-                            final YFSummaryData yfSummaryData = yahooFinance.getSummaryData();
+                            final YFSummaryDataUpdate yfSummaryData = yahooFinance.getSummaryDataUpdate();
 
                             // first update mongo db fields
                             final MongoCollection<Document> stocksCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
