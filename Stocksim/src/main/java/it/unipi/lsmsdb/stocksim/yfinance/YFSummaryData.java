@@ -1,4 +1,4 @@
-package it.unipi.lsmsdb.stocksim.server.yfinance;
+package it.unipi.lsmsdb.stocksim.yfinance;
 
 /**
  * This class represents the summary data fetched using

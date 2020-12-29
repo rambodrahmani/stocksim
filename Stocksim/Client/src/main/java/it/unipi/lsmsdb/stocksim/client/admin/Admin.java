@@ -63,12 +63,14 @@ public class Admin {
     }
 
     /**
+     * Uses YahooFinance API to retrieve summary and historical data for the
+     * given ticker symbol. If successful, the data is added to the database.
      *
-     * @param symbol
-     * @param csvPath
+     * @param symbol ticker symbol to be searched.
+     *
      * @return
      */
-    public boolean addTicker(final String symbol, final String csvPath) {
+    public boolean addTicker(final String symbol) {
         boolean ret  = true;
 
         // check if symbol is not already present in the db

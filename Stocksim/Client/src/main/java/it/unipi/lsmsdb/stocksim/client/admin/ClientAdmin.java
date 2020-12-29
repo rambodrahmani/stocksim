@@ -150,12 +150,8 @@ public class ClientAdmin {
         ClientUtil.print("Ticker symbol: ");
         final String symbol = scanner.nextLine();
 
-        // ask for password username
-        ClientUtil.print("CSV path: ");
-        final String csvPath = scanner.nextLine();
-
         // add new ticker
-        admin.addTicker(symbol, csvPath);
+        admin.addTicker(symbol);
 
         return ret;
     }
