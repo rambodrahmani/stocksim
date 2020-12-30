@@ -5,6 +5,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ui.ApplicationFrame;
+import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.chart.ui.UIUtils;
@@ -13,16 +14,11 @@ import java.util.ArrayList;
 
 public class PieChart extends Chart{
 	
-	// title of the chart
-	private final String title;
-	
 	// list of all the slices that make up the pie
 	private final String[] slices;
 	
 	// list of all the values associated with slices
 	private final Number[] values;
-	
-	private ApplicationFrame applicationFrame;
 	
 	/**
 	 * Default constructor.
@@ -37,18 +33,19 @@ public class PieChart extends Chart{
 		if(slices.size() != values.size()){
 			throw new IllegalArgumentException("slices and values must have the same length");
 		}
-		applicationFrame = new ApplicationFrame(title);
+		
 		this.title = title;
 		this.slices = slices.toArray(new String[slices.size()]);
 		this.values = values.toArray(new Number[values.size()]);
 		
-		
+		applicationFrame = new ApplicationFrame(title);
 	}
 	
 	/**
 	 *  Feed data into dataset
+	 * @return
 	 */
-	private PieDataset createDataset(){
+	protected AbstractDataset createDataset(){
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		for (int i = 0; i < slices.length; i++) {
 			dataset.setValue(slices[i], values[i]);
@@ -58,30 +55,24 @@ public class PieChart extends Chart{
 	}
 	
 	private JFreeChart createChart(PieDataset dataset){
-		JFreeChart chart = ChartFactory.createPieChart(
+		JFreeChart pieChart = ChartFactory.createPieChart(
 			title,          // chart title
 			dataset,        // data
 			true,    // include legend
 			true,
 			false);
 		
-		return chart;
+		return pieChart;
 	}
 	
-	private JPanel createPanel(){
-		JFreeChart chart = createChart(createDataset());
+	protected JPanel createPanel(){
+		JFreeChart chart = createChart((PieDataset) createDataset());
 		return new ChartPanel(chart);
 	}
 	
 	/**
 	 * Spawn new window
 	 */
-	public void showChart(){
-		applicationFrame.setSize(600, 400);
-		UIUtils.centerFrameOnScreen(this.applicationFrame);
-		applicationFrame.setContentPane(createPanel());
-		applicationFrame.setVisible(true);
-	}
 	
 	public static void main(String[] args) {
 		ArrayList<String> slices = new ArrayList<String>();
