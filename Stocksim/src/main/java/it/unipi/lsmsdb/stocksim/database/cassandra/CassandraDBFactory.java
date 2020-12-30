@@ -1,9 +1,9 @@
 package it.unipi.lsmsdb.stocksim.database.cassandra;
 
-import java.util.ArrayList;
-
 import it.unipi.lsmsdb.stocksim.database.DBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
+
+import java.util.ArrayList;
 
 /**
  * Apache Cassandra DB Factory.

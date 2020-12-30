@@ -1,5 +1,10 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
+/**
+ * StockSim Client User menu actions enum.
+ *
+ * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
+ */
 public enum UserMenuAction {
     LOGIN("login", "login to your user account."),
     LOGOUT("logout", "logout from current user account."),

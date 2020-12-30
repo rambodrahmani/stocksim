@@ -1,18 +1,16 @@
 package it.unipi.lsmsdb.stocksim.client.admin;
 
-import com.datastax.oss.driver.api.core.cql.BoundStatement;
-import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
 import it.unipi.lsmsdb.stocksim.yfinance.YFAssetProfile;
 import it.unipi.lsmsdb.stocksim.yfinance.YFHistoricalData;
-import it.unipi.lsmsdb.stocksim.yfinance.YFSummaryData;
 import it.unipi.lsmsdb.stocksim.yfinance.YahooFinance;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 /**

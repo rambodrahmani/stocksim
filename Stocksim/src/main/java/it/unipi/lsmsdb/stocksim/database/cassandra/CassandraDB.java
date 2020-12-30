@@ -7,10 +7,12 @@ import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.Statement;
 import it.unipi.lsmsdb.stocksim.database.DB;
 
-import javax.swing.plaf.nimbus.State;
 import java.net.InetSocketAddress;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Apache Cassandra DB Manager.

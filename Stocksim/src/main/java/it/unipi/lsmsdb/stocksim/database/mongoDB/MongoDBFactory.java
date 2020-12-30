@@ -1,6 +1,7 @@
 package it.unipi.lsmsdb.stocksim.database.mongoDB;
 
 import it.unipi.lsmsdb.stocksim.database.DBFactory;
+
 import java.util.List;
 
 /**
