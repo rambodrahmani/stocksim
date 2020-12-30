@@ -140,9 +140,15 @@ public class ClientAdmin {
         ClientUtil.print("Password: ");
         final String password = scanner.nextLine();
 
-        // do the login
-        admin = new Admin(username, password);
-        ret = admin.login();
+        // check if the given strings are valid ones
+        if (ClientUtil.isNotNull(username) && ClientUtil.isNotNull(password)) {
+            // do the login
+            admin = new Admin(username, password);
+            ret = admin.login();
+        } else {
+            ret = false;
+            ClientUtil.println("Invalid username or password.");
+        }
 
         return ret;
     }
@@ -157,8 +163,14 @@ public class ClientAdmin {
         ClientUtil.print("Ticker symbol: ");
         final String symbol = scanner.nextLine();
 
-        // add new ticker
-        ret = admin.addTicker(symbol);
+        // check if the given string input is a valid one
+        if (ClientUtil.isNotNull(symbol)) {
+            // add new ticker
+            ret = admin.addTicker(symbol);
+        } else {
+            ret = false;
+            ClientUtil.println("Invalid ticker symbol.");
+        }
 
         return ret;
     }
@@ -185,8 +197,15 @@ public class ClientAdmin {
         ClientUtil.print("Admin account password: ");
         final String password = scanner.nextLine();
 
-        // do create the admin account
-        ret = admin.createAdminAccount(name, surname, username, password);
+        // check if the given strings are valid ones
+        if (ClientUtil.isNotNull(name) && ClientUtil.isNotNull(surname) &&
+            ClientUtil.isNotNull(username) && ClientUtil.isNotNull(password)) {
+            // do create the admin account
+            ret = admin.createAdminAccount(name, surname, username, password);
+        } else {
+            ret = false;
+            ClientUtil.println("The given parameters are not valid.");
+        }
 
         return ret;
     }
@@ -205,13 +224,19 @@ public class ClientAdmin {
         ClientUtil.print("Admin account password: ");
         final String password = scanner.nextLine();
 
-        // check if we are trying to delete the currently logged in admin account
-        if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
-            ClientUtil.println("Could not delete currently logged in admin account.");
-            ret = false;
+        // check if the given strings are valid ones
+        if (ClientUtil.isNotNull(username) && ClientUtil.isNotNull(password)) {
+            // check if we are trying to delete the currently logged in admin account
+            if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
+                ClientUtil.println("Could not delete currently logged in admin account.");
+                ret = false;
+            } else {
+                // do create the admin account
+                ret = admin.removeAdminAccount(username, password);
+            }
         } else {
-            // do create the admin account
-            ret = admin.removeAdminAccount(username, password);
+            ret = false;
+            ClientUtil.println("Invalid username or password.");
         }
 
         return ret;
@@ -227,8 +252,14 @@ public class ClientAdmin {
         ClientUtil.print("User account email: ");
         final String email = scanner.nextLine();
 
-        // remove the user with the given email
-        ret = admin.removeUserAccount(email);
+        // check if the given string input is a valid one
+        if (ClientUtil.isNotNull(email)) {
+            // remove the user with the given email
+            ret = admin.removeUserAccount(email);
+        } else {
+            ret = false;
+            ClientUtil.println("Invalid email.");
+        }
 
         return ret;
     }

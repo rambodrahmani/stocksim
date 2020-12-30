@@ -16,7 +16,7 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoServer;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
 import it.unipi.lsmsdb.stocksim.server.app.ServerUtil;
 import it.unipi.lsmsdb.stocksim.yfinance.YFHistoricalData;
-import it.unipi.lsmsdb.stocksim.yfinance.YFSummaryDataUpdate;
+import it.unipi.lsmsdb.stocksim.yfinance.YFSummaryData;
 import it.unipi.lsmsdb.stocksim.yfinance.YahooFinance;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -124,10 +124,10 @@ public class DBManager {
                 }
 
                 // find stocks documents missing in cassandra db
-                final Bson stockFilter = Filters.nin("ticker", symbolsStringList);
+                final Bson stockFilter = Filters.nin("symbol", symbolsStringList);
                 final ArrayList<Document> missingStocks = getMongoDB().findMany(stockFilter, mongoDBStocks);
                 for (final Document missingStock : missingStocks) {
-                    ServerUtil.println("Data consistency check failed for: " + missingStock.getString("ticker"));
+                    ServerUtil.println("Data consistency check failed for: " + missingStock.getString("symbol"));
                 }
             }
 
@@ -212,15 +212,24 @@ public class DBManager {
                             final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, currentTimestamp);
 
                             // get summary data from yahoo finance
-                            ServerUtil.println("Request URL: " + yahooFinance.getV10URL());
-                            final YFSummaryDataUpdate yfSummaryData = yahooFinance.getSummaryDataUpdate();
+                            ServerUtil.println("Request URL: " + yahooFinance.getV10URLSummaryDetail());
+                            final YFSummaryData yfSummaryData = yahooFinance.getSummaryData();
 
                             // first update mongo db fields
                             final MongoCollection<Document> stocksCollection = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
-                            final Bson stockFilter = eq("ticker", symbol);
+                            final Bson stockFilter = eq("symbol", symbol);
                             final Bson updateTrailingPE = Updates.set("trailingPE", yfSummaryData.getTrailingPE());
                             final Bson updateMarketCap = Updates.set("marketCap", yfSummaryData.getMarketCap());
-                            final Bson updateSet = Updates.combine(updateTrailingPE, updateMarketCap);
+                            Bson updateSet;
+
+                            if (yfSummaryData.getTrailingPE() != 0 && yfSummaryData.getMarketCap() != 0) {
+                                 updateSet = Updates.combine(updateTrailingPE, updateMarketCap);
+                            } else if (yfSummaryData.getTrailingPE() != 0) {
+                                updateSet = updateTrailingPE;
+                            } else {
+                                updateSet = updateMarketCap;
+                            }
+
                             getMongoDB().updateOne(stockFilter, updateSet, stocksCollection);
 
                             // update historical data

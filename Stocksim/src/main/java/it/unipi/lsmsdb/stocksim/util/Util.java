@@ -61,4 +61,15 @@ public class Util {
         final Logger rootLogger = loggerContext.getLogger("com.datastax");
         rootLogger.setLevel(logLevel);
     }
+
+    /**
+     * Checks if the given string is valid: not null and not empty.
+     *
+     * @param string the string to be checked.
+     *
+     * @return true if the given string is valid, false otherwise.
+     */
+    public final static boolean isNotNull(final String string) {
+        return (string != null) && (!string.equals("")) && (string.length() > 0);
+    }
 }

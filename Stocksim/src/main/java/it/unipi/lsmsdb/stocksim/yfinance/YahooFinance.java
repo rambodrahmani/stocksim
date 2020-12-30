@@ -1,5 +1,6 @@
 package it.unipi.lsmsdb.stocksim.yfinance;
 
+import it.unipi.lsmsdb.stocksim.util.Util;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,8 +23,6 @@ public class YahooFinance {
     // Yahoo Finance v7 API base URL
     private final static String BASE_URL_V7 = "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&symbols=";
 
-    // https://query1.finance.yahoo.com/v10/finance/quoteSummary/AAPL?modules=assetProfile,financialData,defaultKeyStatistics,calendarEvents,incomeStatementHistory,cashflowStatementHistory,balanceSheetHistory
-
     // Yahoo Finance v8 API base URL
     private final static String BASE_URL_V8 = "https://query1.finance.yahoo.com/v8/finance/chart/";
 
@@ -45,8 +44,11 @@ public class YahooFinance {
     // Yahoo Finance v8 API full URL
     private final String V8URL;
 
-    // Yahoo Finance v10 API full URL
-    private final String V10URL;
+    // Yahoo Finance v10 API full URL with summaryDetail module
+    private final String V10URLSummaryDetail;
+
+    // Yahoo Finance v10 API full URL with Asset Profile module
+    private final String V10URLAssetProfile;
 
     /**
      * Default constructor.
@@ -68,8 +70,11 @@ public class YahooFinance {
                 + "&interval=1d"
                 + "&events=history";
 
-        V10URL = BASE_URL_V10 + symbol + "?"
+        V10URLSummaryDetail = BASE_URL_V10 + symbol + "?"
                 + "modules=summaryDetail";
+
+        V10URLAssetProfile = BASE_URL_V10 + symbol + "?"
+                + "modules=assetProfile";
     }
 
     /**
@@ -87,14 +92,173 @@ public class YahooFinance {
     }
 
     /**
-     * @return the full Yahoo Finance v10 API URL.
+     * @return the full Yahoo Finance v10 API summary detail URL.
      */
-    public String getV10URL() {
-        return V10URL;
+    public String getV10URLSummaryDetail() {
+        return V10URLSummaryDetail;
+    }
+
+    /**
+     * @return the full Yahoo Finance v10 API asset profile URL.
+     */
+    public String getV10URLAssetProfile() {
+        return V10URLAssetProfile;
     }
 
     /**
      * Retrieves summary details data.
+     *
+     * @return retrieved {@link YFAssetProfile}.
+     *
+     * @throws JSONException
+     * @throws IOException
+     */
+    public YFAssetProfile getAssetProfile() throws JSONException {
+        final YFAssetProfile ret = new YFAssetProfile();
+
+        try {
+            // fetch summary details using Yahoo Finance v7 API
+            final JSONObject quoteResponse = new JSONObject(IOUtils.toString(new URL(getV7URL()), StandardCharsets.UTF_8));
+            final JSONObject quoteResponseResult = quoteResponse.getJSONObject("quoteResponse").getJSONArray("result").getJSONObject(0);
+
+            if (quoteResponseResult.has("currency")) {
+                ret.setCurrency(quoteResponseResult.getString("currency"));
+            } else {
+                ret.setCurrency("");
+            }
+
+            if (quoteResponseResult.has("shortName")) {
+                ret.setShortName(quoteResponseResult.getString("shortName"));
+            } else {
+                ret.setShortName("");
+            }
+
+            if (quoteResponseResult.has("longName")) {
+                ret.setLongName(quoteResponseResult.getString("longName"));
+            } else {
+                ret.setLongName("");
+            }
+
+            if (quoteResponseResult.has("exchangeTimezoneName")) {
+                ret.setExchangeTimezoneName(quoteResponseResult.getString("exchangeTimezoneName"));
+            } else {
+                ret.setExchangeTimezoneName("");
+            }
+
+            if (quoteResponseResult.has("exchangeTimezoneShortName")) {
+                ret.setExchangeTimezoneShortName(quoteResponseResult.getString("exchangeTimezoneShortName"));
+            } else {
+                ret.setExchangeTimezoneShortName("");
+            }
+
+            if (quoteResponseResult.has("quoteType")) {
+                ret.setQuoteType(quoteResponseResult.getString("quoteType"));
+            } else {
+                ret.setQuoteType("");
+            }
+
+            if (quoteResponseResult.has("symbol")) {
+                ret.setSymbol(quoteResponseResult.getString("symbol"));
+            } else {
+                ret.setSymbol("");
+            }
+
+            if (quoteResponseResult.has("market")) {
+                ret.setMarket(quoteResponseResult.getString("market"));
+            } else {
+                ret.setMarket("");
+            }
+
+            if (quoteResponseResult.has("marketCap")) {
+                ret.setMarketCap(quoteResponseResult.getDouble("marketCap"));
+            } else {
+                ret.setMarketCap(0);
+            }
+
+            if (quoteResponseResult.has("trailingPE")) {
+                ret.setTrailingPE(quoteResponseResult.getDouble("trailingPE"));
+            } else {
+                ret.setTrailingPE(0);
+            }
+        } catch (final IOException e) {
+            Util.println("Yahoo Finance Quotes not found. Some information will be missing.");
+        }
+
+        try {
+            // fetch summary details using Yahoo Finance v10 API
+            final JSONObject quoteSummary = new JSONObject(IOUtils.toString(new URL(getV10URLAssetProfile()), StandardCharsets.UTF_8));
+            final JSONObject assetProfile = quoteSummary.getJSONObject("quoteSummary").getJSONArray("result").getJSONObject(0).getJSONObject("assetProfile");
+
+            if (assetProfile.has("website")) {
+                ret.setWebsite(assetProfile.getString("website"));
+                ret.setLogoURL("https://logo.clearbit.com/" + ret.getWebsite().substring(11));
+            } else {
+                ret.setWebsite("");
+                ret.setLogoURL("");
+            }
+
+            if (assetProfile.has("sector")) {
+                ret.setSector(assetProfile.getString("sector"));
+            } else {
+                ret.setSector("");
+            }
+
+            if (assetProfile.has("city")) {
+                ret.setCity(assetProfile.getString("city"));
+            } else {
+                ret.setCity("");
+            }
+
+            if (assetProfile.has("website")) {
+                ret.setWebsite(assetProfile.getString("website"));
+            } else {
+                ret.setWebsite("");
+            }
+
+            if (assetProfile.has("industry")) {
+                ret.setIndustry(assetProfile.getString("industry"));
+            } else {
+                ret.setIndustry("");
+            }
+
+            if (assetProfile.has("longBusinessSummary")) {
+                ret.setLongBusinessSummary(assetProfile.getString("longBusinessSummary"));
+            } else {
+                ret.setLongBusinessSummary("");
+            }
+
+            if (assetProfile.has("state")) {
+                ret.setState(assetProfile.getString("state"));
+            } else {
+                ret.setState("");
+            }
+
+            if (assetProfile.has("country")) {
+                ret.setCountry(assetProfile.getString("country"));
+            } else {
+                ret.setCountry("");
+            }
+
+            if (assetProfile.has("phone")) {
+                ret.setPhone(assetProfile.getString("phone"));
+            } else {
+                ret.setPhone("");
+            }
+
+            if (assetProfile.has("address")) {
+                ret.setAddress(assetProfile.getString("address"));
+            } else {
+                ret.setAddress("");
+            }
+        } catch (final IOException e) {
+            Util.println("Yahoo Finance Asset Profile not found. Some information will be missing.");
+        }
+
+        return ret;
+    }
+
+    /**
+     * Retrieves summary update data.
      *
      * @return retrieved {@link YFSummaryData}.
      *
@@ -105,35 +269,7 @@ public class YahooFinance {
         final YFSummaryData ret = new YFSummaryData();
 
         // fetch summary details for market capitalization and trailing PE
-        final JSONObject quoteResponse = new JSONObject(IOUtils.toString(new URL(V7URL), StandardCharsets.UTF_8));
-        final JSONObject quoteResponseResult = quoteResponse.getJSONObject("quoteResponse").getJSONArray("result").getJSONObject(0);
-
-        ret.setCurrency(quoteResponseResult.getString("currency"));
-        ret.setShortName(quoteResponseResult.getString("shortName"));
-        ret.setLongName(quoteResponseResult.getString("longName"));
-        ret.setExchangeTimezoneName(quoteResponseResult.getString("exchangeTimezoneName"));
-        ret.setExchangeTimezoneShortName(quoteResponseResult.getString("exchangeTimezoneShortName"));
-        ret.setQuoteType(quoteResponseResult.getString("quoteType"));
-        ret.setTicker(quoteResponseResult.getString("symbol"));
-        ret.setMarket(quoteResponseResult.getString("market"));
-        ret.setMarketCap(quoteResponseResult.getString("marketCap"));
-
-        return ret;
-    }
-
-    /**
-     * Retrieves summary update data.
-     *
-     * @return retrieved {@link YFSummaryDataUpdate}.
-     *
-     * @throws JSONException
-     * @throws IOException
-     */
-    public YFSummaryDataUpdate getSummaryDataUpdate() throws JSONException, IOException {
-        final YFSummaryDataUpdate ret = new YFSummaryDataUpdate();
-
-        // fetch summary details for market capitalization and trailing PE
-        final JSONObject summaryDetails = new JSONObject(IOUtils.toString(new URL(V10URL), StandardCharsets.UTF_8));
+        final JSONObject summaryDetails = new JSONObject(IOUtils.toString(new URL(getV10URLSummaryDetail()), StandardCharsets.UTF_8));
         final JSONObject summaryDetail = summaryDetails.getJSONObject("quoteSummary").getJSONArray("result").getJSONObject(0).getJSONObject("summaryDetail");
 
         // check if the required field is available
@@ -175,7 +311,7 @@ public class YahooFinance {
         final ArrayList<YFHistoricalData> ret = new ArrayList<>();
 
         // fetch historical data
-        final JSONObject historicalData = new JSONObject(IOUtils.toString(new URL(V8URL), StandardCharsets.UTF_8));
+        final JSONObject historicalData = new JSONObject(IOUtils.toString(new URL(getV8URL()), StandardCharsets.UTF_8));
         final JSONArray timestamp = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONArray("timestamp");
         final JSONObject quote = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("quote").getJSONObject(0);
         final JSONArray adjclose = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("adjclose").getJSONObject(0).getJSONArray("adjclose");
@@ -183,12 +319,36 @@ public class YahooFinance {
         for (int i = 0 ; i < timestamp.length(); i++) {
             final int epochSecs = timestamp.getInt(i);
             final LocalDate updateDate = Instant.ofEpochSecond(epochSecs).atZone(ZoneId.systemDefault()).toLocalDate();
-            final double adj_close = adjclose.getDouble(i);
-            final double close = quote.getJSONArray("close").getDouble(i);
-            final double high = quote.getJSONArray("high").getDouble(i);
-            final double low = quote.getJSONArray("low").getDouble(i);
-            final double open = quote.getJSONArray("open").getDouble(i);
-            final double volume = quote.getJSONArray("volume").getDouble(i);
+
+            double adj_close = 0;
+            if (!adjclose.isNull(i)) {
+                adj_close = adjclose.getDouble(i);
+            }
+
+            double close = 0;
+            if (!quote.getJSONArray("close").isNull(i)) {
+                close = quote.getJSONArray("close").getDouble(i);
+            }
+
+            double high = 0;
+            if (!quote.getJSONArray("high").isNull(i)) {
+                high = quote.getJSONArray("high").getDouble(i);
+            }
+
+            double low = 0;
+            if (!quote.getJSONArray("low").isNull(i)) {
+                low = quote.getJSONArray("low").getDouble(i);
+            }
+
+            double open = 0;
+            if (!quote.getJSONArray("open").isNull(i)) {
+                open = quote.getJSONArray("open").getDouble(i);
+            }
+
+            double volume = 0;
+            if (!quote.getJSONArray("volume").isNull(i)) {
+                volume = quote.getJSONArray("volume").getDouble(i);
+            }
 
             ret.add(new YFHistoricalData(updateDate, adj_close, close, high, low, open, volume));
         }

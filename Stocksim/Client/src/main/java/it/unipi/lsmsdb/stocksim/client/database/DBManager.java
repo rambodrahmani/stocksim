@@ -1,5 +1,7 @@
 package it.unipi.lsmsdb.stocksim.client.database;
 
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -13,6 +15,8 @@ import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDB;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoDBFactory;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.MongoServer;
 import it.unipi.lsmsdb.stocksim.database.mongoDB.StocksimCollection;
+import it.unipi.lsmsdb.stocksim.yfinance.YFAssetProfile;
+import it.unipi.lsmsdb.stocksim.yfinance.YFHistoricalData;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -137,10 +141,83 @@ public class DBManager {
 
         // find summary data in mongodb
         final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
-        final Document stock = getMongoDB().findOne(Filters.eq("ticker", symbol), mongoDBStocks);
+        final Document stock = getMongoDB().findOne(Filters.eq("symbol", symbol), mongoDBStocks);
 
         // check if historical and summary data was found
         ret = (resultSet != null && stock != null);
+
+        return ret;
+    }
+
+    /**
+     * Creates an asset profile in mongodb for the given {@link YFAssetProfile}.
+     *
+     * @param yfAssetProfile the {@link YFAssetProfile} to be isnerted.
+     *
+     * @return true if the asset profile is added correctly, false otherwise.
+     */
+    public boolean createAssetProfile(final YFAssetProfile yfAssetProfile) {
+        boolean ret = true;
+
+        // retrieve stocks collection
+        final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+
+        // create new location document
+        final Document locationDocument = new Document();
+        locationDocument.append("state", yfAssetProfile.getState())
+                .append("country", yfAssetProfile.getCountry())
+                .append("phone", yfAssetProfile.getPhone())
+                .append("address", yfAssetProfile.getAddress());
+
+        // create new asset document
+        final Document assetDocument = new Document("_id", new ObjectId());
+        assetDocument.append("currency", yfAssetProfile.getCurrency())
+                .append("shortName", yfAssetProfile.getShortName())
+                .append("longName", yfAssetProfile.getLongName())
+                .append("exchangeTimezoneName", yfAssetProfile.getExchangeTimezoneName())
+                .append("exchangeTimezoneShortName", yfAssetProfile.getExchangeTimezoneShortName())
+                .append("quoteType", yfAssetProfile.getQuoteType())
+                .append("symbol", yfAssetProfile.getSymbol())
+                .append("market", yfAssetProfile.getMarket())
+                .append("logoURL", yfAssetProfile.getLogoURL())
+                .append("marketCap", yfAssetProfile.getMarketCap())
+                .append("trailingPE", yfAssetProfile.getTrailingPE())
+                .append("sector", yfAssetProfile.getSector())
+                .append("city", yfAssetProfile.getCity())
+                .append("website", yfAssetProfile.getWebsite())
+                .append("industry", yfAssetProfile.getIndustry())
+                .append("longBusinessSummary", yfAssetProfile.getLongBusinessSummary());
+
+        // insert the new admin document in the collection
+        ret = getMongoDB().insertOne(assetDocument, stocks);
+
+        // disconnect from mongodb
+        disconnectMongoDB();
+
+        return ret;
+    }
+
+    /**
+     * Updates historical data for the given symbol.
+     *
+     * @param symbol the symbol to be updated.
+     * @param yfHistoricalData the new historical data.
+     *
+     * @return true if the historical data is updated without errors, false otherwise.
+     *
+     * @throws CQLSessionException
+     */
+    public boolean updateHistoricalData(final String symbol, final ArrayList<YFHistoricalData> yfHistoricalData) throws CQLSessionException {
+        boolean ret = true;
+
+        // update historical data
+        for (final YFHistoricalData historicalData : yfHistoricalData) {
+            final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(CassandraQueryBuilder.getUpdateInsertQuery());
+            final BoundStatement bounded = preparedStatement.bind(symbol, historicalData.getDate(), (float) historicalData.getAdjClose(),
+                    (float) historicalData.getClose(), (float) historicalData.getHigh(), (float) historicalData.getLow(),
+                    (float) historicalData.getOpen(), (float) historicalData.getVolume());
+            final ResultSet updateResultSet = getCassandraDB().execute(bounded);
+        }
 
         return ret;
     }

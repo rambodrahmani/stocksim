@@ -1,10 +1,13 @@
 package it.unipi.lsmsdb.stocksim.client.admin;
 
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
+import it.unipi.lsmsdb.stocksim.yfinance.YFAssetProfile;
 import it.unipi.lsmsdb.stocksim.yfinance.YFHistoricalData;
-import it.unipi.lsmsdb.stocksim.yfinance.YFSummaryDataUpdate;
+import it.unipi.lsmsdb.stocksim.yfinance.YFSummaryData;
 import it.unipi.lsmsdb.stocksim.yfinance.YahooFinance;
 import org.json.JSONException;
 
@@ -104,19 +107,22 @@ public class Admin {
         // build yahoo finance object for current ticker symbol
         final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, nowTimestamp);
 
-        ClientUtil.println(yahooFinance.getV8URL());
-        ClientUtil.println(yahooFinance.getV10URL());
-
         // get summary data from yahoo finance
-        ClientUtil.println("Request URL: " + yahooFinance.getV10URL());
-        final YFSummaryDataUpdate yfSummaryData = yahooFinance.getSummaryDataUpdate();
+        final YFAssetProfile yfAssetProfile = yahooFinance.getAssetProfile();
 
         // retrieve historical data
         final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
 
-        // retrieve summary update
-
         // all retrieved correctly, load in the database
+        ret = dbManager.createAssetProfile(yfAssetProfile);
+        if (ret) {
+            ClientUtil.println("Asset Profile created with success. Updating historical data.");
+        }
+
+        ret = dbManager.updateHistoricalData(symbol, yfHistoricalData);
+        if (ret) {
+            ClientUtil.println("Historical data updated with success.");
+        }
 
         return ret;
     }
