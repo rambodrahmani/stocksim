@@ -7,16 +7,16 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.chart.ui.UIUtils;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.AbstractDataset;
 
 // import java.lang.reflect.Array;
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class LineChart extends Chart{
-	
-	// title of the chart
-	private final String title;
 	
 	// label of the X axis
 	private final String xAxisLabel;
@@ -29,8 +29,6 @@ public class LineChart extends Chart{
 	
 	// data for dependent variable
 	private final Number[] yAxisData;
-	
-	private ApplicationFrame applicationFrame;
 	
 	/**
 	 * @param title         title of the chart
@@ -55,21 +53,9 @@ public class LineChart extends Chart{
 		this.yAxisData = yAxisData.toArray(new Number[yAxisData.size()]);
 		
 		applicationFrame = new ApplicationFrame(title);
-		
-		JFreeChart lineChart = ChartFactory.createLineChart(
-				this.title,
-				xAxisLabel,
-				yAxisLabel,
-				createDataset(),
-				PlotOrientation.VERTICAL,
-				true, true, false);
-		
-		ChartPanel chartPanel = new ChartPanel(lineChart);
-		chartPanel.setPreferredSize(new java.awt.Dimension( 600 , 400));
-		applicationFrame.setContentPane(chartPanel);
 	}
 	
-	private DefaultCategoryDataset createDataset() {
+	protected AbstractDataset createDataset() {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for (int i = 0; i < yAxisData.length; i++) {
 			dataset.addValue(yAxisData[i], "value", xAxisData[i]);
@@ -77,10 +63,21 @@ public class LineChart extends Chart{
 		return dataset;
 	}
 	
-	public void showChart() {
-		this.applicationFrame.pack();
-		UIUtils.centerFrameOnScreen(this.applicationFrame);
-		this.applicationFrame.setVisible( true );
+	private JFreeChart createChart(CategoryDataset dataset){
+		JFreeChart lineChart = ChartFactory.createLineChart(
+				this.title,
+				xAxisLabel,
+				yAxisLabel,
+				dataset,
+				PlotOrientation.VERTICAL,
+				true, true, false);
+		
+		return lineChart;
+	}
+	
+	protected JPanel createPanel(){
+		JFreeChart chart = createChart((CategoryDataset) createDataset());
+		return new ChartPanel(chart);
 	}
 	
 	public static void main(String[] args) {
