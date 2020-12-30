@@ -1,5 +1,5 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
-public interface Chart {
-	public void showChart();
+public abstract class Chart {
+	public abstract void showChart();
 }

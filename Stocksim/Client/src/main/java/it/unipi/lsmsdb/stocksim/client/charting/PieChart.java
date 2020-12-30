@@ -1,7 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
 import javax.swing.JPanel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -12,7 +11,7 @@ import org.jfree.chart.ui.UIUtils;
 
 import java.util.ArrayList;
 
-public class PieChart implements Chart{
+public class PieChart extends Chart{
 	
 	// title of the chart
 	private final String title;
@@ -36,7 +35,7 @@ public class PieChart implements Chart{
 	                final ArrayList<String> slices,
 	                final ArrayList<Number> values){
 		if(slices.size() != values.size()){
-			throw new IllegalArgumentException("slices and values have to have the same length");
+			throw new IllegalArgumentException("slices and values must have the same length");
 		}
 		applicationFrame = new ApplicationFrame(title);
 		this.title = title;
@@ -105,7 +104,7 @@ public class PieChart implements Chart{
 				);
 		
 		if(pieChart != null){
-			System.out.println("Instance created succesfully.");
+			System.out.println("Instance created successfully.");
 			pieChart.showChart();
 		}
 		else{
