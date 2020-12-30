@@ -1,7 +1,7 @@
 /*
  * Apache Cassandra Stocksim CQL aggregation function.
  *
- * author: Marco Picca, Rambod Rahmani, Yuri Mazzuoli.
+ * author: Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 
  /* State function to be executed for every row*/
