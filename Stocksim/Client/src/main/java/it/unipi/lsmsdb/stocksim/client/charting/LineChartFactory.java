@@ -1,8 +1,8 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class PieChartFactory {
-	
+public class LineChartFactory {
 
 }
