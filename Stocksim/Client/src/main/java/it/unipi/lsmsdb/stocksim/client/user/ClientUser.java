@@ -1,5 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
+import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 
 import java.util.Scanner;
@@ -40,20 +41,29 @@ public class ClientUser {
      * @param command the command to be executed, if valid.
      */
     private static void parseCommand(final String command) {
-        switch (command) {
-            case "login":
-                if (login()) {
-                    ClientUtil.println("User login executed correctly.");
-                    ClientUtil.println("Welcome " + user.getName() + " " + user.getSurname() + ".\n");
+        final UserMenuAction action = UserMenuAction.valueOf(command.toUpperCase().replace("-", "_"));
+        switch (action) {
+            case LOGIN:
+                if (isLoggedIn()) {
+                    ClientUtil.println("User login already executed.\n");
                 } else {
-                    ClientUtil.println("User login failed.\n");
+                    if (login()) {
+                        ClientUtil.println("User login executed correctly.");
+                        ClientUtil.println("Welcome " + user.getName() + " " + user.getSurname() + ".\n");
+                    } else {
+                        ClientUtil.println("User login failed.\n");
+                    }
                 }
                 break;
-            case "logout":
-                logout();
-                ClientUtil.println("User logged out.\n");
+            case LOGOUT:
+                if (isLoggedIn()) {
+                    logout();
+                    ClientUtil.println("User logged out.\n");
+                } else {
+                    ClientUtil.println("You need to login first.\n");
+                }
                 break;
-            case "quit":
+            case QUIT:
                 System.exit(0);
                 break;
             default:
