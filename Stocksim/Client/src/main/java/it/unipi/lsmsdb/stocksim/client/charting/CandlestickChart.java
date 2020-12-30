@@ -1,11 +1,16 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
 
-public class CandlestickChart extends Chart {
+import org.jfree.data.general.AbstractDataset;
+
+/*public class CandlestickChart extends Chart {
 	
 	public CandlestickChart() {
 	}
 	
+
+	protected AbstractDataset createDataset();
+	
 	public void showChart() {
 	}
-}
+}*/

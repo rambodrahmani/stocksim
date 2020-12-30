@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class ChartFactory {
 	
-//	public CandlestickChart getCandlestickChart();
+//	public static CandlestickChart getCandlestickChart(){};
 	
 	/**
 	 *
