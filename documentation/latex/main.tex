@@ -5,7 +5,9 @@
 %       Compile using:
 %           $ pdflatex main.tex
 %
-% Author: Rambod Rahmani <rambodrahmani@autistici.org>
+% Author: Marco Pinna <>
+%         Rambod Rahmani <rambodrahmani@autistici.org>
+%         Yuri Mazzuoli <>
 %         Created on 05/11/2020
 %-------------------------------------------------------------------------------
 \documentclass[11pt, a4paper, twoside, openright]{book}
@@ -24,6 +26,8 @@
 
 % used to set page background image
 \usepackage{tikz}
+
+\let\cleardoublepage=\clearpage
 
 % blank page command
 \newcommand{\blankpage}
@@ -72,7 +76,7 @@
     \rule{7cm}{0.01cm}\\
     {\normalsize{\scshape Large Scale and Multi-Structured Databases}}\\
     [2cm]
-    {\scshape Stocksim: stock portfolio simulator}\\
+    {\scshape StockSim: Stock Portfolio Simulator}\\
     [3cm]
     \LARGE{\textbf{Supervisor}\hfill\textbf{Students}}\\
     \Large{\emph{Prof. Pietro Ducange}\hfill\emph{Marco Pinna\\}}
@@ -105,13 +109,21 @@
 % set arabic page numbering style
 \pagenumbering{arabic}
 
+%-------------------------------------------------------------------------------
+% Part I: Documentation
+%-------------------------------------------------------------------------------
 \part{Documentation}
 \include{introduction}
 \include{requirements}
-\include{database}
 \include{UML_diagrams}
+\include{database}
 \include{software_architecture}
-\part{User manual}
-\include{user_manual/user_manual_CH1}
-\end{document}
+\include{conclusions}
 
+%-------------------------------------------------------------------------------
+% Part I: User Manual
+%-------------------------------------------------------------------------------
+\part{User Manual}
+\include{user_manual/user_manual_CH1}
+\include{user_manual/user_manual_CH2}
+\end{document}
