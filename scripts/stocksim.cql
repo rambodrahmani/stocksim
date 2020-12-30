@@ -1,7 +1,7 @@
 /*
  * Apache Cassandra Stocksim CQL Query.
  *
- * author: Marco Picca, Rambod Rahmani, Yuri Mazzuoli.
+ * author: Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 DROP KEYSPACE stocksim;
 
