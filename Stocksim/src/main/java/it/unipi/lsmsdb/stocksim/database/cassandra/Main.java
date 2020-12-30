@@ -3,8 +3,8 @@ package it.unipi.lsmsdb.stocksim.database.cassandra;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * Developer harness test for the Datastax Java Driver for Apache Cassandra.
@@ -12,6 +12,7 @@ import java.util.Arrays;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class Main {
+
     /**
      * Developer harness test entry point.
      *
@@ -30,12 +31,15 @@ public class Main {
         // Cassandra DB with multiple explicit contact points
         final ArrayList<String> hostnames = new ArrayList<String>(Arrays.asList("172.16.3.94", "172.16.3.95", "172.16.3.96"));
         final ArrayList<Integer> ports = new ArrayList<Integer>(Arrays.asList(9042, 9042, 9042));
-        cassandraDB = cassandraDBFactory.getCassandraDB(hostnames, ports, "workgroup-04 Datacenter");
+        cassandraDB = cassandraDBFactory.getCassandraDB(hostnames, ports, "datacenter1");
+
+        testAggregation(cassandraDB);
+
 
         // connect to Cassandra DB Server
         if (cassandraDB.connect()) {
             try {
-                final ResultSet resultSet = cassandraDB.query("select * from stocksim.zyme");
+                final ResultSet resultSet = cassandraDB.query("select * from stocksim.tickers where symbol='AAPL';");
 
                 for (final Row row : resultSet) {
                     System.out.print(row.getInt("id") + "|");
@@ -56,5 +60,58 @@ public class Main {
 
         // close Cassandra DB connection and set reference to null
         cassandraDB = cassandraDB.disconnect();
+    }
+
+    /**
+     * Developer harness test for the aggregation function of Cassandra.
+     *
+     * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
+     */
+    public static void testAggregation(CassandraDB db)  {
+        Map<LocalDate, Map> data=null;
+        Map<String, Float> candle=null;
+        Set<LocalDate> keySet=null;
+        if(db.connect()){
+            final ResultSet resultSet;
+            try {
+                // aggregation query using a user defined aggregation functon
+                resultSet = db.query(
+                        "select PeriodParam(20,date, \n" +
+                                "   open, close, high, low, volume,adj_close)\n" +
+                                "    as Period from stocksim.tickers where date<'2020-12-1' " +
+                                "and date>'2020-6-10' and symbol='TSLA';"
+                );
+                // for each row we have a map
+                for (final Row row : resultSet) {
+                    data=row.getMap("Period", LocalDate.class, Map.class );
+                    System.out.println(data);
+                    if(data==null)
+                        continue;
+                    // taking the keySet of the map, witch is the final date of the period;
+                    // this is not known a priori because it's influenced by market closure
+                    // during different period of years and weeks; so we let the cassandra
+                    // aggregator compute it autonomously
+                    keySet= data.keySet();
+                    for (LocalDate finalDate : keySet) {
+                        // every date identify OHLC data (and more) for one candle
+                        candle = data.get(finalDate);
+                        if(candle==null)
+                            continue;
+                        System.out.print(finalDate+ " |");
+                        System.out.print(candle.get("open") + " |");
+                        System.out.print(candle.get("adj_close") + " |");
+                        System.out.print(candle.get("close") + " |");
+                        System.out.print(candle.get("date") + " |");
+                        System.out.print(candle.get("high") + " |");
+                        System.out.print(candle.get("low") + " |");
+                        System.out.println(candle.get("volume"));
+                    }
+
+                }
+            } catch (CQLSessionException e) {
+                e.printStackTrace();
+            }
+            db.disconnect();
+        }
     }
 }
