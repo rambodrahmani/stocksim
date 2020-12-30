@@ -80,6 +80,7 @@ public class PieChart implements Chart{
 	public void showChart(){
 		applicationFrame.setSize(600, 400);
 		UIUtils.centerFrameOnScreen(this.applicationFrame);
+		applicationFrame.setContentPane(createPanel());
 		applicationFrame.setVisible(true);
 	}
 	
@@ -97,7 +98,7 @@ public class PieChart implements Chart{
 		values.add(30);
 		values.add(40);
 		
-		PieChart pieChart = PieChartFactory.getPieChart(
+		PieChart pieChart = new PieChart(
 				"Torta di prova",
 				slices,
 				values
