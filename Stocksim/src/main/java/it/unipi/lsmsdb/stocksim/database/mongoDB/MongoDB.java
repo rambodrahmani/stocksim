@@ -2,12 +2,8 @@ package it.unipi.lsmsdb.stocksim.database.mongoDB;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoException;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.lsmsdb.stocksim.database.DB;
@@ -15,6 +11,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -262,5 +259,22 @@ public class MongoDB implements DB {
         }
 
         return  0;
+    }
+
+    /**
+     * Aggregates data with filtering ang grouping by an attribute, can compute
+     * sum, avg ecc.
+     *
+     * @param collection the collection where to perform the operation;
+     * @param filter filter to be used to find the documents.
+     * @param groupField the filed used to group the aggregation
+     * @param aggregator the aggregator function and field
+     *
+     * @return iterable object containing the result of the aggregation.
+     */
+    public AggregateIterable<Document> aggregate(final Bson filter, final String groupField, final BsonField aggregator, final MongoCollection<Document> collection) {
+        Bson match = Aggregates.match(filter);
+        return  collection.aggregate(
+                Arrays.asList(match, Aggregates.group("$"+groupField, aggregator)));
     }
 }

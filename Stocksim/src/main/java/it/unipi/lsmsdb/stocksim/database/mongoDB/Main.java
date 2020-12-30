@@ -1,6 +1,10 @@
 package it.unipi.lsmsdb.stocksim.database.mongoDB;
 
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.BsonField;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -79,5 +83,26 @@ public class Main {
         for (final Document document : dbManager.findMany(filter4, collection1)) {
             System.out.println(document.toJson());
         }
+
+        // aggregate examples
+        final Bson equity= eq("quoteType", "EQUITY"); //filter(s)
+        // name of the field projected, field to accumulate
+        // type of accumulation (sum, avg...)
+        final BsonField marketCapAccumulator=Accumulators.sum("totalCap","$marketCap");
+        AggregateIterable<Document> aggregateList =
+                                            // grouping attribute
+                dbManager.aggregate(equity, "sector", marketCapAccumulator, collection1);
+        for (Document document : aggregateList) {
+            System.out.println(document);
+        }
+        // avg example with nested attribute
+        final BsonField PEAccumulator=Accumulators.avg("avgPE","$trailingPE");
+        aggregateList =
+                dbManager.aggregate(equity, "location.country",
+                        PEAccumulator, collection1);
+        for (Document document : aggregateList) {
+            System.out.println(document);
+        }
     }
+
 }
