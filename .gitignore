@@ -24,7 +24,8 @@
 *.zip
 *.tar.gz
 *.rar
-
+**/target/
+**/.gradle
 
 #IntelliJ Idea settings files
 **/.idea/
