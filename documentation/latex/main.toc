@@ -1,0 +1,28 @@
+\babel@toc {english}{}
+\contentsline {part}{I\hspace {1em}Documentation}{2}% 
+\contentsline {chapter}{\numberline {1}Introduction}{4}% 
+\contentsline {chapter}{\numberline {2}Actors and requirements}{6}% 
+\contentsline {section}{\numberline {2.1}Actors}{6}% 
+\contentsline {section}{\numberline {2.2}Requirements}{6}% 
+\contentsline {subsection}{\numberline {2.2.1}Functional requirements}{6}% 
+\contentsline {subsection}{\numberline {2.2.2}Non-functional requirements}{6}% 
+\contentsline {chapter}{\numberline {3}UML diagrams}{7}% 
+\contentsline {section}{\numberline {3.1}Use Case diagram}{7}% 
+\contentsline {section}{\numberline {3.2}Class diagram}{7}% 
+\contentsline {chapter}{\numberline {4}Database}{8}% 
+\contentsline {section}{\numberline {4.1}Dataset}{8}% 
+\contentsline {subsection}{\numberline {4.1.1}Yahoo! Finance}{8}% 
+\contentsline {subsection}{\numberline {4.1.2}NasdaqTrader}{8}% 
+\contentsline {section}{\numberline {4.2}MongoDB}{8}% 
+\contentsline {subsection}{\numberline {4.2.1}Aggregations}{8}% 
+\contentsline {subsection}{\numberline {4.2.2}Indexes}{8}% 
+\contentsline {section}{\numberline {4.3}Apache Cassandra}{8}% 
+\contentsline {subsection}{\numberline {4.3.1}Aggregations}{8}% 
+\contentsline {subsection}{\numberline {4.3.2}Indexes}{8}% 
+\contentsline {section}{\numberline {4.4}Sharding and Replicas}{8}% 
+\contentsline {section}{\numberline {4.5}Apache Cassandra vs MongoDB}{8}% 
+\contentsline {chapter}{\numberline {5}Software architecture}{9}% 
+\contentsline {chapter}{\numberline {6}Conclusions}{10}% 
+\contentsline {part}{II\hspace {1em}User Manual}{11}% 
+\contentsline {chapter}{\numberline {7}StockSim Server Manual}{13}% 
+\contentsline {chapter}{\numberline {8}StockSim Client Manual}{14}% 
