@@ -1,6 +1,5 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
-import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 
 import java.util.Scanner;

@@ -1,7 +1,7 @@
 package it.unipi.lsmsdb.stocksim.client.admin;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
-import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
+import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 import org.json.JSONException;
 
 import java.io.IOException;

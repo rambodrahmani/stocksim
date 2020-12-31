@@ -2,10 +2,10 @@ package it.unipi.lsmsdb.stocksim.client.admin;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
-import it.unipi.lsmsdb.stocksim.database.cassandra.CQLSessionException;
-import it.unipi.lsmsdb.stocksim.yfinance.YFAssetProfile;
-import it.unipi.lsmsdb.stocksim.yfinance.YFHistoricalData;
-import it.unipi.lsmsdb.stocksim.yfinance.YahooFinance;
+import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
+import it.unipi.lsmsdb.stocksim.lib.yfinance.YFAssetProfile;
+import it.unipi.lsmsdb.stocksim.lib.yfinance.YFHistoricalData;
+import it.unipi.lsmsdb.stocksim.lib.yfinance.YahooFinance;
 import org.json.JSONException;
 
 import java.io.IOException;

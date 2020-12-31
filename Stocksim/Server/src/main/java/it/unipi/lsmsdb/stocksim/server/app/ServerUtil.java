@@ -3,7 +3,7 @@ package it.unipi.lsmsdb.stocksim.server.app;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
-import it.unipi.lsmsdb.stocksim.util.Util;
+import it.unipi.lsmsdb.stocksim.lib.util.Util;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class ServerUtil extends Util{
+public class ServerUtil extends Util {
     /**
      * Prints the main menu for the Server usage.
      */

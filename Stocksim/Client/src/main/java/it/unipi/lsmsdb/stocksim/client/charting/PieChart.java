@@ -8,7 +8,6 @@ import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.chart.ui.UIUtils;
 
 import java.util.ArrayList;
 

@@ -3,7 +3,7 @@ package it.unipi.lsmsdb.stocksim.client.app;
 import ch.qos.logback.classic.Level;
 import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
 import it.unipi.lsmsdb.stocksim.client.user.UserMenuAction;
-import it.unipi.lsmsdb.stocksim.util.Util;
+import it.unipi.lsmsdb.stocksim.lib.util.Util;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**

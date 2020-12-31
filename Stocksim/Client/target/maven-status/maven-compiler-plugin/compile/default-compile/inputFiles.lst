@@ -1,0 +1,17 @@
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/charting/OhlcRow.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/user/UserMenuAction.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/user/User.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/charting/Chart.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/charting/LineChart.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/database/Ticker.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/app/ClientUtil.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/user/ClientUser.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/charting/CandlestickChart.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/charting/PieChart.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/admin/ClientAdmin.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/charting/ChartFactory.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/database/DBManager.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/app/Client.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/admin/Admin.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/admin/AdminMenuAction.java
+/media/rrahmani/sdb1/UNIPI/stocksim/Stocksim/Client/src/main/java/it/unipi/lsmsdb/stocksim/client/database/CassandraQueryBuilder.java

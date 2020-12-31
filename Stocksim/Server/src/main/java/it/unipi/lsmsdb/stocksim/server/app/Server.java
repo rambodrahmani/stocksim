@@ -3,7 +3,7 @@ package it.unipi.lsmsdb.stocksim.server.app;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.server.database.DBManager;
-import it.unipi.lsmsdb.stocksim.util.ArgsParser;
+import it.unipi.lsmsdb.stocksim.lib.util.ArgsParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
