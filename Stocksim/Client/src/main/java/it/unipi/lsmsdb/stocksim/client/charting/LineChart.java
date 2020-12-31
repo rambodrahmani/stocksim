@@ -1,6 +1,5 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
-// import jdk.vm.ci.meta.Local;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -9,13 +8,18 @@ import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
-// import java.lang.reflect.Array;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class LineChart extends Chart{
+/**
+ * LineChart implementation.
+ *
+ * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
+ */
+public class LineChart extends Chart {
 	
 	// label of the X axis
 	private final String xAxisLabel;
@@ -30,19 +34,17 @@ public class LineChart extends Chart{
 	private final Number[] yAxisData;
 	
 	/**
-	 * @param title         title of the chart
-	 * @param xAxisLabel    label for the X axis
-	 * @param yAxisLabel    label for the Y axis
-	 * @param xAxisData     data for the X axis
-	 * @param yAxisData     data for the Y axis
+	 * Default constructor.
+	 *
+	 * @param title       title of the chart {@link ApplicationFrame};
+	 * @param xAxisLabel  label for the X axis;
+	 * @param yAxisLabel  label for the Y axis;
+	 * @param xAxisData   data for the X axis;
+	 * @param yAxisData   data for the Y axis.
 	 */
-	
-	public LineChart(final String title,
-	             final String xAxisLabel,
-	             final String yAxisLabel,
-	             final ArrayList<LocalDate> xAxisData,
-	             final ArrayList<Number> yAxisData){
-		if(xAxisData.size() != yAxisData.size()){
+	public LineChart(final String title, final String xAxisLabel, final String yAxisLabel,
+	             final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) {
+		if (xAxisData.size() != yAxisData.size()) {
 			throw new IllegalArgumentException("xAxisData and yAxisData must have the same length");
 		}
 		this.title = title;
@@ -50,15 +52,19 @@ public class LineChart extends Chart{
 		this.yAxisLabel = yAxisLabel;
 		this.xAxisData = xAxisData.toArray(new LocalDate[xAxisData.size()]);
 		this.yAxisData = yAxisData.toArray(new Number[yAxisData.size()]);
-		
 		applicationFrame = new ApplicationFrame(title);
 	}
-	
+
+	/**
+	 * @return the {@link DefaultCategoryDataset} obtained from the raw data.
+	 */
 	protected AbstractDataset createDataset() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
 		for (int i = 0; i < yAxisData.length; i++) {
 			dataset.addValue(yAxisData[i], "value", xAxisData[i]);
 		}
+
 		return dataset;
 	}
 	
@@ -74,7 +80,7 @@ public class LineChart extends Chart{
 		return lineChart;
 	}
 	
-	protected JPanel createPanel(){
+	protected JPanel createPanel() {
 		JFreeChart chart = createChart((CategoryDataset) createDataset());
 		return new ChartPanel(chart);
 	}
@@ -96,7 +102,7 @@ public class LineChart extends Chart{
 				values
 		);
 		
-		if(c != null) {
+		if (c != null) {
 			c.showChart();
 		}
 	}

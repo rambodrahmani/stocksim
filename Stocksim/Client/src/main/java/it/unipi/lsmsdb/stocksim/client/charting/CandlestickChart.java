@@ -21,16 +21,16 @@ import java.util.Random;
 public class CandlestickChart extends Chart {
 
 	private final String stockSymbol;
-	private final OhlcRow[] dataRows;
+	private final OHLCRow[] dataRows;
 	
 	
 	public CandlestickChart(final String title,
 	                        final String stockSymbol,
-	                        final ArrayList<OhlcRow> data)
+	                        final ArrayList<OHLCRow> data)
 	{
 		this.title = title;
 		this.stockSymbol = stockSymbol;
-		this.dataRows = data.toArray(new OhlcRow[data.size()]);
+		this.dataRows = data.toArray(new OHLCRow[data.size()]);
 		
 		this.applicationFrame = new ApplicationFrame(title);
 	}
@@ -39,7 +39,7 @@ public class CandlestickChart extends Chart {
 		DefaultOHLCDataset set = null;
 		List<OHLCDataItem> dataItems = new ArrayList<OHLCDataItem>();
 		
-		for (OhlcRow row:
+		for (OHLCRow row:
 				dataRows) {
 			OHLCDataItem item = new OHLCDataItem(
 				row.getDate(),
@@ -78,7 +78,7 @@ public class CandlestickChart extends Chart {
 	
 	
 	public static void main(String[] args) throws ParseException {
-		ArrayList<OhlcRow> testRows = new ArrayList<>();
+		ArrayList<OHLCRow> testRows = new ArrayList<>();
 		for (int i = 10; i < 31; i++) {
 			String dateString = "2020-11-" + i;
 			Date testDate = new SimpleDateFormat("yyyy-mm-dd").parse(dateString);
@@ -97,7 +97,7 @@ public class CandlestickChart extends Chart {
 			Float testClose = (float)10 + i;
 //			Float testVolume = (float)1;
 			
-			OhlcRow row = new OhlcRow(
+			OHLCRow row = new OHLCRow(
 					testDate,
 					testOpen,
 					testHigh,

@@ -8,7 +8,7 @@ public class ChartFactory {
 	public static CandlestickChart getCandlestickChart(
 			final String title,
 			final String stockSymbol,
-			final ArrayList<OhlcRow> dataset){
+			final ArrayList<OHLCRow> dataset){
 		CandlestickChart c = new CandlestickChart(title, stockSymbol, dataset);
 		return c;
 	};
