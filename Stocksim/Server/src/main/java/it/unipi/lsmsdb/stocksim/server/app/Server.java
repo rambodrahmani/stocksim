@@ -1,11 +1,14 @@
 package it.unipi.lsmsdb.stocksim.server.app;
 
 import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.server.database.DBManager;
 import it.unipi.lsmsdb.stocksim.util.ArgsParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
 
@@ -16,10 +19,14 @@ import java.util.Scanner;
  */
 public class Server {
     // Default input scanner used to read input commands
-    final static Scanner scanner = new Scanner(System.in);
+    private final static Scanner scanner = new Scanner(System.in);
 
-    // Stocksim Server DB Manager
-    final static DBManager dbManager = new DBManager();
+    // StockSim Server logger
+    private final static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+    private final static Logger rootLogger = loggerContext.getLogger("it.unipi.lsmsdb.stocksim.server");
+
+    // StockSim Server DB Manager
+    private final static DBManager dbManager = new DBManager(rootLogger);
 
     /**
      * StockSim Server entry point.
@@ -35,6 +42,9 @@ public class Server {
 
         // parse command line arguments and run historical data update if needed
         parseArguments(args);
+
+        // start parallel updater thread
+        startUpdaterThread();
 
         // infinite main loop
         while (true) {
@@ -73,6 +83,18 @@ public class Server {
             argsParser.printHelp("./server --no-update");
             System.exit(1);
         }
+    }
+
+    /**
+     * Defines the {@link Runnable} to be executed by the thread in charge
+     * of executing the daily update.
+     */
+    private static void startUpdaterThread() {
+        final Runnable runnable = () -> {
+        };
+
+        final Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     /**

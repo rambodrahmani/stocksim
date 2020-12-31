@@ -21,6 +21,7 @@ import it.unipi.lsmsdb.stocksim.yfinance.YahooFinance;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.JSONException;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.time.*;
@@ -49,6 +50,18 @@ public class DBManager {
 
     // Mongo DB shared instance
     private MongoDB mongoDB;
+
+    // StockSim Server logger
+    final Logger logger;
+
+    /**
+     * Default constructor.
+     *
+     * @param logger the application logger to be used.
+     */
+    public DBManager(final Logger logger) {
+        this.logger = logger;
+    }
 
     /**
      * @return Cassandra DB shared instance;
@@ -204,7 +217,7 @@ public class DBManager {
                     ServerUtil.println("Days since last update: " + String.valueOf(daysBetween) + ".");
 
                     // historical data already up to date
-                    if (daysBetween == 0 ) {
+                    if (daysBetween == 0 || (daysBetween == 1 && currentTime < 20)) {
                         ServerUtil.println("Historical data for " + symbol + " already up to date. Moving on.\n");
                     } else {
                         try {
@@ -212,7 +225,7 @@ public class DBManager {
                             final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, currentTimestamp);
 
                             // get summary data from yahoo finance
-                            ServerUtil.println("Request URL: " + yahooFinance.getV10URLSummaryDetail());
+                            logger.info("Request URL: " + yahooFinance.getV10URLSummaryDetail());
                             final YFSummaryData yfSummaryData = yahooFinance.getSummaryData();
 
                             // first update mongo db fields
@@ -233,7 +246,7 @@ public class DBManager {
                             getMongoDB().updateOne(stockFilter, updateSet, stocksCollection);
 
                             // update historical data
-                            ServerUtil.println("Request URL: " + yahooFinance.getV8URL());
+                            logger.info("Request URL: " + yahooFinance.getV8URL());
                             final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
                             for (final YFHistoricalData historicalData : yfHistoricalData) {
                                 final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(CassandraQueryBuilder.getUpdateInsertQuery());

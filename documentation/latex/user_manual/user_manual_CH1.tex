@@ -7,4 +7,13 @@
 For an application dealing with the stock market, it is essential to 
 always provide up-to-date, consistent and reliable data. This is the purpose of 
 the \textbf{StockSim Server} program. It is not intended to be distributed to 
-end users. It is thought to be running 24/7.
+end users. It is thought to be running 24/7.\\
+\\
+The StockSim Server has two different startup modes:
+\begin{lstlisting}[language=bash]
+java -jar Server.jar
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash]
+java -jar Server.jar --no-update
+\end{lstlisting}
