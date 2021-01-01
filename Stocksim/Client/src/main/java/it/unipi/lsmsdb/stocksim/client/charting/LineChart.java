@@ -8,14 +8,13 @@ import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
-import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * LineChart implementation.
+ * Line Chart implementation using a {@link JFreeChart}.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
@@ -28,10 +27,10 @@ public class LineChart extends Chart {
 	private final String yAxisLabel;
 	
 	// data for independent variable
-	private final LocalDate[] xAxisData;
+	private final ArrayList<LocalDate> xAxisData;
 	
 	// data for dependent variable
-	private final Number[] yAxisData;
+	private final ArrayList<Number> yAxisData;
 	
 	/**
 	 * Default constructor.
@@ -43,15 +42,15 @@ public class LineChart extends Chart {
 	 * @param yAxisData   data for the Y axis.
 	 */
 	public LineChart(final String title, final String xAxisLabel, final String yAxisLabel,
-	             final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) {
+	             final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) throws IllegalArgumentException {
 		if (xAxisData.size() != yAxisData.size()) {
 			throw new IllegalArgumentException("xAxisData and yAxisData must have the same length");
 		}
 		this.title = title;
 		this.xAxisLabel = xAxisLabel;
 		this.yAxisLabel = yAxisLabel;
-		this.xAxisData = xAxisData.toArray(new LocalDate[xAxisData.size()]);
-		this.yAxisData = yAxisData.toArray(new Number[yAxisData.size()]);
+		this.xAxisData = xAxisData;
+		this.yAxisData = yAxisData;
 		applicationFrame = new ApplicationFrame(title);
 	}
 
@@ -61,49 +60,53 @@ public class LineChart extends Chart {
 	protected AbstractDataset createDataset() {
 		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-		for (int i = 0; i < yAxisData.length; i++) {
-			dataset.addValue(yAxisData[i], "value", xAxisData[i]);
+		for (int i = 0; i < yAxisData.size(); i++) {
+			dataset.addValue(yAxisData.get(i), "value", xAxisData.get(i));
 		}
 
 		return dataset;
 	}
-	
-	private JFreeChart createChart(CategoryDataset dataset){
-		JFreeChart lineChart = ChartFactory.createLineChart(
-				this.title,
-				xAxisLabel,
-				yAxisLabel,
-				dataset,
-				PlotOrientation.VERTICAL,
-				true, true, false);
-		
+
+	/**
+	 * @param dataset the {@link CategoryDataset} used to build the line chart.
+	 *
+	 * @return the {@link JFreeChart} created using the given {@link CategoryDataset}.
+	 */
+	private JFreeChart createChart(final CategoryDataset dataset) {
+		final JFreeChart lineChart = ChartFactory.createLineChart(this.title, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
 		return lineChart;
 	}
-	
+
+	/**
+	 * @return the {@link ChartPanel} that displays the specified chart.
+	 */
 	protected JPanel createPanel() {
-		JFreeChart chart = createChart((CategoryDataset) createDataset());
+		final JFreeChart chart = createChart((CategoryDataset) createDataset());
 		return new ChartPanel(chart);
 	}
-	
-	public static void main(String[] args) {
-		ArrayList<LocalDate> dates = new ArrayList<LocalDate>();
-		ArrayList<Number> values = new ArrayList<Number>();
+
+	/**
+	 * Developer harness test entry point.
+	 *
+	 * @param args command line arguments.
+	 */
+	public static void main(final String[] args) {
+		final ArrayList<LocalDate> dates = new ArrayList<LocalDate>();
+		final ArrayList<Number> values = new ArrayList<Number>();
+
 		for (int i = 1; i < 31; i++) {
-			LocalDate date = LocalDate.of(2020, 12, i);
+			final LocalDate date = LocalDate.of(2020, 12, i);
 			dates.add(date);
-			
 			values.add((float) Math.random());
 		}
-		
-		LineChart c = it.unipi.lsmsdb.stocksim.client.charting.ChartFactory.getLineChart("prova",
-				"Asse X",
-				"Asse Y",
-				dates,
-				values
-		);
-		
-		if (c != null) {
-			c.showChart();
+
+		try {
+			final LineChart lineChart = ChartingFactory.getLineChart("LineChart di prova", "Asse X", "Asse Y", dates, values);
+			if (lineChart != null) {
+				lineChart.showChart();
+			}
+		} catch (final IllegalArgumentException e) {
+			e.printStackTrace();
 		}
 	}
 }
