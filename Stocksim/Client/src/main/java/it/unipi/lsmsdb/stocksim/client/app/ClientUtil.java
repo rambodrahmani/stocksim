@@ -1,10 +1,15 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
 import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
 import it.unipi.lsmsdb.stocksim.client.user.UserMenuAction;
 import it.unipi.lsmsdb.stocksim.lib.util.Util;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.LoggerFactory;
+
+import static it.unipi.lsmsdb.stocksim.client.app.Client.LOGGER_CONTEXT;
 
 /**
  * General purpose utility methods.
@@ -86,5 +91,10 @@ public class ClientUtil extends Util{
 
         // set log level for the cassandra driver
         setCassandraLogLevel(logLevel);
+
+        // finally, set StockSim Client loggin level
+        final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        final Logger rootLogger = loggerContext.getLogger(LOGGER_CONTEXT);
+        rootLogger.setLevel(logLevel);
     }
 }

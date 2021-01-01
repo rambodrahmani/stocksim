@@ -1,12 +1,15 @@
 package it.unipi.lsmsdb.stocksim.client.app;
 
 import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.client.admin.ClientAdmin;
 import it.unipi.lsmsdb.stocksim.client.user.ClientUser;
 import it.unipi.lsmsdb.stocksim.lib.util.ArgsParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * StockSim Client implementation.
@@ -14,6 +17,13 @@ import org.apache.commons.cli.ParseException;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class Client {
+    // StockSim Client logger context
+    public final static String LOGGER_CONTEXT = "it.unipi.lsmsdb.stocksim.client";
+
+    // StockSim Client logger
+    private final static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+    private final static Logger rootLogger = loggerContext.getLogger(LOGGER_CONTEXT);
+
     /**
      * StockSim Client entry point.
      *

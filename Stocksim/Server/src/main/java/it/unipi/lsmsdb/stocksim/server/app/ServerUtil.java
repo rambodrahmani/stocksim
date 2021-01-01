@@ -6,6 +6,8 @@ import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.lib.util.Util;
 import org.slf4j.LoggerFactory;
 
+import static it.unipi.lsmsdb.stocksim.server.app.Server.LOGGER_CONTEXT;
+
 /**
  * General purpose utility methods.
  *
@@ -47,7 +49,7 @@ public class ServerUtil extends Util {
 
         // finally, set StockSim Server loggin level
         final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        final Logger rootLogger = loggerContext.getLogger("it.unipi.lsmsdb.stocksim.server");
+        final Logger rootLogger = loggerContext.getLogger(LOGGER_CONTEXT);
         rootLogger.setLevel(logLevel);
     }
 }

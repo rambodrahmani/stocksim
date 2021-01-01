@@ -18,12 +18,15 @@ import java.util.Scanner;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class Server {
-    // Default input scanner used to read input commands
-    private final static Scanner scanner = new Scanner(System.in);
+    // StockSim Server logger context
+    public final static String LOGGER_CONTEXT = "it.unipi.lsmsdb.stocksim.server";
 
     // StockSim Server logger
     private final static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-    private final static Logger rootLogger = loggerContext.getLogger("it.unipi.lsmsdb.stocksim.server");
+    private final static Logger rootLogger = loggerContext.getLogger(LOGGER_CONTEXT);
+
+    // Default input scanner used to read input commands
+    private final static Scanner scanner = new Scanner(System.in);
 
     // StockSim Server DB Manager
     private final static DBManager dbManager = new DBManager(rootLogger);
