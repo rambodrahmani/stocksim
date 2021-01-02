@@ -1,4 +1,5 @@
 package it.unipi.lsmsdb.stocksim.lib.database.mongoDB;
+
 /**
  * This class represents a MongoDB Server.
  *
