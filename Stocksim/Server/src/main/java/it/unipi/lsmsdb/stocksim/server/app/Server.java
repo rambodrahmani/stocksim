@@ -10,6 +10,9 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Scanner;
 
 /**
@@ -90,10 +93,35 @@ public class Server {
 
     /**
      * Defines the {@link Runnable} to be executed by the thread in charge
-     * of executing the daily update.
+     * of executing the daily historical data update.
      */
     private static void startUpdaterThread() {
         final Runnable runnable = () -> {
+            try {
+                // thread infinite main loop
+                while (true) {
+                    // get current New York clock time
+                    final ZoneId nyZoneId = ZoneId.of("America/New_York");
+                    final Instant instant = Clock.systemDefaultZone().instant();
+                    final int currentHour = instant.atZone(nyZoneId).getHour();
+
+                    ServerUtil.println("\n" + "[UPDATER THREAD] Current New York time: " + instant.atZone(nyZoneId).toString());
+
+                    if (currentHour < 20) {
+                        final int sleepHours = 20 - currentHour;
+                        ServerUtil.print("[UPDATER THREAD] Going to sleep for " + sleepHours + " hours before next update.\n> ");
+                        Thread.sleep(sleepHours * 60 * 60 *1000);
+                    } else {
+                        ServerUtil.println("[UPDATER THREAD] Starting historical data update.");
+                        dbManager.updateDB();
+                        final int sleepHours = (24 - Clock.systemDefaultZone().instant().atZone(nyZoneId).getHour()) + 20;
+                        ServerUtil.print("[UPDATER THREAD] Going to sleep for " + sleepHours + " hours before next update.\n> ");
+                        Thread.sleep(sleepHours * 60 * 60 *1000);
+                    }
+                }
+            } catch (final InterruptedException e) {
+
+            }
         };
 
         final Thread thread = new Thread(runnable);
