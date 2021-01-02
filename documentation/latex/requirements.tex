@@ -4,11 +4,38 @@
 %       See main.tex for further information.
 %-------------------------------------------------------------------------------
 \chapter{Actors and requirements}
-Blablabla.
+The main actors and the functional requirements are defided based on the previous
+simple description of the application. There is also a 
+particular actor witch is in charge of the authomatic update of the dataset; non functional
+requirements are the caracteristics that ensure satisfactory interaction with users and 
+real world utility of the product.
 
 \section{Actors}
-Something about requirements in general.
+Based on the application design, four actors can interact with the system:
+\begin{itemize}
+    \item A \textbf{Guest user} is someone who's not registered on the applicazion; this actor doesn't 
+own private credentials for the login; in order to exploit the application main functionalities, 
+it has to register a new account. The registration it's the only action allowed for a Guest;
 
+    \item A \textbf{Registered user} is someone who's registered on the applicazion; this actor own
+private credentials (username and password) for the login; this actor can login as a user
+into the client
+application and utilize it's main features like watch stoks information, compose portfolios and 
+simulate them. 
+   
+    \item An \textbf{Admin user} is someone who's registered on the applicazion with administration
+credentials; this actor can login as an admin into the client and do some maintenance 
+operations; this operations includes check the integrity of the entire dataset and add new 
+stocks to it;
+
+    \item The \textbf{Data Updater} is a thread running on one server; this thread is suppose to 
+run always, and it's in charge of update the dataset with the new information coming from 
+the stock market daily sessions; it's also in charge to find and fix (at list report)
+integrity issues.
+
+\end{itemize}
+
+The full use case diagram is provided on chapter 3.
 \section{Requirements}
 
 \subsection{Functional requirements}
