@@ -33,6 +33,25 @@ Historical data updated for EWU. Moving on.
 ...
 
 
+Updating historical data for: XRX.
+Last update date: 2020-12-28.
+Days since last update: 4.
+Historical data updated for XRX. Moving on.
+
+Historical data update terminated.
+Elapsed time: 1 hrs, 37 mins, 3622 secs.
+Exceptions during update process: 8.
+Failed updates: [ARKG, HDS, IWFH, LDEM, WWW, XVV, GINN, AAAU].
+
+Available Commands:
+
+status       check databases status.
+update       update databases historical data.
+quit         quit Stocksim server.
+> 
+[UPDATER THREAD] Current New York time: 2021-01-02T07:50-[America/New_York]
+[UPDATER THREAD] Going to sleep for 13 hours before next update.
+> 
 \end{lstlisting}
 which executes the \texttt{historical data update} procedure right after
 startup. Whereas, the second startup mode can be triggered using the
@@ -44,30 +63,44 @@ $ java -jar Server.jar --no-update
 Welcome to the StockSim Server.
 
 Available Commands:
-status       check databases status.                 
-update       update databases historical data.       
-quit         quit Stocksim server.                   
+status       check databases status.
+update       update databases historical data.
+quit         quit Stocksim server.
 > 
 [UPDATER THREAD] Current New York time: 2021-01-02T06:29-[America/New_York]
 [UPDATER THREAD] Going to sleep for 14 hours before next update.
 > update
-
 DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.
 
-Updating historical data for: IRBT.
-Last update date: 2020-12-30.
-Days since last update: 2.
-Historical data updated for IRBT. Moving on.
+Updating historical data for: AUPH.
+Last update date: 2020-12-31.
+Days since last update: 1.
+Historical data for AUPH already up to date. Moving on.
 
 ...
 
 Updating historical data for: EWU.
-Last update date: 2020-12-28.
-Days since last update: 4.
-Historical data updated for EWU. Moving on.
+Last update date: 2020-12-31.
+Days since last update: 1.
+Historical data for EWU already up to date. Moving on.
 
 ...
 
+Updating historical data for: XRX.
+Last update date: 2020-12-31.
+Days since last update: 1.
+Historical data for XRX already up to date. Moving on.
+
+Historical data update terminated.
+Elapsed time: 0 hrs, 4 mins, 44 secs.
+Exceptions during update process: 3.
+Failed updates: [ARKG, XVV, DUAL].
+
+Available Commands:
+status       check databases status.
+update       update databases historical data.
+quit         quit Stocksim server.
+> 
 \end{lstlisting}
 in this mode, no update is executed right after startup, the main menu is shown
 and the user can decide the action to be performed.\\

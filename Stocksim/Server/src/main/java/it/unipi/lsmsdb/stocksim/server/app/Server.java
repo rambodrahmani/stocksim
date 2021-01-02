@@ -46,11 +46,11 @@ public class Server {
         // print welcome message
         ServerUtil.printWelcomeMessage();
 
-        // parse command line arguments and run historical data update if needed
-        parseArguments(args);
-
         // start parallel updater thread
         startUpdaterThread();
+
+        // parse command line arguments and run historical data update if needed
+        parseArguments(args);
 
         // infinite main loop
         while (true) {
@@ -96,7 +96,7 @@ public class Server {
      * of executing the daily historical data update.
      */
     private static void startUpdaterThread() {
-        final Runnable runnable = () -> {
+        final Runnable updaterRunnable = () -> {
             try {
                 // thread infinite main loop
                 while (true) {
@@ -120,12 +120,13 @@ public class Server {
                     }
                 }
             } catch (final InterruptedException e) {
-
+                // nothing to do
             }
         };
 
-        final Thread thread = new Thread(runnable);
-        thread.start();
+        // start updater thread
+        final Thread updaterThread = new Thread(updaterRunnable, "StockSim Server Updater");
+        updaterThread.start();
     }
 
     /**
