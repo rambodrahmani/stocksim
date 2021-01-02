@@ -31,3 +31,5 @@
 \contentsline {part}{II\hspace {1em}User Manual}{11}% 
 \contentsline {chapter}{\numberline {7}StockSim Server Manual}{13}% 
 \contentsline {chapter}{\numberline {8}StockSim Client Manual}{15}% 
+\contentsline {section}{\numberline {8.1}StockSim Client User Mode}{15}% 
+\contentsline {section}{\numberline {8.2}StockSim Client Admin Mode}{15}% 

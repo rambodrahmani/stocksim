@@ -4,4 +4,34 @@
 %       See main.tex for further information.
 %-------------------------------------------------------------------------------
 \chapter{StockSim Client Manual}
-Content.
+The StockSim Client has two different running modes: the first one
+\begin{lstlisting}[basicstyle=\footnotesize,language=bash,numbers=left,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+Welcome to the StockSim Client.
+
+*** [RUNNING IN USER MODE] ***
+
+Available Commands:
+login        login to your user account.             
+quit         quit StockSim client.
+\end{lstlisting}
+is the \texttt{user mode}. Whereas, the second running mode can be triggered 
+using the \texttt{--admin} command line argument:
+\begin{lstlisting}[basicstyle=\footnotesize,language=bash,numbers=left,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+$ java -jar Client.jar --admin
+
+Welcome to the StockSim Client.
+
+*** [RUNNING IN ADMIN MODE] ***
+
+Available Commands:
+login        login to your admin account.            
+quit         quit StockSim client.
+\end{lstlisting}
+and is the \texttt{admin mode}. Although they might look like the same, the 
+available menu actions differ once the user/admin login has been executed.
+
+\section{StockSim Client User Mode}
+
+\section{StockSim Client Admin Mode}

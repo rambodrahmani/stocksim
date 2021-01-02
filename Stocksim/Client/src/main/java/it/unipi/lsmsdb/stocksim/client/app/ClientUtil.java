@@ -53,8 +53,8 @@ public class ClientUtil extends Util{
      */
     public final static void printUserLoginMenu() {
         print("Available Commands:\n");
-        print(String.format("%-12s %5s %-40s%n", UserMenuAction.LOGIN.getActionName(), " ", UserMenuAction.LOGIN.getActionDescription()));
-        print(String.format("%-12s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
+        print(String.format("%-6s %5s %-40s%n", UserMenuAction.LOGIN.getActionName(), " ", UserMenuAction.LOGIN.getActionDescription()));
+        print(String.format("%-6s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 
