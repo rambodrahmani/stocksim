@@ -9,11 +9,74 @@ always provide up-to-date, consistent and reliable data. This is the purpose of
 the \textbf{StockSim Server} program. It is not intended to be distributed to 
 end users. It is thought to be running 24/7.\\
 \\
-The StockSim Server has two different startup modes:
-\begin{lstlisting}[language=bash]
-java -jar Server.jar
-\end{lstlisting}
+The StockSim Server has two different startup modes: the first one
+\begin{lstlisting}[basicstyle=\footnotesize,language=bash,numbers=left,numberstyle=\footnotesize,numbersep=8pt,frame=single]
+$ java -jar Server.jar
 
-\begin{lstlisting}[language=bash]
-java -jar Server.jar --no-update
+Welcome to the StockSim Server.
+
+DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.
+
+Updating historical data for: IRBT.
+Last update date: 2020-12-30.
+Days since last update: 2.
+Historical data updated for IRBT. Moving on.
+
+...
+
+Updating historical data for: EWU.
+Last update date: 2020-12-28.
+Days since last update: 4.
+Historical data updated for EWU. Moving on.
+
+...
+
+
 \end{lstlisting}
+which executes the \texttt{historical data update} procedure right after
+startup. Whereas, the second startup mode can be triggered using the
+\texttt{--no-update} command line argument:
+\begin{lstlisting}[basicstyle=\footnotesize,language=bash,numbers=left,numberstyle=\footnotesize,numbersep=8pt,frame=single]
+$ java -jar Server.jar --no-update
+
+Welcome to the StockSim Server.
+
+Available Commands:
+status       check databases status.                 
+update       update databases historical data.       
+quit         quit Stocksim server.                   
+> 
+[UPDATER THREAD] Current New York time: 2021-01-02T06:29-[America/New_York]
+[UPDATER THREAD] Going to sleep for 14 hours before next update.
+> update
+
+DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.
+
+Updating historical data for: IRBT.
+Last update date: 2020-12-30.
+Days since last update: 2.
+Historical data updated for IRBT. Moving on.
+
+...
+
+Updating historical data for: EWU.
+Last update date: 2020-12-28.
+Days since last update: 4.
+Historical data updated for EWU. Moving on.
+
+...
+
+\end{lstlisting}
+in this mode, no update is executed right after startup, the main menu is shown
+and the user can decide the action to be performed.\\
+\\
+In the previously shown examples, something we should pay attention to, are the
+following
+\begin{itemize}
+    \item \texttt{DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.}
+    \item \texttt{the sotcksim server automatically detects the last update
+    date, the number of days since the last update and fetches the required
+    data using Yahoo Finance for EACH and EVERY ticker symbol.}
+    \item \texttt{Historical Data Update logs.}
+    \item \texttt{[UPDATER THREAD]}
+\end{itemize}

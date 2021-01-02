@@ -22,7 +22,12 @@
 \contentsline {section}{\numberline {4.4}Sharding and Replicas}{8}% 
 \contentsline {section}{\numberline {4.5}Apache Cassandra vs MongoDB}{8}% 
 \contentsline {chapter}{\numberline {5}Software architecture}{9}% 
+\contentsline {section}{\numberline {5.1}Maven Multi-Module Structure}{9}% 
+\contentsline {subsection}{\numberline {5.1.1}Library}{9}% 
+\contentsline {subsection}{\numberline {5.1.2}Server}{9}% 
+\contentsline {subsection}{\numberline {5.1.3}Client}{9}% 
+\contentsline {section}{\numberline {5.2}Apache Maven Assembly Plugin}{9}% 
 \contentsline {chapter}{\numberline {6}Conclusions}{10}% 
 \contentsline {part}{II\hspace {1em}User Manual}{11}% 
 \contentsline {chapter}{\numberline {7}StockSim Server Manual}{13}% 
-\contentsline {chapter}{\numberline {8}StockSim Client Manual}{14}% 
+\contentsline {chapter}{\numberline {8}StockSim Client Manual}{15}% 
