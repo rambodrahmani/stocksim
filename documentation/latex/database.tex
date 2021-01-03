@@ -5,7 +5,18 @@
 %-------------------------------------------------------------------------------
 \chapter{Database}
 
-Something in general about the dataset and then about the choice of the DB architectures we choose (e.g. "We decided to use a documentDB because blablabla and a column DB because financial analytics on these volumes of data are performed 
+The dataset is composd by 8236 stocks from the US stock market, along with
+their general informations and historical data; the application also need to store 
+users' and admins' credential, personal informationof users, composition and details of
+each user's porfolio.
+We decided to use a column database for the storage of historical data; those 
+informations represent around the 95% of our dataset and they are going to grow very fast
+during time; aggaregation and financial analytics on these volumes of data will perform
+better in a colum database where data storage is design to optimize this type of operations;
+We decided to store every other information in a document database, in order to exploit the
+schemaless property for save memory; information frequently needed toghether will be stored 
+in the same document and indexes are created to speedup linking beetween documents; 
+
 
 \section{Dataset}
 
@@ -14,6 +25,11 @@ Something in general about the dataset and then about the choice of the DB archi
 \subsection{NasdaqTrader}
 
 \section{MongoDB}
+"MongoDB is a general purpose, document-based, distributed database built 
+for modern application developers and for the cloud era." Taken from www.mongodb.com.
+MongoDB is a very famous document database with a great support for cloud operations, witch 
+will improve the avaliability of our application. It also suport a lot of analytics functions
+and the creation of custom indexes ibn order to speedup read operations;
 \subsection{Aggregations}
 \subsection{Indexes}
 
