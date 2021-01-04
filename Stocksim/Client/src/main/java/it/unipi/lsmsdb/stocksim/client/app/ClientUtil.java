@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
+import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.client.user.User;
 import it.unipi.lsmsdb.stocksim.client.user.UserMenuAction;
 import it.unipi.lsmsdb.stocksim.lib.util.Util;

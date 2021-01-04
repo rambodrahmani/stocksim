@@ -454,4 +454,22 @@ public class DBManager {
 
         return ret;
     }
+
+    /**
+     * Searches both Cassandra DB and Mongo DB for the given ticker symbol.
+     *
+     * @param symbol the ticker symbol to be searched for.
+     *
+     * @return the retrieved {@link Stock}, null otherwise.
+     */
+    public Stock searchStock(final String symbol) throws CQLSessionException {
+        if (checkTickerExists(symbol)) {
+            // find summary data in mongodb
+            final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+            final Document stockDocument = getMongoDB().findOne(Filters.eq("symbol", symbol), mongoDBStocks);
+            return new Stock(stockDocument);
+        }
+
+        return null;
+    }
 }

@@ -1,6 +1,8 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
+import it.unipi.lsmsdb.stocksim.client.database.Stock;
+import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
 /**
  * This class represents a StockSim Client User.
@@ -75,6 +77,17 @@ public class User {
     public boolean login() {
         this.loggedIn = dbManager.userLogin(this);
         return loggedIn;
+    }
+
+    /**
+     * Search for the given ticker symbol using the {@link DBManager}.
+     *
+     * @param symbol the ticker symbol to be searched for.
+     *
+     * @return the retrieved {@link Stock} in case of success, null otherwise.
+     */
+    public Stock searchStock(final String symbol) throws CQLSessionException {
+        return dbManager.searchStock(symbol);
     }
 
     /**

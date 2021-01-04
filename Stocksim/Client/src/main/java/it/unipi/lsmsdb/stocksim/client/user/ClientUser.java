@@ -1,6 +1,8 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
+import it.unipi.lsmsdb.stocksim.client.database.Stock;
+import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
 import java.util.Scanner;
 
@@ -68,7 +70,7 @@ public class ClientUser {
                     break;
                 case SEARCH_STOCK:
                     if (isLoggedIn()) {
-                        
+                        searchStock();
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
@@ -153,6 +155,26 @@ public class ClientUser {
         }
 
         return ret;
+    }
+
+    /**
+     * Searches for a stock using the ticker symbol.
+     */
+    private static void searchStock() {
+        // ask for stock ticker symbol
+        ClientUtil.print("Ticker Symbol: ");
+        final String symbol = scanner.nextLine();
+
+        try {
+            final Stock found = user.searchStock(symbol);
+            if (found != null) {
+                ClientUtil.println(found.toString());
+            } else {
+                ClientUtil.println("No stock found for the given symbol.\n");
+            }
+        } catch (final CQLSessionException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
