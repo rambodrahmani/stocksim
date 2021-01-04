@@ -8,29 +8,49 @@ import it.unipi.lsmsdb.stocksim.client.database.DBManager;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class User {
-    // admin username
-    private final String username;
-
-    // admin password
-    private final String password;
-
-    // admin name
+    // user name
     private String name;
 
-    // admin surname
+    // user surname
     private String surname;
 
-    // admin logged in flag
+    // user surname
+    private String email;
+
+    // user username: used for login
+    private final String username;
+
+    // user password: used for login
+    private final String password;
+
+    // user logged in flag
     private boolean loggedIn = false;
 
-    // admin DB Manager
+    // user DB Manager
     private final DBManager dbManager = new DBManager();
+
+    /**
+     * Default constructor with all fields.
+     *
+     * @param name     the user real name;
+     * @param surname  the user real surname;
+     * @param email    the user email address;
+     * @param username the user login username;
+     * @param password the user login password.
+     */
+    public User(final String name, final String surname, final String email, final String username, final String password) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
 
     /**
      * Default constructor.
      *
-     * @param username admin login username;
-     * @param password admin login password.
+     * @param username user login username;
+     * @param password user login password.
      */
     public User(final String username, final String password) {
         this.username = username;
@@ -38,7 +58,17 @@ public class User {
     }
 
     /**
-     * Executes admin login.
+     * Executes user sign up.
+     *
+     * @return true if the sign up is successful, false otherwise.
+     */
+    public boolean register() {
+        this.loggedIn = dbManager.userRegister(this);
+        return loggedIn;
+    }
+
+    /**
+     * Executes user login.
      *
      * @return true if the login is successful, false otherwise.
      */
@@ -48,7 +78,7 @@ public class User {
     }
 
     /**
-     * Executes admin logout.
+     * Executes user logout.
      *
      * @return null.
      */
@@ -65,44 +95,51 @@ public class User {
     }
 
     /**
-     * @param name the name retrieved from the db.
+     * @param name the real name of the user.
      */
     public void setName(final String name) {
         this.name = name;
     }
 
     /**
-     * @param surname the surname retrieved from the db.
+     * @param surname the real surname of the user.
      */
     public void setSurname(String surname) {
         this.surname = surname;
     }
 
     /**
-     * @return admin username.
+     * @return user username.
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * @return admin password.
+     * @return user password.
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * @return admin name.
+     * @return user name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return admin surname.
+     * @return user surname.
      */
     public String getSurname() {
         return surname;
+    }
+
+    /**
+     * @return the user email address.
+     */
+    public String getEmail() {
+        return email;
     }
 }

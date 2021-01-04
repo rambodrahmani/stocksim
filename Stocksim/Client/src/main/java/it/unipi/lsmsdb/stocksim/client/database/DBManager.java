@@ -260,6 +260,9 @@ public class DBManager {
             final ResultSet updateResultSet = getCassandraDB().execute(bounded);
         }
 
+        // disconnect from cassandra DB
+        disconnectCassandraDB();
+
         return ret;
     }
 
@@ -318,6 +321,9 @@ public class DBManager {
         // try to delete admin credentials from the database
         ret = getMongoDB().deleteOne(loginFilter, admins);
 
+        // disconnect from mongodb
+        disconnectMongoDB();
+
         return ret;
     }
 
@@ -340,6 +346,76 @@ public class DBManager {
         // try to delete admin credentials from the database
         ret = getMongoDB().deleteOne(emailFilter, users);
 
+        // disconnect from mongo db
+        disconnectMongoDB();
+
+        return ret;
+    }
+
+    /**
+     * Checks if the given user account already exists.
+     *
+     * @param user the user to be checked.
+     *
+     * @return true if the given user account already exists,
+     *         false otherwise.
+     */
+    private boolean checkUserExists(final User user) {
+        boolean ret = false;
+
+        // retrieve user collection from mongodb
+        final MongoCollection<Document> users = getMongoDB().getCollection(StocksimCollection.USERS.getCollectionName());
+
+        // check user with the same username of email already exists
+        final Bson usernameFilter = eq("username", user.getUsername());
+        final Bson emailFilter = eq("email", user.getEmail());
+        final Bson checkFilter = Filters.or(usernameFilter, emailFilter);
+        final Document userDocument = getMongoDB().findOne(checkFilter, users);
+
+        // check if at least one user was found
+        if (userDocument != null) {
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    /**
+     * Executes a user sign up.
+     *
+     * @param user user to be signed up.
+     *
+     * @return true if the sign up is successful, false otherwise.
+     */
+    public boolean userRegister(final User user) {
+        boolean ret = true;
+
+        // check if a user with the given credentials already exists
+        ret = checkUserExists(user);
+        if (ret) {
+            return false;
+        }
+
+        // get password hash
+        final String hashedPwd = ClientUtil.SHA256Hash(user.getPassword());
+
+        // retrieve admin collection from mongodb
+        final MongoCollection<Document> users = getMongoDB().getCollection(StocksimCollection.USERS.getCollectionName());
+
+        // create new user document for mongo db
+        final Document userDocument = new Document("_id", new ObjectId());
+        userDocument.append("name", user.getName());
+        userDocument.append("surname", user.getSurname());
+        userDocument.append("email", user.getEmail());
+        userDocument.append("username", user.getUsername());
+        userDocument.append("password", hashedPwd);
+
+        // insert the new admin document in the collection
+        ret = getMongoDB().insertOne(userDocument, users);
+
+        // disconnect from mongodb
+        disconnectMongoDB();
+
         return ret;
     }
 
@@ -356,19 +432,19 @@ public class DBManager {
         // get password hash
         final String hashedPwd = ClientUtil.SHA256Hash(user.getPassword());
 
-        // retrieve admin collection from mongodb
-        final MongoCollection<Document> admins = getMongoDB().getCollection(StocksimCollection.USERS.getCollectionName());
+        // retrieve user collection from mongodb
+        final MongoCollection<Document> users = getMongoDB().getCollection(StocksimCollection.USERS.getCollectionName());
 
-        // get info for admin
+        // get info for user
         final Bson usernameFilter = eq("username", user.getUsername());
         final Bson passwordFilter = eq("password", hashedPwd);
         final Bson loginFilter = Filters.and(usernameFilter, passwordFilter);
-        final Document adminDocument = getMongoDB().findOne(loginFilter, admins);
+        final Document userDocument = getMongoDB().findOne(loginFilter, users);
 
         // set fields retrieved from db if present, otherwise login failed
-        if (adminDocument != null) {
-            user.setName(adminDocument.getString("name"));
-            user.setSurname(adminDocument.getString("surname"));
+        if (userDocument != null) {
+            user.setName(userDocument.getString("name"));
+            user.setSurname(userDocument.getString("surname"));
         } else {
             ret = false;
         }
