@@ -33,7 +33,7 @@ will improve the avaliability of our application. It also suport a lot of analyt
 and the creation of custom indexes in order to speedup read operations.
 In order to orgnize data ina a meaningfull and memery-optimal way, we opted for this structure:
 
-\includegraphics[scale=0.15]{img/mongoDB_schema.png}
+\includegraphics[scale=0.17]{img/mongoDB_schema.png}\\
 
 This scheme is composed by 3 collections: \textbf{stocks}, \textbf{users}, \textbf{admins};
 \begin{itemize}
@@ -85,10 +85,10 @@ we decided to introduce some custom indexes:
     \item a REGULAR index on the attribute \textbf{country} in the collection stocks;
     \item a REGULAR and UNIQUE index on the attribute \textbf{username} in the collection users;
 \end{itemize}
-We provide some statistic that endorse our idexes choises
+We provide some statistic that endorse our idexes choises\\
 
-\includegraphics[scale=0.07]{img/memory_mongo.png}
-\includegraphics[scale=0.07]{img/latency_mongo.png}
+\includegraphics[scale=0.11]{img/memory_mongo.png}
+\includegraphics[scale=0.11]{img/latency_mongo.png}\\
 
 Analog results can be found about the username index in the users collection.
 
