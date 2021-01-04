@@ -1,0 +1,22 @@
+use stocksim;
+db.stocks.find();
+db.stocks.aggregate([
+    {$match:{$and:[
+        {quoteType:"EQUITY"},
+        {sector:{$ne:null}},
+        {sector:{$ne:""}}]
+        }},
+    {$group:{
+        _id:"$sector", total:{$sum:"$marketCap"}}
+    }]);
+    
+db.stocks.aggregate([
+    {$match:
+        {quoteType:"EQUITY"}
+       }   ,
+    {$group:{
+        _id:"$location.country", avgPE:{$avg:"$trailingPE"}}
+    }]);
+
+
+
