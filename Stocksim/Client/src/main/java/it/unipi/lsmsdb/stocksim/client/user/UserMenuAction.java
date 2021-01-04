@@ -8,8 +8,13 @@ package it.unipi.lsmsdb.stocksim.client.user;
 public enum UserMenuAction {
     REGISTER("register", "create a new user account."),
     LOGIN("login", "login to your user account."),
-    CREATE_PORTFOLIO("create-portfolio", "create a new stock portfolio."),
     SEARCH_STOCK("search-stock", "search for a stock ticker."),
+    VIEW_STOCK("view-stock", "view historical data for a stock ticker."),
+    CREATE_PORTFOLIO("create-portfolio", "create a new stock portfolio."),
+    LIST_PORTFOLIOS("list-portfolios", "list user stock portfolios."),
+    VIEW_PORTFOLIO("view-portfolio", "view user stock portfolio data."),
+    SIMULATE_PORTFOLIO("simulate-portfolio", "simulate user stock portfolio."),
+    DELETE_PORTFOLIO("delete-portfolio", "delete user stock portfolio."),
     LOGOUT("logout", "logout from current user account."),
     QUIT("quit", "quit StockSim client.");
 
