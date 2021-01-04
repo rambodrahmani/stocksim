@@ -162,32 +162,72 @@ public class DBManager {
         // retrieve stocks collection
         final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
 
-        // create new location document
+        // create new location document: only add available fields
         final Document locationDocument = new Document();
-        locationDocument.append("state", yfAssetProfile.getState())
-                .append("city", yfAssetProfile.getCity())
-                .append("country", yfAssetProfile.getCountry())
-                .append("phone", yfAssetProfile.getPhone())
-                .append("address", yfAssetProfile.getAddress());
+        if (ClientUtil.isValidString(yfAssetProfile.getState()) && !yfAssetProfile.getState().equals("null")) {
+            locationDocument.append("state", yfAssetProfile.getState());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getCity()) && !yfAssetProfile.getCity().equals("null")) {
+            locationDocument.append("city", yfAssetProfile.getCity());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getCountry()) && !yfAssetProfile.getCountry().equals("null")) {
+            locationDocument.append("country", yfAssetProfile.getCountry());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getPhone()) && !yfAssetProfile.getPhone().equals("null")) {
+            locationDocument.append("phone", yfAssetProfile.getPhone());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getAddress()) && !yfAssetProfile.getAddress().equals("null")) {
+            locationDocument.append("address", yfAssetProfile.getAddress());
+        }
 
-        // create new asset document
+        // create new asset document: only add available fields
         final Document assetDocument = new Document("_id", new ObjectId());
-        assetDocument.append("currency", yfAssetProfile.getCurrency())
-                .append("shortName", yfAssetProfile.getShortName())
-                .append("longName", yfAssetProfile.getLongName())
-                .append("exchangeTimezoneName", yfAssetProfile.getExchangeTimezoneName())
-                .append("exchangeTimezoneShortName", yfAssetProfile.getExchangeTimezoneShortName())
-                .append("quoteType", yfAssetProfile.getQuoteType())
-                .append("symbol", yfAssetProfile.getSymbol())
-                .append("market", yfAssetProfile.getMarket())
-                .append("logoURL", yfAssetProfile.getLogoURL())
-                .append("marketCap", yfAssetProfile.getMarketCap())
-                .append("trailingPE", yfAssetProfile.getTrailingPE())
-                .append("sector", yfAssetProfile.getSector())
-                .append("website", yfAssetProfile.getWebsite())
-                .append("industry", yfAssetProfile.getIndustry())
-                .append("longBusinessSummary", yfAssetProfile.getLongBusinessSummary())
-                .append("location", locationDocument);
+        if (ClientUtil.isValidString(yfAssetProfile.getCurrency()) && !yfAssetProfile.getCurrency().equals("null")) {
+            assetDocument.append("currency", yfAssetProfile.getCurrency());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getShortName()) && !yfAssetProfile.getShortName().equals("null")) {
+            assetDocument.append("shortName", yfAssetProfile.getShortName());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getLongName()) && !yfAssetProfile.getLongName().equals("null")) {
+            assetDocument.append("longName", yfAssetProfile.getLongName());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getExchangeTimezoneName()) && !yfAssetProfile.getExchangeTimezoneName().equals("null")) {
+            assetDocument.append("exchangeTimezoneName", yfAssetProfile.getExchangeTimezoneName());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getExchangeTimezoneShortName()) && !yfAssetProfile.getExchangeTimezoneShortName().equals("null")) {
+            assetDocument.append("exchangeTimezoneShortName", yfAssetProfile.getExchangeTimezoneShortName());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getQuoteType()) && !yfAssetProfile.getQuoteType().equals("null")) {
+            assetDocument.append("quoteType", yfAssetProfile.getQuoteType());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getSymbol()) && !yfAssetProfile.getSymbol().equals("null")) {
+            assetDocument.append("symbol", yfAssetProfile.getSymbol());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getMarket()) && !yfAssetProfile.getMarket().equals("null")) {
+            assetDocument.append("market", yfAssetProfile.getMarket());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getLogoURL()) && !yfAssetProfile.getLogoURL().equals("null")) {
+            assetDocument.append("logoURL", yfAssetProfile.getLogoURL());
+        }
+        if (yfAssetProfile.getMarketCap() > 0) {
+            assetDocument.append("marketCap", yfAssetProfile.getMarketCap());
+        }
+        if (yfAssetProfile.getTrailingPE() > 0) {
+            assetDocument.append("trailingPE", yfAssetProfile.getTrailingPE());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getSector()) && !yfAssetProfile.getSector().equals("null")) {
+            assetDocument.append("sector", yfAssetProfile.getSector());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getWebsite()) && !yfAssetProfile.getWebsite().equals("null")) {
+            assetDocument.append("website", yfAssetProfile.getWebsite());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getIndustry()) && !yfAssetProfile.getIndustry().equals("null")) {
+            assetDocument.append("industry", yfAssetProfile.getIndustry());
+        }
+        if (ClientUtil.isValidString(yfAssetProfile.getLongBusinessSummary()) && !yfAssetProfile.getLongBusinessSummary().equals("null")) {
+            assetDocument.append("longBusinessSummary", yfAssetProfile.getLongBusinessSummary());
+        }
+        assetDocument.append("location", locationDocument);
 
         // insert the new admin document in the collection
         ret = getMongoDB().insertOne(assetDocument, stocks);

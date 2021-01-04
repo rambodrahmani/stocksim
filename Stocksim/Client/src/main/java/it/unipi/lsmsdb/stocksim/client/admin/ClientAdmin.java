@@ -141,7 +141,7 @@ public class ClientAdmin {
         final String password = scanner.nextLine();
 
         // check if the given strings are valid ones
-        if (ClientUtil.isNotNull(username) && ClientUtil.isNotNull(password)) {
+        if (ClientUtil.isValidString(username) && ClientUtil.isValidString(password)) {
             // do the login
             admin = new Admin(username, password);
             ret = admin.login();
@@ -164,7 +164,7 @@ public class ClientAdmin {
         final String symbol = scanner.nextLine();
 
         // check if the given string input is a valid one
-        if (ClientUtil.isNotNull(symbol)) {
+        if (ClientUtil.isValidString(symbol)) {
             // add new ticker
             ret = admin.addTicker(symbol);
         } else {
@@ -198,8 +198,8 @@ public class ClientAdmin {
         final String password = scanner.nextLine();
 
         // check if the given strings are valid ones
-        if (ClientUtil.isNotNull(name) && ClientUtil.isNotNull(surname) &&
-            ClientUtil.isNotNull(username) && ClientUtil.isNotNull(password)) {
+        if (ClientUtil.isValidString(name) && ClientUtil.isValidString(surname) &&
+            ClientUtil.isValidString(username) && ClientUtil.isValidString(password)) {
             // do create the admin account
             ret = admin.createAdminAccount(name, surname, username, password);
         } else {
@@ -225,7 +225,7 @@ public class ClientAdmin {
         final String password = scanner.nextLine();
 
         // check if the given strings are valid ones
-        if (ClientUtil.isNotNull(username) && ClientUtil.isNotNull(password)) {
+        if (ClientUtil.isValidString(username) && ClientUtil.isValidString(password)) {
             // check if we are trying to delete the currently logged in admin account
             if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
                 ClientUtil.println("Could not delete currently logged in admin account.");
@@ -253,7 +253,7 @@ public class ClientAdmin {
         final String email = scanner.nextLine();
 
         // check if the given string input is a valid one
-        if (ClientUtil.isNotNull(email)) {
+        if (ClientUtil.isValidString(email)) {
             // remove the user with the given email
             ret = admin.removeUserAccount(email);
         } else {
