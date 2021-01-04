@@ -105,6 +105,12 @@ public class Admin {
         // build yahoo finance object for current ticker symbol
         final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, nowTimestamp);
 
+        // debugging information
+        ClientUtil.getLogger().info(yahooFinance.getV7URL());
+        ClientUtil.getLogger().info(yahooFinance.getV8URL());
+        ClientUtil.getLogger().info(yahooFinance.getV10URLAssetProfile());
+        ClientUtil.getLogger().info(yahooFinance.getV10URLSummaryDetail());
+
         // get summary data from yahoo finance
         final YFAssetProfile yfAssetProfile = yahooFinance.getAssetProfile();
 

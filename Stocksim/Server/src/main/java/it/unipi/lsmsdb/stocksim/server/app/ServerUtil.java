@@ -33,6 +33,15 @@ public class ServerUtil extends Util {
     }
 
     /**
+     * @return StockSim Server logger.
+     */
+    public final static Logger getLogger() {
+        final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        final Logger rootLogger = loggerContext.getLogger(LOGGER_CONTEXT);
+        return rootLogger;
+    }
+
+    /**
      * Sets the logging level for SLF4J, MongoDB and Cassandra.
      *
      * @param logLevel the log {@link Level} to be used.
@@ -48,8 +57,6 @@ public class ServerUtil extends Util {
         setCassandraLogLevel(logLevel);
 
         // finally, set StockSim Server loggin level
-        final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        final Logger rootLogger = loggerContext.getLogger(LOGGER_CONTEXT);
-        rootLogger.setLevel(logLevel);
+        getLogger().setLevel(logLevel);
     }
 }

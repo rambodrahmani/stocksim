@@ -165,6 +165,7 @@ public class DBManager {
         // create new location document
         final Document locationDocument = new Document();
         locationDocument.append("state", yfAssetProfile.getState())
+                .append("city", yfAssetProfile.getCity())
                 .append("country", yfAssetProfile.getCountry())
                 .append("phone", yfAssetProfile.getPhone())
                 .append("address", yfAssetProfile.getAddress());
@@ -183,10 +184,10 @@ public class DBManager {
                 .append("marketCap", yfAssetProfile.getMarketCap())
                 .append("trailingPE", yfAssetProfile.getTrailingPE())
                 .append("sector", yfAssetProfile.getSector())
-                .append("city", yfAssetProfile.getCity())
                 .append("website", yfAssetProfile.getWebsite())
                 .append("industry", yfAssetProfile.getIndustry())
-                .append("longBusinessSummary", yfAssetProfile.getLongBusinessSummary());
+                .append("longBusinessSummary", yfAssetProfile.getLongBusinessSummary())
+                .append("location", locationDocument);
 
         // insert the new admin document in the collection
         ret = getMongoDB().insertOne(assetDocument, stocks);

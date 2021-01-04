@@ -51,16 +51,10 @@ public class DBManager {
     // Mongo DB shared instance
     private MongoDB mongoDB;
 
-    // StockSim Server logger
-    final Logger logger;
-
     /**
      * Default constructor.
-     *
-     * @param logger the application logger to be used.
      */
-    public DBManager(final Logger logger) {
-        this.logger = logger;
+    public DBManager() {
     }
 
     /**
@@ -225,7 +219,7 @@ public class DBManager {
                             final YahooFinance yahooFinance = new YahooFinance(symbol, lastUpdateTimestamp, currentTimestamp);
 
                             // get summary data from yahoo finance
-                            logger.info("Request URL: " + yahooFinance.getV10URLSummaryDetail());
+                            ServerUtil.getLogger().info("Request URL: " + yahooFinance.getV10URLSummaryDetail());
                             final YFSummaryData yfSummaryData = yahooFinance.getSummaryData();
 
                             // first update mongo db fields
@@ -246,7 +240,7 @@ public class DBManager {
                             getMongoDB().updateOne(stockFilter, updateSet, stocksCollection);
 
                             // update historical data
-                            logger.info("Request URL: " + yahooFinance.getV8URL());
+                            ServerUtil.getLogger().info("Request URL: " + yahooFinance.getV8URL());
                             final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
                             for (final YFHistoricalData historicalData : yfHistoricalData) {
                                 final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(CassandraQueryBuilder.getUpdateInsertQuery());

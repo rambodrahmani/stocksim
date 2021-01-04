@@ -20,10 +20,6 @@ public class Client {
     // StockSim Client logger context
     public final static String LOGGER_CONTEXT = "it.unipi.lsmsdb.stocksim.client";
 
-    // StockSim Client logger
-    private final static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-    private final static Logger rootLogger = loggerContext.getLogger(LOGGER_CONTEXT);
-
     /**
      * StockSim Client entry point.
      *

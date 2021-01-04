@@ -24,15 +24,11 @@ public class Server {
     // StockSim Server logger context
     public final static String LOGGER_CONTEXT = "it.unipi.lsmsdb.stocksim.server";
 
-    // StockSim Server logger
-    private final static LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-    private final static Logger rootLogger = loggerContext.getLogger(LOGGER_CONTEXT);
-
     // Default input scanner used to read input commands
     private final static Scanner scanner = new Scanner(System.in);
 
     // StockSim Server DB Manager
-    private final static DBManager dbManager = new DBManager(rootLogger);
+    private final static DBManager dbManager = new DBManager();
 
     /**
      * StockSim Server entry point.
