@@ -25,7 +25,7 @@ public class ClientUser {
         // infinite main loop
         while (true) {
             if (isLoggedIn()) {
-                ClientUtil.printUserMainMenu();
+                ClientUtil.printUserMainMenu(user);
             } else {
                 ClientUtil.printUserLoginMenu();
             }
@@ -40,39 +40,98 @@ public class ClientUser {
      * @param command the command to be executed, if valid.
      */
     private static void parseCommand(final String command) {
-        final UserMenuAction action = UserMenuAction.valueOf(command.toUpperCase().replace("-", "_"));
-        switch (action) {
-            case LOGIN:
-                if (isLoggedIn()) {
-                    ClientUtil.println("User login already executed.\n");
-                } else {
-                    if (login()) {
-                        ClientUtil.println("User login executed correctly.");
-                        ClientUtil.println("Welcome " + user.getName() + " " + user.getSurname() + ".\n");
+        try {
+            final UserMenuAction action = UserMenuAction.valueOf(command.toUpperCase().replace("-", "_"));
+            switch (action) {
+                case REGISTER:
+                    if (isLoggedIn()) {
+                        ClientUtil.println("User login already executed. Logout first.\n");
                     } else {
-                        ClientUtil.println("User login failed.\n");
+                        if (register()) {
+                            ClientUtil.println("User sign up executed correctly. You can now login.\n");
+                        } else {
+                            ClientUtil.println("User sign up failed.\n");
+                        }
                     }
-                }
-                break;
-            case LOGOUT:
-                if (isLoggedIn()) {
-                    logout();
-                    ClientUtil.println("User logged out.\n");
-                } else {
-                    ClientUtil.println("You need to login first.\n");
-                }
-                break;
-            case QUIT:
-                System.exit(0);
-                break;
-            default:
-                ClientUtil.println("Invalid command.\n");
-                break;
+                    break;
+                case LOGIN:
+                    if (isLoggedIn()) {
+                        ClientUtil.println("User login already executed.\n");
+                    } else {
+                        if (login()) {
+                            ClientUtil.println("User login executed correctly.");
+                            ClientUtil.println("Welcome " + user.getName() + " " + user.getSurname() + ".\n");
+                        } else {
+                            ClientUtil.println("User login failed.\n");
+                        }
+                    }
+                    break;
+                case SEARCH_STOCK:
+                    if (isLoggedIn()) {
+                        
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
+                case LOGOUT:
+                    if (isLoggedIn()) {
+                        logout();
+                        ClientUtil.println("User logged out.\n");
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
+                case QUIT:
+                    System.exit(0);
+                    break;
+                default:
+                    ClientUtil.println("Invalid command.\n");
+                    break;
+            }
+        } catch (final IllegalArgumentException e) {
+            ClientUtil.println("Invalid command.\n");
         }
     }
 
     /**
+     * User Sign up.
+     *
+     * @return true in case of success, false otherwise.
+     */
+    private static boolean register() {
+        boolean ret = true;
+
+        // ask for new user real name
+        ClientUtil.print("Name: ");
+        final String name = scanner.nextLine();
+
+        // ask for new user real surname
+        ClientUtil.print("Surname: ");
+        final String surname = scanner.nextLine();
+
+        // ask for new user email address
+        ClientUtil.print("E-Mail: ");
+        final String email = scanner.nextLine();
+
+        // ask for new user login username
+        ClientUtil.print("Username [login]: ");
+        final String username = scanner.nextLine();
+
+        // ask for new user login password
+        ClientUtil.print("Password [login]: ");
+        final String password = scanner.nextLine();
+
+        // create new user for sign up
+        final User newUser = new User(name, surname, email, username, password);
+        ret = newUser.register();
+
+        return ret;
+    }
+
+    /**
      * User login.
+     *
+     * @return true in case of success, false otherwise.
      */
     private static boolean login() {
         boolean ret = true;

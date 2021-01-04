@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
+import it.unipi.lsmsdb.stocksim.client.user.User;
 import it.unipi.lsmsdb.stocksim.client.user.UserMenuAction;
 import it.unipi.lsmsdb.stocksim.lib.util.Util;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -29,8 +30,8 @@ public class ClientUtil extends Util{
      */
     public final static void printAdminLoginMenu() {
         print("Available Commands:\n");
-        print(String.format("%-6s %5s %-40s%n", AdminMenuAction.LOGIN.getActionName(), " ", AdminMenuAction.LOGIN.getActionDescription()));
-        print(String.format("%-6s %5s %-40s%n", AdminMenuAction.QUIT.getActionName(), " ", AdminMenuAction.QUIT.getActionDescription()));
+        print(String.format("%-10s %5s %-40s%n", AdminMenuAction.LOGIN.getActionName(), " ", AdminMenuAction.LOGIN.getActionDescription()));
+        print(String.format("%-10s %5s %-40s%n", AdminMenuAction.QUIT.getActionName(), " ", AdminMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 
@@ -53,18 +54,21 @@ public class ClientUtil extends Util{
      */
     public final static void printUserLoginMenu() {
         print("Available Commands:\n");
-        print(String.format("%-6s %5s %-40s%n", UserMenuAction.LOGIN.getActionName(), " ", UserMenuAction.LOGIN.getActionDescription()));
-        print(String.format("%-6s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
+        print(String.format("%-10s %5s %-40s%n", UserMenuAction.REGISTER.getActionName(), " ", UserMenuAction.REGISTER.getActionDescription()));
+        print(String.format("%-10s %5s %-40s%n", UserMenuAction.LOGIN.getActionName(), " ", UserMenuAction.LOGIN.getActionDescription()));
+        print(String.format("%-10s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 
     /**
      * Prints the main menu for the Client usage in admin mode.
      */
-    public final static void printUserMainMenu() {
-        print("Available Commands:\n");
-        print(String.format("%-12s %5s %-40s%n", UserMenuAction.LOGOUT.getActionName(), " ", UserMenuAction.LOGOUT.getActionDescription()));
-        print(String.format("%-12s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
+    public final static void printUserMainMenu(final User user) {
+        print("[" + user.getUsername() + "] Available Commands:\n");
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.SEARCH_STOCK.getActionName(), " ", UserMenuAction.SEARCH_STOCK.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.CREATE_PORTFOLIO.getActionName(), " ", UserMenuAction.CREATE_PORTFOLIO.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.LOGOUT.getActionName(), " ", UserMenuAction.LOGOUT.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 
