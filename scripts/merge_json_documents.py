@@ -34,7 +34,7 @@ for json_file in files:
         "exchangeTimezoneName": ticket_object["exchangeTimezoneName"],
         "exchangeTimezoneShortName": ticket_object["exchangeTimezoneShortName"],
         "quoteType": ticket_object["quoteType"],
-        "ticker": ticket_object["symbol"],
+        "symbol": ticket_object["symbol"],
         "market": ticket_object["market"],
         "logoURL": ticket_object["logo_url"]
     }
