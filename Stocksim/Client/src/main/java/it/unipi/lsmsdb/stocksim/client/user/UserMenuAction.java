@@ -9,7 +9,7 @@ public enum UserMenuAction {
     REGISTER("register", "create a new user account."),
     LOGIN("login", "login to your user account."),
     CREATE_PORTFOLIO("create-portfolio", "create a new stock portfolio."),
-    SEARCH("search-stock", "search for a stock ticker."),
+    SEARCH_STOCK("search-stock", "search for a stock ticker."),
     LOGOUT("logout", "logout from current user account."),
     QUIT("quit", "quit StockSim client.");
 

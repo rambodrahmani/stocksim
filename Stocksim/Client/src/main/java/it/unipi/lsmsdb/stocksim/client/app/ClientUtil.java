@@ -65,8 +65,10 @@ public class ClientUtil extends Util{
      */
     public final static void printUserMainMenu(final User user) {
         print("[" + user.getUsername() + "] Available Commands:\n");
-        print(String.format("%-12s %5s %-40s%n", UserMenuAction.LOGOUT.getActionName(), " ", UserMenuAction.LOGOUT.getActionDescription()));
-        print(String.format("%-12s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.SEARCH_STOCK.getActionName(), " ", UserMenuAction.SEARCH_STOCK.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.CREATE_PORTFOLIO.getActionName(), " ", UserMenuAction.CREATE_PORTFOLIO.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.LOGOUT.getActionName(), " ", UserMenuAction.LOGOUT.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
         print("> ");
     }
 

@@ -66,6 +66,13 @@ public class ClientUser {
                         }
                     }
                     break;
+                case SEARCH_STOCK:
+                    if (isLoggedIn()) {
+                        
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
                 case LOGOUT:
                     if (isLoggedIn()) {
                         logout();
