@@ -3,6 +3,8 @@ package it.unipi.lsmsdb.stocksim.client.database;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import org.bson.Document;
 
+import java.util.ArrayList;
+
 /**
  * This class represents a Stock.
  *
@@ -19,7 +21,7 @@ public class Stock {
     private final String market;
     private final String logoURL;
     private final Long marketCap;
-    private final double trailingPE;
+    private final Double trailingPE;
     private final String sector;
     private final String website;
     private final String industry;
@@ -56,12 +58,12 @@ public class Stock {
          */
         public String toString() {
             String ret = "";
-
-            ClientUtil.println(this.city);
-            ClientUtil.println(this.state);
-            ClientUtil.println(this.country);
-            ClientUtil.println(this.phone);
-            ClientUtil.println(this.address);
+            
+            ret += this.address + ", " +
+                this.city + ", " +
+                this.state + ", " +
+                this.country + ";\n" +
+                "Phone: " + this.phone;
 
             return ret;
         }
@@ -73,49 +75,87 @@ public class Stock {
      * @param stockDocument the JSON document to be parsed.
      */
     public Stock(final Document stockDocument) {
+    
+
+        
         this.currency = stockDocument.getString("currency");
+        this.symbol = stockDocument.getString("symbol");
         this.shortName = stockDocument.getString("shortName");
         this.longName = stockDocument.getString("longName");
         this.exchangeTimezoneName = stockDocument.getString("exchangeTimezoneName");
         this.exchangeTimezoneShortName = stockDocument.getString("exchangeTimezoneShortName");
         this.quoteType = stockDocument.getString("quoteType");
-        this.symbol = stockDocument.getString("symbol");
-        this.market = stockDocument.getString("market");
+        this.location = new Location((Document) stockDocument.get("location"));
         this.logoURL = stockDocument.getString("logoURL");
+        this.market = stockDocument.getString("market");
+        
+        // the following fields could be null or undefined
+        
         this.marketCap = stockDocument.getLong("marketCap");
         this.trailingPE = stockDocument.getDouble("trailingPE");
         this.sector = stockDocument.getString("sector");
         this.website = stockDocument.getString("website");
         this.industry = stockDocument.getString("industry");
         this.longBusinessSummary = stockDocument.getString("longBusinessSummary");
-        this.location = new Location((Document) stockDocument.get("location"));
+        
     }
 
     /**
      * Converts the Stock into printable {@link String}.
-     *
+     * Fields that are null or absent will be left empty (no dash or anything
+     * will be printed).
      * @return the {@link String} to be printed to STD Out.
      */
     public String toString() {
+        
         String ret = "";
-
-        ClientUtil.println(this.currency);
-        ClientUtil.println(this.shortName);
-        ClientUtil.println(this.longName);
-        ClientUtil.println(this.exchangeTimezoneName);
-        ClientUtil.println(this.exchangeTimezoneShortName);
-        ClientUtil.println(this.quoteType);
-        ClientUtil.println(this.symbol);
-        ClientUtil.println(this.market);
-        ClientUtil.println(this.logoURL);
-        ClientUtil.println(String.valueOf(this.marketCap));
-        ClientUtil.println(String.valueOf(this.trailingPE));
-        ClientUtil.println(this.sector);
-        ClientUtil.println(this.website);
-        ClientUtil.println(this.industry);
-        ClientUtil.println(this.longBusinessSummary);
-        ClientUtil.println(this.location.toString());
-
+        
+        ret += "Short name:\t" + this.shortName + '\n';
+        ret += "Long name:\t" + this.longName + '\n';
+        ret += "Symbol:\t" + this.symbol + '\n';
+        
+        ret += "Market capitalization:\t";
+        if(this.marketCap != null){
+            ret += this.marketCap;
+        }
+        ret += '\n';
+        
+        ret += "Trailing PE:\t";
+        if(this.trailingPE != null){
+            ret += this.trailingPE;
+        }
+        ret += '\n';
+        
+        ret += "Market:\t" + this.market + '\n';
+        ret += "Exchange timezone short name:\t" + this.exchangeTimezoneShortName + '\n';
+        ret += "Exchange timezone name:\t" + this.exchangeTimezoneName + '\n';
+        ret += "Quote type:\t" + this.quoteType + '\n';
+        
+        ret += "Sector:\t";
+        if(this.sector != null){
+            ret += this.sector;
+        }
+        ret += '\n';
+    
+        ret += "Industry:\t";
+        if(this.industry != null){
+            ret += this.industry;
+        }
+        ret += '\n';
+        
+        ret += "Currency:\t" + this.currency + '\n';
+        ret += "Location:\t" + this.location.toString();
+        ret += "Logo URL:\t" + this.logoURL + '\n';
+        ret += "Website:\t";
+        if(this.website != null){
+            ret += this.website;
+        }
+        ret += '\n';
+        
+        if(this.longBusinessSummary != null){
+            ret += "Long business summary:\t" + this.longBusinessSummary + '\n';
+        }
+        
         return ret;
     }
 }
