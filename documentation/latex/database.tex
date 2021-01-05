@@ -5,48 +5,48 @@
 %-------------------------------------------------------------------------------
 \chapter{Database}
 
-The dataset is composd by 8236 stocks from the US stock market, along with
+The dataset is composed by 8236 stocks from the US stock market, along with
 their general informations and historical data; the application also need to store 
-users' and admins' credential, personal informationof users, composition and details of
-each user's porfolio.
+users and admins credential, personal information of users, composition and details of
+each user's portfolio.
 We decided to use a column database for the storage of historical data; those 
 informations represent around the 99\%\ of our dataset and they are going to grow very fast
 during time; aggregation and financial analytics on these volumes of data will perform
-better in a colum database where data storage is design to optimize this type of operations;
+better in a column database where data storage is design to optimize this type of operations;
 We decided to store every other information in a document database, in order to exploit the
-schemaless property for save memory; information frequently needed toghether will be stored 
-in the same document and indexes are created to speedup linking beetween documents; 
+schemaless property for save memory; information frequently needed together will be stored 
+in the same document and indexes are created to speed up linking between documents; 
 
 
 \section{Dataset}
-The initial set of data it's been taken from the web, thanks to www.nasdaqtrader.com
-and finance.yahoo.com, using python scripts with pandas, yfinmace and json as support
+The initial set of data has been taken from the web, thanks to www.nasdaqtrader.com
+and finance.yahoo.com, using Python scripts with pandas, yfinance and JSON as support
 libraries.
 \subsection{NasdaqTrader}
 The Nasdaq Stock Market (Nasdaq) is the largest U.S. equities exchange venue by volume. 
 https://www.nasdaqtrader.com/ \\
-We choose to take our set of stocks from the Nasdaq index, because it's very popular and
-include a large number of stock, representative of differenteconomy sector. This will allow 
-users to interact with big and famous comopanies stocks (like Google, Apple, Tesla...), but also
-to try smaller companies and/or minor sectors investemts. 
-NasdaqTrader provides us a stocks'symbols' list of all the stocks entered in the nasdaq index
-from 1970 till now;
+We choose to take our set of stocks from the Nasdaq index, because it is very popular and
+include a large number of stock, representative of different economy sector. This will allow 
+users to interact with big and famous companies stocks (like Google, Apple, Tesla...), but also
+to try smaller companies and/or minor sectors investments. 
+NasdaqTrader provides us a stock symbols' list of all the stocks entered in the NASDAQ index
+from 1970 until now;
 \subsection{Yahoo! Finance}
 "Yahoo Finance provides free stock quotes, up-to-date news, portfolio management resources, 
 international market data, social interaction and mortgage rates that help you manage your 
 financial life." https://finance.yahoo.com/ \\
-Yahoo Finance is a service, been part of the yahoo network, that provide a lot of information
-about stocks and companies; they are frequantly updated, relible and good organized.\\
-We decided to use this service to retrive the starting dataset of stocks; we extract only 
+Yahoo Finance is a service, been part of the Yahoo network, that provides a lot of information
+about stocks and companies; they are frequently updated, reliable and well organized.\\
+We decided to use this service to retrieve the starting dataset of stocks; we extract only 
 the fields that we needed, and parse into a JSON file. In this way 
-is possible to rebuild from scratch this dataset into mongoDB with few commands (including
+is possible to rebuild from scratch this dataset into MongoDB with few commands (including
 mongoimport).
-With Yahoo Finance is also possible to retrive historical data of market values for every 
-stocks. Using this service it's been possible to build a dataset of all the market values of
+With Yahoo Finance is also possible to retrieve historical data of market values for every 
+stocks. Using this service it has been possible to build a dataset of all the market values of
 each stocks coming from NasdaqTrader; values are collected daily, and we decided to take all 
-the values from 2010 to 2020; this dataset (around 1.43 GB) it's been parsed to CVS files and
+the values from 2010 to 2020; this dataset (around 1.43 GB) has been parsed to CVS files and
 than imported into a Cassandra Cluster. Thanks to the Yahoo Finance service, it's possible
-to update every day the databse with the last session results. It's also possible to add a new
+to update every day the database with the last session results. It's also possible to add a new
 stock to the dataset, coming from every market exchange of every country.\\
 \includegraphics[scale=0.12]{img/dataset_comp.png}\\
 
@@ -54,10 +54,10 @@ stock to the dataset, coming from every market exchange of every country.\\
 \section{MongoDB}
 "MongoDB is a general purpose, document-based, distributed database build
 for modern application developers and for the cloud era." Taken from www.mongodb.com.\\
-MongoDB is a very famous document database with a great support for cloud operations, witch 
-will improve the avaliability of our application. It also suport a lot of analytics functions
+MongoDB is a very famous document database with a great support for cloud operations, which 
+will improve the availability of our application. It also supports several analytic functions
 and the creation of custom indexes in order to speedup read operations.
-In order to orgnize data ina a meaningfull and memery-optimal way, we opted for this structure:
+In order to organize data in a meaningful and memory-optimal way, we opted for this structure:
 
 \includegraphics[scale=0.17]{img/mongoDB_schema.png}\\
 
@@ -65,41 +65,41 @@ This scheme is composed by 3 collections: \textbf{stocks}, \textbf{users}, \text
 \begin{itemize}
     \item
 The stocks collection contains one document for each stock; inside this document are stored 
-all the general information about the stock, wich is identified by the attribute SYMBOL;
-some basic information are always presents, while others are missing for some stocks; we decided 
-to keep these last type of informations where possible, exploiting the schemaless property of
-the documentat databse;
+all the general information about the stock, which is identified by the attribute SYMBOL;
+some basic information are always present, while others are missing for some stocks; we decided 
+to keep these last type of information where possible, exploiting the schemaless property of
+the document database;
     \item
-The users collection contains one docuemt for each user regitered on the application; for every
+The \textbf{users} collection contains one document for each user registered on the application; for every
 user login credentials are stored, along with few personal information; for every user is 
-also stored an array of documents named PORFOLIOS: this array contains the porfolios of the user.
+also stored an array of documents named PORTFOLIOS: this array contains the portfolios of the user.
 Each portfolio has a scheme, witch include an array of TITLEs, named COMPOSITION, witch represent
-the settlement of the portfolio itsef. This nested structure it's been preferred from splittin
-data in different collections, because all the information of a user, including his portfolios, 
-are frequently needed toghether; on the other hand, there aren't such operations that involve
-porfolios owneds by different users.
+the settlement of the portfolio itself. This nested structure has been preferred over splitting
+data in different collections, because all the information of a user, including their portfolios, 
+are frequently needed together; on the other hand, there are not operations that involve
+portfolios owned by different users.
     \item 
-The admins collection contains the admins login credentials toghether with few personal
-informations about them; we decided to crerate a separated collection for administators 
+The \textbf{admins} collection contains the admins login credentials together with few personal
+informations about them; we decided to create a separated collection for administrators 
 to improve the security of the administration features: in this way is impossible to inject
-administration privileges throw the login command.
+administration privileges through the login command.
 \end{itemize}
 \subsection{Aggregations}
-One of the main features of own application is the possibility to choose some stocks from
-the market and combine them in to a portfolio. When a user is looking for a stock, he want to
-know statistic about \textbf{industies} and \textbf{sectors}, along with classification by 
-\textbf{level of capitalization} and  \textbf{PE ratio}; in ordewr to do so, we will provide
+One of the main features of our application is the possibility to choose some stocks from
+the market and combine them into a portfolio. When a user is looking for a stock, they want to
+know statistic about \textbf{industries} and \textbf{sectors}, along with classification by 
+\textbf{level of capitalization} and  \textbf{PE ratio}; in order to do so, we will provide
 these aggregation pipelines:
 \begin{itemize}
     \item the total market capitalization of each sector
     \item the total market capitalization of each industry
     \item the total market capitalization of stocks coming from the same country
-    \item the avarage PE ratio of stocks working in the same sectors
-    \item the avarage PE ratio of stocks working in the same industry
-    \item the avarage PE ratio of stocks coming from the same country
-    \item the avarage PE ratio of stocks beeing in a specific range of market capitalization
+    \item the average PE ratio of stocks working in the same sector
+    \item the average PE ratio of stocks working in the same industry
+    \item the average PE ratio of stocks coming from the same country
+    \item the average PE ratio of stocks being in a specific range of market capitalization
 \end{itemize}
-We provide here an example of an aggregation mongo query:
+We provide here an example of an aggregation Mongo query:
 \begin{lstlisting}[basicstyle=\footnotesize,language=Java,numbers=left,
     numberstyle=\footnotesize,numbersep=4pt,frame=single]
     /**
@@ -173,19 +173,19 @@ providing lower latency for your users and the peace of mind of knowing that you
 regional outages." www.cassandra.apache.org\\
 Apache Cassandra is a database designed for high scalability and availability; it's 
 capable to handle a huge amount of data and manage it in a decentralized architecture
-across multiple nodes. It's build to be write optimized, but with right indexes choises
-also read latency can be improved; tables schemes and analytics functions can be customized.
-This is the scheme of our Cassandra databse:\\
+across multiple nodes. It's build to be write optimized, but with right indexes choices
+also read latency can be improved; tables schemes and analytic functions can be customized.
+This is the scheme of our Cassandra database:\\
 \includegraphics[scale=0.2]{img/cassandraDB_scheme.png}\\
 
 \subsection{Aggregations}
-In order to provide snaphots and statistics of stocks and portfolios trends oevr time,
-we explit the customization functionalities of Cassandra; a custom aggaregation it's been 
-created, specifically to provide aggegate values of more than one day, for a given
-perdiod of time; this allow us to obtain different granularity for stock market data,
-computed on server side; this will not over overwelm the server, because the aggregator will
-execute, for each row, beetween a memory access and the following. This will reduce by a lot
-the data to be transitted from the node to the client, saving bandwith and time.  \\
+In order to provide snapshots and statistics of stocks and portfolios trends over time,
+we exploit the customization functionalities of Cassandra; a custom aggregation has been 
+created, specifically to provide aggregate values of more than one day, for a given
+period of time; this allows us to obtain different granularity for stock market data,
+computed on server side; this will not over overwhelm the server, because the aggregator will
+execute, for each row, between a memory access and the following. This will greatly reduce
+the data to be transmitted from the node to the client, saving bandwidth and time.  \\
 
 \begin{lstlisting}[basicstyle=\footnotesize,language=SQL,numbers=left,
     numberstyle=\footnotesize,numbersep=4pt,frame=single]
@@ -266,30 +266,30 @@ the data to be transitted from the node to the client, saving bandwith and time.
 \subsection{Indexes}
 \begin{itemize}
     \item 
-The PARTITIO KEY index is part of the PRIMARY KEY and it's used to shard the dataset across
+The PARTITION KEY index is part of the PRIMARY KEY and it is used to shard the dataset across
 the nodes. This index is build on the string symbol, unique for each stock;
     \item
-the CLUSTERING KEY it's also part of the PRIMARY KEY, and it's used to mantain rows 
-chronologic orde. This index is build on the attribute date;
+the CLUSTERING KEY i is also part of the PRIMARY KEY, and it's used to maintain rows 
+chronological order. This index is build on the attribute date;
 \end{itemize}
 \section{Sharding and Replicas}
-The MongoDB cluster and the Cassandra cluster are deployed on 3 vitual machines provided
+The MongoDB cluster and the Cassandra cluster are deployed on 3 virtual machines provided
 by the University of Pisa; 
 Our architecture is oriented to the availability of the service, and build for the maximum
 scalability and decentralization.
 \begin{itemize}
     \item 
-The casandra cluster is build among all 3 nodes, and data are sharded by the ticker symbol;
+The Cassandra cluster is build among all 3 nodes, and data are sharded by the ticker symbol;
 in this way every node store 1/3 of the main dataset, and aggregation functions are computed
-on records that stay in the same node; each node also store a backup of the data
-assigned to another node, give us a replicazion factor of 2. There are 2 seed nodes,
-wich are responsible for the cluster: the cluster is online as long as one of them keep
-working. This is indeed a minor issue, because in any case, with only ne node, the dataset 
-would by incomplete. The decentralized behavior of Cassabdra ensure than
-even if all the node go offline, the cluster return available as soon as one seed server go back
+on records that stay in the same node; each node also stores a backup of the data
+assigned to another node, giving us a replication factor of 2. There are 2 seed nodes,
+which are responsible for the cluster: the cluster is online as long as one of them keeps
+working. This is indeed a minor issue, because in any case, with only one node, the dataset 
+would by incomplete. The decentralized behaviour of Cassandra ensures that
+even if all the node were to go offline, the cluster would return available as soon as one seed server went back
 online. 
     \item
-The mongoDB cluster is also build among all 3 virtual machines, and the service is replicated;
+The MongoDB cluster is also build among all 3 virtual machines, and the service is replicated;
 an initial primary server is elected, then another one will take it's place if it goes down. 
 The cluster is available as long as one server is working, and incoming traffic could be balanced
 with the "nearest" preference on client connection; in this way the client would connect to the
