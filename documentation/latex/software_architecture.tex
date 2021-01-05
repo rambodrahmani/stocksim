@@ -5,10 +5,78 @@
 %-------------------------------------------------------------------------------
 \chapter{Software architecture}
 
+In this section we show the general software architecture of the application.\\
+Stocksim is a multi-module application written in Java. Its development was helped by the IntelliJ IDEA\footnote{https://www.jetbrains.com/idea/} IDE, together with the build automation tool Maven\footnote{https://maven.apache.org/}.\\
+We opted for a multi-module approach so that logically independent sections could be kept separated and better maintained. Furthermore, we decided to follow a feature-oriented development process and the modularity of the project helped us to coding with more ease and efficiency.\\
+The entire codebase can be found at https://github.com/rambodrahmani/stocksim .
+
 \section{Maven Multi-Module Structure}
-\subsection{Library}
-\subsection{Server}
+
+The application consists of three modules: Client, Server and Library.\\
+Every module has its own .pom file, necessary for the building process and for keeping track of all the dependencies needed.\\
+There is also a parent .pom that belongs to the 'parent' module Stocksim (which encapsulates the whole application), which contains all the dependencies and build settings that are common for all the modules.\\
+All .pom files are available in Appendix A.\\
+For every module an independent .jar file can be generated  which allows to run that module \textit{standalone}, without any dependency issue.
+
 \subsection{Client}
+The Client module is the main core of the application. It is that part of the application which is thought to be distributed to end users.\\
+It has the following structure:
+\pagebreak
+\dirtree{%
+.1 CLIENT.
+.2 src.
+.3 main.
+.4 java.
+.5 it.unipi.lsmsdb.stocksim.client.
+.6 admin.
+.6 app.
+.6 charting.
+.6 database.
+.6 user.
+}
+\hfill \break
+\noindent The \texttt{app} directory contains the class with the entry point for the applications.\\
+Since the Client program was thought to be possibly launched in two different modes (namely \texttt{admin} or \texttt{user} mode), these two functionalities were split into the homonym directories.\\
+The \texttt{database} directory contains the classes necessary for the interaction with the databases and those necessary to store data retrieved from the formers.\\
+The \texttt{charting} directory contains an API for the JFreeChart library, used by the Client to create charts of various types.
+
+\subsection{Server}
+The Server module takes care of keeping the data updated.\\
+It is not supposed to be distributed: it should be always-on so that every day it can pull down from  NasdaqTrader the most recent values about every stocks.
+The Server module has the following structure:
+\dirtree{%
+.1 SERVER.
+.2 src.
+.3 main.
+.4 java.
+.5 it.unipi.lsmsdb.stocksim.server.
+.6 app.
+.6 database.
+}
+\hfill \break
+\noindent The \texttt{app} directory contains the class with the entry point for the application.\\
+The \texttt{database} directory contains the classes necessary for the interaction with the databases.
+
+\subsection{Library}
+There is also a third module, the \texttt{Library} module, which contains the database APIs both for MongoDB and Cassandra, together with the YahooFinance API and some utility functions.
+It has the following structure:
+\pagebreak
+\dirtree{%
+.1 LIBRARY.
+.2 src.
+.3 main.
+.4 java.
+.5 it.unipi.lsmsdb.stocksim.lib.
+.6 database.
+.7 cassandra.
+.7 mongoDB.
+.6 util.
+.6 yfinance.
+}
+\hfill \break
+The \texttt{database} directory contains the two APIs we wrote for the interaction with Cassandra and MongoDB.\\
+The \texttt{yfinance} directory contains the API we used to retrieve data from Yahoo Finance.\\
+The \texttt{util} directory contains some utilities functions, such as the ones used to set the log level both for Cassandra and Mongo, and an argument parser.
 
 \section{Apache Maven Assembly Plugin}
 The Assembly Plugin for Maven enables developers to combine project output into 
