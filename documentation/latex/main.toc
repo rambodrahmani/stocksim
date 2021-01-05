@@ -29,8 +29,8 @@
 \contentsline {section}{\numberline {5.2}Apache Maven Assembly Plugin}{23}{}%
 \contentsline {chapter}{\numberline {6}Conclusions}{24}{}%
 \contentsline {chapter}{\numberline {7}Appendices}{25}{}%
-\contentsline {part}{II\hspace {1em}User Manual}{31}{}%
-\contentsline {chapter}{\numberline {8}StockSim Server Manual}{33}{}%
-\contentsline {chapter}{\numberline {9}StockSim Client Manual}{36}{}%
-\contentsline {section}{\numberline {9.1}StockSim Client User Mode}{36}{}%
-\contentsline {section}{\numberline {9.2}StockSim Client Admin Mode}{36}{}%
+\contentsline {part}{II\hspace {1em}User Manual}{30}{}%
+\contentsline {chapter}{\numberline {8}StockSim Server Manual}{32}{}%
+\contentsline {chapter}{\numberline {9}StockSim Client Manual}{35}{}%
+\contentsline {section}{\numberline {9.1}StockSim Client User Mode}{35}{}%
+\contentsline {section}{\numberline {9.2}StockSim Client Admin Mode}{35}{}%
