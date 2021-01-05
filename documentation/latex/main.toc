@@ -15,21 +15,21 @@
 \contentsline {subsection}{\numberline {4.1.2}Yahoo! Finance}{12}{}%
 \contentsline {section}{\numberline {4.2}MongoDB}{12}{}%
 \contentsline {subsection}{\numberline {4.2.1}Aggregations}{14}{}%
-\contentsline {subsection}{\numberline {4.2.2}Indexes}{14}{}%
-\contentsline {section}{\numberline {4.3}Apache Cassandra}{15}{}%
-\contentsline {subsection}{\numberline {4.3.1}Aggregations}{16}{}%
-\contentsline {subsection}{\numberline {4.3.2}Indexes}{16}{}%
-\contentsline {section}{\numberline {4.4}Sharding and Replicas}{16}{}%
-\contentsline {section}{\numberline {4.5}Apache Cassandra vs MongoDB}{17}{}%
-\contentsline {chapter}{\numberline {5}Software architecture}{18}{}%
-\contentsline {section}{\numberline {5.1}Maven Multi-Module Structure}{18}{}%
-\contentsline {subsection}{\numberline {5.1.1}Library}{18}{}%
-\contentsline {subsection}{\numberline {5.1.2}Server}{18}{}%
-\contentsline {subsection}{\numberline {5.1.3}Client}{18}{}%
-\contentsline {section}{\numberline {5.2}Apache Maven Assembly Plugin}{18}{}%
-\contentsline {chapter}{\numberline {6}Conclusions}{19}{}%
-\contentsline {part}{II\hspace {1em}User Manual}{20}{}%
-\contentsline {chapter}{\numberline {7}StockSim Server Manual}{22}{}%
-\contentsline {chapter}{\numberline {8}StockSim Client Manual}{25}{}%
-\contentsline {section}{\numberline {8.1}StockSim Client User Mode}{25}{}%
-\contentsline {section}{\numberline {8.2}StockSim Client Admin Mode}{25}{}%
+\contentsline {subsection}{\numberline {4.2.2}Indexes}{15}{}%
+\contentsline {section}{\numberline {4.3}Apache Cassandra}{16}{}%
+\contentsline {subsection}{\numberline {4.3.1}Aggregations}{17}{}%
+\contentsline {subsection}{\numberline {4.3.2}Indexes}{19}{}%
+\contentsline {section}{\numberline {4.4}Sharding and Replicas}{19}{}%
+\contentsline {section}{\numberline {4.5}Apache Cassandra vs MongoDB}{20}{}%
+\contentsline {chapter}{\numberline {5}Software architecture}{21}{}%
+\contentsline {section}{\numberline {5.1}Maven Multi-Module Structure}{21}{}%
+\contentsline {subsection}{\numberline {5.1.1}Library}{21}{}%
+\contentsline {subsection}{\numberline {5.1.2}Server}{21}{}%
+\contentsline {subsection}{\numberline {5.1.3}Client}{21}{}%
+\contentsline {section}{\numberline {5.2}Apache Maven Assembly Plugin}{21}{}%
+\contentsline {chapter}{\numberline {6}Conclusions}{22}{}%
+\contentsline {part}{II\hspace {1em}User Manual}{23}{}%
+\contentsline {chapter}{\numberline {7}StockSim Server Manual}{25}{}%
+\contentsline {chapter}{\numberline {8}StockSim Client Manual}{28}{}%
+\contentsline {section}{\numberline {8.1}StockSim Client User Mode}{28}{}%
+\contentsline {section}{\numberline {8.2}StockSim Client Admin Mode}{28}{}%

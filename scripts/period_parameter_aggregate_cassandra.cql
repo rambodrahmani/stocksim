@@ -9,8 +9,11 @@ CREATE OR REPLACE FUNCTION PeriodStateParam (
      /* the state, containing the aggregation result till this row */
     state map<date,frozen<map<text, float>>>,
      /* the parameter ndays indicate the duration of the period aggregation, in days */
-    ndays int, data date,  open float,  close float , high float,  low float, volume float ,  adj_close float)
-CALLED ON NULL INPUT RETURNS map<date,frozen<map<text, float>>> LANGUAGE java AS '
+    ndays int, data date,  
+        open float,  close float , high float,  low float, volume float ,  adj_close float)
+CALLED ON NULL INPUT 
+RETURNS map<date,frozen<map<text, float>>> 
+LANGUAGE java AS '
 if (data != null) { 
     int d=0;
     Map<String, Float> statemap=null;
@@ -55,12 +58,15 @@ return state;'
 *
 *
 */
-CREATE OR REPLACE AGGREGATE PeriodParam ( int, date,float, float,float, float,float, float ) 
+CREATE OR REPLACE AGGREGATE PeriodParam 
+    ( int, date,float, float,float, float,float, float ) 
 SFUNC PeriodStateParam
 STYPE map<date,frozen<map<text, float>>>
 INITCOND {}; /* no initial condition is necessary */
 
   /* example of usage, it can be used also with grouping by symbol */
-select PeriodParam(20,date, 
-   open, close, high, low, volume,adj_close)
-    as Period from tickers where date<'2020-12-1' and date>'2020-6-10' and symbol='TSLA'
+select PeriodParam(
+    20, date, open, close, high, low, volume, adj_close)
+    as Period from tickers where 
+    date<'2020-12-1' and date>'2020-6-10' 
+    and symbol='TSLA'
