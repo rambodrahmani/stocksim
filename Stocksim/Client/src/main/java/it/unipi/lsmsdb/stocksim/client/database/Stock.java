@@ -1,9 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.database;
 
-import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import org.bson.Document;
-
-import java.util.ArrayList;
 
 /**
  * This class represents a Stock.
@@ -58,7 +55,7 @@ public class Stock {
          */
         public String toString() {
             String ret = "";
-            
+
             ret += this.address + ", " +
                 this.city + ", " +
                 this.state + ", " +
@@ -75,9 +72,6 @@ public class Stock {
      * @param stockDocument the JSON document to be parsed.
      */
     public Stock(final Document stockDocument) {
-    
-
-        
         this.currency = stockDocument.getString("currency");
         this.symbol = stockDocument.getString("symbol");
         this.shortName = stockDocument.getString("shortName");
@@ -97,7 +91,6 @@ public class Stock {
         this.website = stockDocument.getString("website");
         this.industry = stockDocument.getString("industry");
         this.longBusinessSummary = stockDocument.getString("longBusinessSummary");
-        
     }
 
     /**
@@ -107,52 +100,51 @@ public class Stock {
      * @return the {@link String} to be printed to STD Out.
      */
     public String toString() {
-        
         String ret = "";
-        
+
         ret += "Short name:\t" + this.shortName + '\n';
         ret += "Long name:\t" + this.longName + '\n';
         ret += "Symbol:\t" + this.symbol + '\n';
         
         ret += "Market capitalization:\t";
-        if(this.marketCap != null){
+        if (this.marketCap != null){
             ret += this.marketCap;
         }
         ret += '\n';
-        
+
         ret += "Trailing PE:\t";
-        if(this.trailingPE != null){
+        if (this.trailingPE != null){
             ret += this.trailingPE;
         }
         ret += '\n';
-        
+
         ret += "Market:\t" + this.market + '\n';
         ret += "Exchange timezone short name:\t" + this.exchangeTimezoneShortName + '\n';
         ret += "Exchange timezone name:\t" + this.exchangeTimezoneName + '\n';
         ret += "Quote type:\t" + this.quoteType + '\n';
-        
+
         ret += "Sector:\t";
         if(this.sector != null){
             ret += this.sector;
         }
         ret += '\n';
-    
+
         ret += "Industry:\t";
-        if(this.industry != null){
+        if (this.industry != null){
             ret += this.industry;
         }
         ret += '\n';
-        
+
         ret += "Currency:\t" + this.currency + '\n';
         ret += "Location:\t" + this.location.toString();
         ret += "Logo URL:\t" + this.logoURL + '\n';
         ret += "Website:\t";
-        if(this.website != null){
+        if (this.website != null) {
             ret += this.website;
         }
         ret += '\n';
         
-        if(this.longBusinessSummary != null){
+        if (this.longBusinessSummary != null){
             ret += "Long business summary:\t" + this.longBusinessSummary + '\n';
         }
         
