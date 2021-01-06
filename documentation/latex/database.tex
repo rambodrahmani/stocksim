@@ -4,24 +4,25 @@
 %       See main.tex for further information.
 %-------------------------------------------------------------------------------
 \chapter{Database}
-
-The dataset is composed by 8236 stocks from the US stock market, along with
-their general informations and historical data; the application also need to store 
-users and admins credential, personal information of users, composition and details of
-each user's portfolio.
-We decided to use a column database for the storage of historical data; those 
-informations represent around the 99\%\ of our dataset and they are going to grow very fast
-during time; aggregation and financial analytics on these volumes of data will perform
-better in a column database where data storage is design to optimize this type of operations;
-We decided to store every other information in a document database, in order to exploit the
-schemaless property for save memory; information frequently needed together will be stored 
-in the same document and indexes are created to speed up linking between documents; 
-
+The database is composed by 8236 stocks from the US stock market, along with
+their general information and historical data; the application also needs to
+store users and admins login credentials, personal information and the
+composition and details of each user's portfolio.
+We decided to use a column database (Apache Cassandra) for the storage of
+historical data; this is because historical data represents almost the 99\%\ of
+the entire database and is going to be growing very fast as days go by;
+aggregation and financial analytics on these volumes of data will perform better
+in a column database where data storage is designed to optimize this type of
+operations by column.\\
+We decided to store any other information using a document database (MongoDB),
+in order to exploit the schemaless property to save memory; data frequently
+needed together is stored in the same document and indexes were created to speed
+up linking between documents; 
 
 \section{Dataset}
-The initial set of data has been taken from the web, thanks to www.nasdaqtrader.com
-and finance.yahoo.com, using Python scripts with pandas, yfinance and JSON as support
-libraries.
+The initial set of data was fetched from the web: using Python scripts with
+\texttt{pandas}, \texttt{yfinance} and \texttt{JSON} as support libraries and
+relaying upon \url{www.nasdaqtrader.com} and \url{finance.yahoo.com}.
 \subsection{NasdaqTrader}
 The Nasdaq Stock Market (Nasdaq) is the largest U.S. equities exchange venue by volume. 
 https://www.nasdaqtrader.com/ \\

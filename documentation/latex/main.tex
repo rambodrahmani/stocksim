@@ -27,6 +27,15 @@
 % used to set page background image
 \usepackage{tikz}
 
+% url and hyper links setup
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+
 \let\cleardoublepage=\clearpage
 
 % blank page command
@@ -87,7 +96,7 @@
   moredelim=[il][\textcolor{pgrey}]{$$},
   moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
 }
- 
+
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -96,7 +105,6 @@
 \definecolor{lightblue}{rgb}{0.0,0.0,0.9}
 \definecolor{cyan}{rgb}{0.0,0.6,0.6}
 \definecolor{darkred}{rgb}{0.6,0.0,0.0}
-
 
 \lstset{
   basicstyle=\ttfamily\footnotesize,
@@ -116,11 +124,10 @@
   captionpos=b,                   % sets the caption-position to bottom
   breaklines=true,                % sets automatic line breaking
   breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
-  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
                                   % also try caption instead of title  
   commentstyle=\color{gray}\upshape
 }
-
 
 \lstdefinelanguage{XML}
 {
@@ -135,6 +142,7 @@
 }
 
 \usepackage{dirtree}
+
 %-------------------------------------------------------------------------------
 % Title page
 %-------------------------------------------------------------------------------
