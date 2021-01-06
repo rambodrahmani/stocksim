@@ -4,56 +4,60 @@
 %       See main.tex for further information.
 %-------------------------------------------------------------------------------
 \chapter{Actors and requirements}
-The main actors and the functional requirements are defined based on the previous
-simple description of the application. There is also a 
-particular actor which is in charge of the automatic update of the dataset; non-functional
-requirements are the characteristics that ensure satisfactory interaction with users and 
-real world utility of the product.
+The main actors and the functional requirements can be defined using the simple
+application description provided in the introductory chapter. Non-functional
+requirements, described in detail in the second section of this chapter, are the
+characteristics that ensure satisfactory interaction with users and real world
+utility of the product.
 
 \section{Actors}
-Based on the application design, four actors can interact with the system:
+Based on the application design, four main actors can be identified:
 \begin{itemize}
-    \item A \textbf{Guest user} is someone who is not registered on the application; this actor does not 
-own private credentials for the login; in order to exploit the application main functionalities, 
-it has to register a new account. The registration it is the only action allowed for a Guest;
+    \item A \textbf{Guest user} is someone who is not yet registered (does not
+    have a valid account to be able to use the application); this actor does not
+    own private credentials for the login; in order to exploit the application
+    main functionalities, he must register a new user account; therefore, the
+    registration is the only action allowed for a Guest;
 
-    \item A \textbf{Registered user} is someone who is registered on the application; this actor owns
-private credentials (username and password) for the login; this actor can login as a user
-into the client
-application and utilize its main features to watch stocks information, compose portfolios and 
-simulate them. 
+    \item A \textbf{Registered user} is someone who sign up on the application;
+    this actor owns private credentials (username and password) for the login;
+    he can login as a user into the client application and utilize its main
+    features to watch stocks information, compose portfolios and simulate them. 
    
-    \item An \textbf{Admin user} is someone who is registered on the application with administration
-credentials; this actor can login as an admin into the client and do some maintenance 
-operations; these operations includes check the integrity of the entire dataset and add new 
-stocks to it;
+    \item An \textbf{Admin user} is someone who is registered on the application
+    with administration credentials; this actor can login as an admin into the
+    client to perform maintenance operations; these operations include, among
+    others, checking the integrity of the entire database and add new stocks to
+    it;
 
-    \item The \textbf{Data Updater} is a thread running on one server; this thread is supposed to 
-be always running, and it is in charge of updating the dataset with the new information coming from 
-the stock market daily sessions; it is also in charge of finding and fixing (at list report)
-integrity issues.
-
+    \item The \textbf{Data Updater} is a thread running on StockSim Server; this 
+    thread is supposed to be always running, and it is in charge of updating the
+    database historical data with the new information coming from the stock
+    market daily trading sessions; it is also in charge of finding and fixing
+    (or at least report) integrity issues.
 \end{itemize}
+Please refer to Chapter 3 for the full use case diagram.
 
-The full use case diagram is provided on chapter 3.
 \section{Requirements}
 
 \subsection{Functional requirements}
 \begin{itemize}
 	\item The user, upon launching the application, should be able to sign-up and sign-in.
-	\item The user should be able to search for a ticker and view info about it.
-	\item The user should be able to view charts on the history of a ticker.
+	\item The user should be able to search for a stock and view related details.
+	\item The user should be able to view charts of the historical data of a stock.
 	\item The user should be able to create and delete portfolios.
-	\item The user should be able to add/remove tickers to/from their portfolio.
+	\item The user should be able to add/remove stocks to/from their portfolio.
 	\item The user should be able to run simulations on a portfolio.
-	\item The user should be able to visualize statistics about a simulation and possibly view charts on them.
+	\item The user should be able to visualize statistics about a simulation and possibly view related charts.
 	\item Only admins should be able to add new stocks to the database.
-	\item Only admins should be able to add other admins.
-	\item The software should always provide the most recent data about a ticker.
+	\item Only admins should be able to create new admin accounts.
+	\item Only admins should be able to delete admin accounts.
+	\item Only admins should be able to delete user accounts.
+	\item The software should always provide the most recent data available for a stock.
 \end{itemize}
 
 \subsection{Non-functional requirements}
 \begin{itemize}
-	\item The retrieval of data about tickers and portfolios should be fast.
+	\item The retrieval of data about stocks and portfolios should be fast.
 	\item User password should be stored in a secure way (i.e. hashed).
 \end{itemize}
