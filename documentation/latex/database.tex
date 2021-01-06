@@ -299,3 +299,31 @@ server with the lowest ping time.
 \end{itemize}
 \includegraphics[scale=0.2]{img/cluster_diagram.png}\\
 \section{Apache Cassandra vs MongoDB}
+Cassandra and MongoDB are different databse architecture but they share similar features. 
+We know for shure that the usage of Cassandra can be avoided by adding a mongo Collection,
+witch can reproduce the behaviour of the Cassandra table for historical data. We want to explain
+why in our opinion is better to store those data in Cassandra instead of Mongo, from a
+performance and flexilility prospective.
+\begin{itemize}
+    \item 
+    First of all, Cassandra has a native decentralized behaviour; we can't replicate all
+    the historical data in every server, because hardware limitation, so we are forced to 
+    shard data. Cassandra is specific designed for availability and partition tollerance,
+    and can easy handle a node faliure;
+    \item 
+    Cassandra can also compress data with advanced algoriths, witch allow a node to store a lot
+    of backup data from other nodes, increasing the availability of the service;
+    \item
+    Even if Mongo can store and aggregate our dataset in a decent way, the opportunity to
+    create custom aggregation directly in Java language make Cassandra the best choise; this 
+    allow us to perform every aggregation function that we need, and to add new ones;
+    \item
+    From a performance prospective, we the same query, on the same dataset, with the same 
+    indexes structure, in a Mongo collection and in our Cassandra keyspace; Cassandra
+    always registered no latency, with mongo showing some ms of latency (4 in most cases);
+    test where performed on local storage, in the same machine,
+    because remote laency performance would have been 
+    somehow distort by network swings.\\
+    \includegraphics[scale=0.16]{img/cassandra_vs_mongoDB.png}\\
+
+\end{itemize}
