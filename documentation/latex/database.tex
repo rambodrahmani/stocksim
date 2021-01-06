@@ -7,10 +7,10 @@
 The database is composed by 8236 stocks from the US stock market, along with
 their general information and historical data; the application also needs to
 store users and admins login credentials, personal information and the
-composition and details of each user's portfolio.
+composition and details of each user's portfolio.\\
 We decided to use a column database (Apache Cassandra) for the storage of
 historical data; this is because historical data represents almost the 99\%\ of
-the entire database and is going to be growing very fast as days go by;
+the entire database and it is going to be growing very fast as days go by;
 aggregation and financial analytics on these volumes of data will perform better
 in a column database where data storage is designed to optimize this type of
 operations by column.\\
@@ -20,14 +20,14 @@ needed together is stored in the same document and indexes were created to speed
 up linking between documents; 
 
 \section{Dataset}
-The initial set of data was fetched from the web: using Python scripts with
+The initial set of data was fetched from the web, by means of Python scripts using
 \texttt{pandas}, \texttt{yfinance} and \texttt{JSON} as support libraries and
-relaying upon \url{www.nasdaqtrader.com} and \url{finance.yahoo.com}.
+relying upon \url{www.nasdaqtrader.com} and \url{finance.yahoo.com}.
 \subsection{NasdaqTrader}
 The Nasdaq Stock Market (Nasdaq) is the largest U.S. equities exchange venue by volume. 
-https://www.nasdaqtrader.com/ \\
+\footnote{https://www.nasdaqtrader.com/} \\
 We choose to take our set of stocks from the Nasdaq index, because it is very popular and
-include a large number of stock, representative of different economy sector. This will allow 
+includes a large number of stock, representative of different economy sectors. This will allow 
 users to interact with big and famous companies stocks (like Google, Apple, Tesla...), but also
 to try smaller companies and/or minor sectors investments. 
 NasdaqTrader provides us a stock symbols' list of all the stocks entered in the NASDAQ index
@@ -35,21 +35,25 @@ from 1970 until now;
 \subsection{Yahoo! Finance}
 "Yahoo Finance provides free stock quotes, up-to-date news, portfolio management resources, 
 international market data, social interaction and mortgage rates that help you manage your 
-financial life." https://finance.yahoo.com/ \\
-Yahoo Finance is a service, been part of the Yahoo network, that provides a lot of information
+financial life." \footnote{https://finance.yahoo.com/} \\
+Yahoo Finance is a service, been part of the Yahoo network, that provides several of information
 about stocks and companies; they are frequently updated, reliable and well organized.\\
 We decided to use this service to retrieve the starting dataset of stocks; we extract only 
-the fields that we needed, and parse into a JSON file. In this way 
+the fields that we need, and parse into a JSON file. In this way  it
 is possible to rebuild from scratch this dataset into MongoDB with few commands (including
 mongoimport).
-With Yahoo Finance is also possible to retrieve historical data of market values for every 
+With Yahoo Finance it is also possible to retrieve historical data of market values for every 
 stocks. Using this service it has been possible to build a dataset of all the market values of
 each stocks coming from NasdaqTrader; values are collected daily, and we decided to take all 
 the values from 2010 to 2020; this dataset (around 1.43 GB) has been parsed to CVS files and
 than imported into a Cassandra Cluster. Thanks to the Yahoo Finance service, it's possible
 to update every day the database with the last session results. It's also possible to add a new
-stock to the dataset, coming from every market exchange of every country.\\
+stock to the dataset, coming from every market exchange of every country.
+
+\hfill \break
+{\centering
 \includegraphics[scale=0.12]{img/dataset_comp.png}\\
+}
 
 
 \section{MongoDB}
@@ -60,24 +64,27 @@ will improve the availability of our application. It also supports several analy
 and the creation of custom indexes in order to speedup read operations.
 In order to organize data in a meaningful and memory-optimal way, we opted for this structure:
 
-\includegraphics[scale=0.17]{img/mongoDB_schema.png}\\
+\hfill \break
+{\centering
+\includegraphics[scale=0.14]{img/mongoDB_schema.png}\\
+}
 
+\hfill \break
 This scheme is composed by 3 collections: \textbf{stocks}, \textbf{users}, \textbf{admins};
 \begin{itemize}
     \item
-The stocks collection contains one document for each stock; inside this document are stored 
-all the general information about the stock, which is identified by the attribute SYMBOL;
-some basic information are always present, while others are missing for some stocks; we decided 
-to keep these last type of information where possible, exploiting the schemaless property of
+The stocks collection contains one document for each stock; inside this document
+all the general information about the stock is stored; each stock is identified by the attribute SYMBOL.
+Some basic information is always present, while other may be missing for some stocks; we decided 
+to keep these last type of information were possible, exploiting the schemaless property of
 the document database;
     \item
-The \textbf{users} collection contains one document for each user registered on the application; for every
-user login credentials are stored, along with few personal information; for every user is 
-also stored an array of documents named PORTFOLIOS: this array contains the portfolios of the user.
-Each portfolio has a scheme, witch include an array of TITLEs, named COMPOSITION, witch represent
-the settlement of the portfolio itself. This nested structure has been preferred over splitting
+The \textbf{users} collection contains one document for each user registered on the application; in each of these documents, login credentials are stored, along with few personal information; for every user there is
+also an array of documents named PORTFOLIOS: this array contains the portfolios of the user.
+Each portfolio has a scheme, which includes an array of TITLEs, named COMPOSITION, which describes
+what the portfolio consists of. This nested structure has been preferred over splitting
 data in different collections, because all the information of a user, including their portfolios, 
-are frequently needed together; on the other hand, there are not operations that involve
+is frequently needed at once; on the other hand, there are not operations that involve
 portfolios owned by different users.
     \item 
 The \textbf{admins} collection contains the admins login credentials together with few personal
@@ -88,8 +95,8 @@ administration privileges through the login command.
 \subsection{Aggregations}
 One of the main features of our application is the possibility to choose some stocks from
 the market and combine them into a portfolio. When a user is looking for a stock, they want to
-know statistic about \textbf{industries} and \textbf{sectors}, along with classification by 
-\textbf{level of capitalization} and  \textbf{PE ratio}; in order to do so, we will provide
+know statistics about \textbf{industries} and \textbf{sectors}, along with classification by 
+\textbf{level of capitalization} and  \textbf{PE ratio} (\textit{Price-Earnings Ratio}); in order to do so, we will provide
 these aggregation pipelines:
 \begin{itemize}
     \item the total market capitalization of each sector
@@ -147,7 +154,7 @@ We provide here an example of an aggregation Mongo query:
     }
 \end{lstlisting}
 \subsection{Indexes}
-In order to speeup read operation in the document database, 
+In order to speed up read operation in the document database, 
 we decided to introduce some custom indexes:
 \begin{itemize}
     \item a REGULAR and UNIQUE index on the attribute \textbf{symbol} in the collection stocks;
@@ -158,12 +165,12 @@ we decided to introduce some custom indexes:
     \item a REGULAR index on the attribute \textbf{country} in the collection stocks;
     \item a REGULAR and UNIQUE index on the attribute \textbf{username} in the collection users;
 \end{itemize}
-We provide some statistic that endorse our idexes choises\\
+We provide some statistic that endorse our indexes choices\\
 
 \includegraphics[scale=0.11]{img/memory_mongo.png}
 \includegraphics[scale=0.11]{img/latency_mongo.png}\\
 
-Analog results can be found about the username index in the users collection.
+\noindent Analog results can be found about the username index in the users collection.
 
 \section{Apache Cassandra}
 "The Apache Cassandra database is the right choice when you need scalability and high 
@@ -171,19 +178,18 @@ availability without compromising performance. Linear scalability and proven fau
 on commodity hardware or cloud infrastructure make it the perfect platform for mission-critical 
 data. Cassandra's support for replicating across multiple datacenters is best-in-class, 
 providing lower latency for your users and the peace of mind of knowing that you can survive
-regional outages." www.cassandra.apache.org\\
-Apache Cassandra is a database designed for high scalability and availability; it's 
+regional outages." \footnote{https://cassandra.apache.org/}\\
+Apache Cassandra is a database designed for high scalability and availability; it is 
 capable to handle a huge amount of data and manage it in a decentralized architecture
-across multiple nodes. It's build to be write optimized, but with right indexes choices
-also read latency can be improved; tables schemes and analytic functions can be customized.
-This is the scheme of our Cassandra database:\\
+across multiple nodes. It is built to be write optimized, but with the right indexes choices
+read latency can be improved too; tables schemas and analytic functions can be customized.
+This is the schema of our Cassandra database:\\
 \includegraphics[scale=0.2]{img/cassandraDB_scheme.png}\\
 
 \subsection{Aggregations}
 In order to provide snapshots and statistics of stocks and portfolios trends over time,
 we exploit the customization functionalities of Cassandra; a custom aggregation has been 
-created, specifically to provide aggregate values of more than one day, for a given
-period of time; this allows us to obtain different granularity for stock market data,
+created, specifically to provide aggregate values for periods of time longer than one day; this allows us to obtain customizable granularity for stock market data,
 computed on server side; this will not over overwhelm the server, because the aggregator will
 execute, for each row, between a memory access and the following. This will greatly reduce
 the data to be transmitted from the node to the client, saving bandwidth and time.  \\
@@ -196,7 +202,7 @@ the data to be transmitted from the node to the client, saving bandwidth and tim
 
     /* the state, containing the aggregation result till this row */
         state map<date,frozen<map<text, float>>>,
-    /*  the parameter ndays indicate the duration 
+    /*  the parameter ndays indicates the duration 
     *   of the period aggregation, in days          */
         ndays int, data date,  
         open float,  close float , high float,  low float, 
@@ -238,14 +244,14 @@ the data to be transmitted from the node to the client, saving bandwidth and tim
     return state;'
      ;
     
-    /*  aggregate declartation
-    *   this aggregation geenrate a map data structure (JSON like):
+    /*  aggregate declaration
+    *   this aggregation generate a map data structure (JSON like):
     *   the key is the end date of each period of nday days, 
     *   and the value is another map containing the aggregate 
     *   values of the period as:
     *        the open of the first day
     *        the close and adjusted close of the last day
-    *        the maximun of the highs
+    *        the maximum of the highs
     *        the minimum of the lows
     *        the sum of the volumes
     */
@@ -270,19 +276,19 @@ the data to be transmitted from the node to the client, saving bandwidth and tim
 The PARTITION KEY index is part of the PRIMARY KEY and it is used to shard the dataset across
 the nodes. This index is build on the string symbol, unique for each stock;
     \item
-the CLUSTERING KEY i is also part of the PRIMARY KEY, and it's used to maintain rows 
-chronological order. This index is build on the attribute date;
+the CLUSTERING KEY i is also part of the PRIMARY KEY, and it is used to maintain rows in
+chronological order. This index is built on the attribute date;
 \end{itemize}
 \section{Sharding and Replicas}
 The MongoDB cluster and the Cassandra cluster are deployed on 3 virtual machines provided
 by the University of Pisa; 
-Our architecture is oriented to the availability of the service, and build for the maximum
+Our architecture is oriented to the availability of the service and built for the maximum
 scalability and decentralization.
 \begin{itemize}
     \item 
-The Cassandra cluster is build among all 3 nodes, and data are sharded by the ticker symbol;
-in this way every node store 1/3 of the main dataset, and aggregation functions are computed
-on records that stay in the same node; each node also stores a backup of the data
+The Cassandra cluster is built among all 3 nodes, and data is sharded by ticker symbol;
+in this way every node stores 1/3 of the main dataset, and aggregation functions are computed
+on records that lie in the same node; each node also stores a backup of the data
 assigned to another node, giving us a replication factor of 2. There are 2 seed nodes,
 which are responsible for the cluster: the cluster is online as long as one of them keeps
 working. This is indeed a minor issue, because in any case, with only one node, the dataset 
@@ -290,8 +296,8 @@ would by incomplete. The decentralized behaviour of Cassandra ensures that
 even if all the node were to go offline, the cluster would return available as soon as one seed server went back
 online. 
     \item
-The MongoDB cluster is also build among all 3 virtual machines, and the service is replicated;
-an initial primary server is elected, then another one will take it's place if it goes down. 
+The MongoDB cluster is also built among all 3 virtual machines, and the service is replicated;
+an initial primary server is elected, then another one will take its place if the former goes down. 
 The cluster is available as long as one server is working, and incoming traffic could be balanced
 with the "nearest" preference on client connection; in this way the client would connect to the
 server with the lowest ping time.
