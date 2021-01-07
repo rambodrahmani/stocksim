@@ -3,10 +3,12 @@ package it.unipi.lsmsdb.stocksim.client.database;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import it.unipi.lsmsdb.stocksim.client.admin.Admin;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
+import it.unipi.lsmsdb.stocksim.client.user.HistoricalDataset;
 import it.unipi.lsmsdb.stocksim.client.user.User;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDB;
@@ -21,8 +23,13 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -472,4 +479,53 @@ public class DBManager {
 
         return null;
     }
+
+    /**
+     * get a Stock historical data for a given period with given days granularity
+     *
+     * @param symbol the ticker symbol to be searched for.
+     * @param startDate starting date for the period
+     * @param endDate ending date for the period
+     * @param ndays days granularity
+     *
+     * @return the retrieved {@link HistoricalDataset}, can be empty.
+     */
+    public HistoricalDataset getHistoricaldata(
+            String symbol, LocalDate startDate, LocalDate endDate, int ndays) throws CQLSessionException {
+        HistoricalDataset hds=new HistoricalDataset();
+        Map<LocalDate, Map> data=null;
+        Map<String, Float> candle=null;
+        Set<LocalDate> keySet=null;
+        ResultSet resultSet = getCassandraDB().query(
+                "select PeriodParam("+ndays+",date, " +
+                        "   open, close, high, low, volume,adj_close)" +
+                        "    as Period from stocksim.tickers where date<'"+endDate+"' " +
+                        "and date>'"+startDate+"' and symbol='"+symbol+"';"
+        );
+        disconnectCassandraDB();
+        for (final Row row : resultSet) {
+            data=row.getMap("Period", LocalDate.class, Map.class );
+            if(data==null)
+                continue;
+            // taking the keySet of the map, witch is the final date of the period;
+            // this is not known a priori because it's influenced by market closure
+            // during different period of years and weeks; so we let the cassandra
+            // aggregator compute it autonomously
+            keySet= data.keySet();
+            for (LocalDate finalDate : keySet) {
+                // every date identify OHLC data for one candle
+                candle = data.get(finalDate);
+                if(candle==null)
+                    continue;
+                hds.append(Date.from(finalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                        candle.get("open"),
+                        candle.get("high"),
+                        candle.get("low"),
+                        candle.get("close"),
+                        candle.get("volume"));
+            }
+        }
+        return hds;
+    }
+
 }

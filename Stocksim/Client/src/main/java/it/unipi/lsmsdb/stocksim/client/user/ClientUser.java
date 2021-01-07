@@ -1,10 +1,20 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
+import it.unipi.lsmsdb.stocksim.client.charting.CandlestickChart;
+import it.unipi.lsmsdb.stocksim.client.charting.Chart;
+import it.unipi.lsmsdb.stocksim.client.charting.ChartingFactory;
+import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
+
+import static it.unipi.lsmsdb.stocksim.lib.util.Util.*;
 
 /**
  * StockSim Client User mode implementation.
@@ -75,6 +85,13 @@ public class ClientUser {
                         ClientUtil.println("You need to login first.\n");
                     }
                     break;
+                case VIEW_STOCK:
+                    if (isLoggedIn()) {
+                        viewStock();
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
                 case LOGOUT:
                     if (isLoggedIn()) {
                         logout();
@@ -92,6 +109,47 @@ public class ClientUser {
             }
         } catch (final IllegalArgumentException e) {
             ClientUtil.println("Invalid command.\n");
+        }
+    }
+
+    /**
+     * Searches for a stock using the ticker symbol, than display
+     * historical data for given parameters
+     */
+    private static void viewStock() {
+        // ask for stock ticker symbol
+        print("Ticker Symbol: ");
+        final String symbol = scanner.nextLine();
+        // ask for start and end dates
+        print("Start Date: ");
+        final String startDate = scanner.nextLine();
+        print("End Date: ");
+        final String endDate = scanner.nextLine();
+        // ask for days granularity: how many days for every row of data
+        print("Days granularity:");
+        final String ndays=scanner.nextLine();
+        try {
+            final Stock s= user.searchStock(symbol);
+            if(s==null) {
+                println("No stock found for the given symbol.\n");
+                return;
+            }
+            final ArrayList<OHLCRow> rows = user.getHistoricalData(symbol,
+                   LocalDate.parse(startDate), LocalDate.parse(endDate), Integer.parseInt(ndays))
+                    .getRows();
+            if (rows != null) {
+                // show the chart starting a new thread
+                ChartingFactory.getCandlestickChart("test", symbol, rows).showChart();
+
+            } else {
+                println("Data not found\n");
+            }
+        } catch (final DateTimeParseException e) {
+            println("Incorrect date format\n");
+        } catch (final NumberFormatException e){
+            println("Incorrect days granularity\n");
+        } catch (CQLSessionException e) {
+            e.printStackTrace();
         }
     }
 
@@ -166,9 +224,9 @@ public class ClientUser {
         final String symbol = scanner.nextLine();
 
         try {
-            final Stock found = user.searchStock(symbol);
-            if (found != null) {
-                ClientUtil.println(found.toString());
+            final Stock stock = user.searchStock(symbol);
+            if (stock != null) {
+                ClientUtil.println(stock.toString());
             } else {
                 ClientUtil.println("No stock found for the given symbol.\n");
             }

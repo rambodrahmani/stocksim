@@ -1,6 +1,16 @@
 package it.unipi.lsmsdb.stocksim.client.database;
 
+import it.unipi.lsmsdb.stocksim.client.charting.CandlestickChart;
+import it.unipi.lsmsdb.stocksim.client.charting.Chart;
+import it.unipi.lsmsdb.stocksim.client.charting.LineChart;
+import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
+import org.apache.commons.lang.WordUtils;
 import org.bson.Document;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import static it.unipi.lsmsdb.stocksim.lib.util.Util.*;
 
 /**
  * This class represents a Stock.
@@ -24,6 +34,10 @@ public class Stock {
     private final String industry;
     private final String longBusinessSummary;
     private final Location location;
+
+
+
+
 
     /**
      * This represents the Stock embedded document location.
@@ -55,13 +69,21 @@ public class Stock {
          */
         public String toString() {
             String ret = "";
-
-            ret += this.address + ", " +
-                this.city + ", " +
-                this.state + ", " +
-                this.country + ";\n" +
-                "Phone: " + this.phone;
-
+            if (isValidString(this.address) ){
+                ret += ' '+this.address;
+            }
+            if (isValidString(this.city)){
+                ret += ' '+this.city;
+            }
+            if (isValidString(this.state)){
+                ret += ' '+this.state;
+            }
+            if (isValidString(this.country)){
+                ret += ' '+this.country;
+            }
+            if (isValidString(this.phone)){
+                ret += '\n'+this.phone;
+            }
             return ret;
         }
     }
@@ -75,16 +97,16 @@ public class Stock {
         this.currency = stockDocument.getString("currency");
         this.symbol = stockDocument.getString("symbol");
         this.shortName = stockDocument.getString("shortName");
-        this.longName = stockDocument.getString("longName");
+
         this.exchangeTimezoneName = stockDocument.getString("exchangeTimezoneName");
         this.exchangeTimezoneShortName = stockDocument.getString("exchangeTimezoneShortName");
         this.quoteType = stockDocument.getString("quoteType");
         this.location = new Location((Document) stockDocument.get("location"));
-        this.logoURL = stockDocument.getString("logoURL");
         this.market = stockDocument.getString("market");
         
         // the following fields could be null or undefined
-        
+        this.longName = stockDocument.getString("longName");
+        this.logoURL = stockDocument.getString("logoURL");
         this.marketCap = stockDocument.getLong("marketCap");
         this.trailingPE = stockDocument.getDouble("trailingPE");
         this.sector = stockDocument.getString("sector");
@@ -101,53 +123,42 @@ public class Stock {
      */
     public String toString() {
         String ret = "";
-
         ret += "Short name:\t" + this.shortName + '\n';
-        ret += "Long name:\t" + this.longName + '\n';
+        if (isValidString(this.longName)){
+            ret += "longName:\t"+this.longName+ '\n';
+        }
         ret += "Symbol:\t" + this.symbol + '\n';
-        
-        ret += "Market capitalization:\t";
-        if (this.marketCap != null){
-            ret += this.marketCap;
+        ret += "Quote type:\t" + this.quoteType + '\n';
+        if (this.marketCap != null && this.marketCap!=0){
+            ret += "Market capitalization:\t"+this.marketCap+ '\n';
         }
-        ret += '\n';
-
-        ret += "Trailing PE:\t";
-        if (this.trailingPE != null){
-            ret += this.trailingPE;
+        if (this.trailingPE != null && this.trailingPE!=0){
+            ret += "PE ratio:\t"+this.trailingPE+ '\n';
         }
-        ret += '\n';
-
         ret += "Market:\t" + this.market + '\n';
         ret += "Exchange timezone short name:\t" + this.exchangeTimezoneShortName + '\n';
         ret += "Exchange timezone name:\t" + this.exchangeTimezoneName + '\n';
-        ret += "Quote type:\t" + this.quoteType + '\n';
-
-        ret += "Sector:\t";
-        if(this.sector != null){
-            ret += this.sector;
+        if (isValidString(this.sector)){
+            ret += "Sector:\t"+this.sector+ '\n';
         }
-        ret += '\n';
-
-        ret += "Industry:\t";
-        if (this.industry != null){
-            ret += this.industry;
+        if (isValidString(this.industry)){
+            ret += "Industry:\t"+this.industry+ '\n';
         }
-        ret += '\n';
-
         ret += "Currency:\t" + this.currency + '\n';
-        ret += "Location:\t" + this.location.toString();
-        ret += "Logo URL:\t" + this.logoURL + '\n';
-        ret += "Website:\t";
-        if (this.website != null) {
-            ret += this.website;
+        final String locString= this.location.toString();
+        if (isValidString(locString)){
+            ret += "Location:\t"+locString+ '\n';
         }
-        ret += '\n';
-        
-        if (this.longBusinessSummary != null){
-            ret += "Long business summary:\t" + this.longBusinessSummary + '\n';
+        if (isValidString(this.logoURL)){
+            ret += "Logo URL:\t"+this.logoURL+ '\n';
         }
-        
+        if (isValidString(this.website)){
+            ret += "Website:\t"+this.website+ '\n';
+        }
+        if (isValidString(this.longBusinessSummary)){
+            ret += "Long business summary:\n" +
+                    WordUtils.wrap(this.longBusinessSummary, 80) + '\n';
+        }
         return ret;
     }
 }

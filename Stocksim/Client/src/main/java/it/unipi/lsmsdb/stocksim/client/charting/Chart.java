@@ -18,7 +18,6 @@ public abstract class Chart {
 	// application frame where to show the chart
 	protected ApplicationFrame applicationFrame;
 
-	protected abstract AbstractDataset createDataset();
 
 	protected abstract JPanel createPanel();
 	

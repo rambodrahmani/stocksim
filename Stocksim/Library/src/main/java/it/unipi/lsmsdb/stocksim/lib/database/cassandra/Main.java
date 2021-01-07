@@ -45,7 +45,7 @@ public class Main {
                 final ResultSet resultSet = cassandraDB.query("select * from stocksim.tickers where symbol='AAPL';");
 
                 for (final Row row : resultSet) {
-                    System.out.print(row.getInt("id") + "|");
+                    System.out.print(row.getInt("symbol") + "|");
                     System.out.print(row.getBigDecimal("adj_close") + "|");
                     System.out.print(row.getBigDecimal("close") + "|");
                     System.out.print(row.getLocalDate("date") + "|");
@@ -104,7 +104,6 @@ public class Main {
                         System.out.print(candle.get("open") + " |");
                         System.out.print(candle.get("adj_close") + " |");
                         System.out.print(candle.get("close") + " |");
-                        System.out.print(candle.get("date") + " |");
                         System.out.print(candle.get("high") + " |");
                         System.out.print(candle.get("low") + " |");
                         System.out.println(candle.get("volume"));

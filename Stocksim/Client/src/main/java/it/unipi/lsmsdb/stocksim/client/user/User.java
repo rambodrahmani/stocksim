@@ -1,8 +1,12 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
+import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  * This class represents a StockSim Client User.
@@ -30,6 +34,7 @@ public class User {
 
     // user DB Manager
     private final DBManager dbManager = new DBManager();
+
 
     /**
      * Default constructor with all fields.
@@ -154,5 +159,12 @@ public class User {
      */
     public String getEmail() {
         return email;
+    }
+
+
+    public HistoricalDataset getHistoricalData(
+            String symbol, LocalDate startDate, LocalDate endDate, int ndays)
+            throws CQLSessionException {
+        return dbManager.getHistoricaldata(symbol, startDate, endDate, ndays);
     }
 }
