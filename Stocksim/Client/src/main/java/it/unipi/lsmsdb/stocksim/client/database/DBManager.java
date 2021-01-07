@@ -144,7 +144,7 @@ public class DBManager {
         boolean ret = true;
 
         // query symbol available historical data
-        final ResultSet resultSet = getCassandraDB().query(CassandraQueryBuilder.getTickerQuery(symbol));
+        final ResultSet resultSet = getCassandraDB().query(CassandraQueryBuilder.getTickerExistenceQuery(symbol));
 
         // find summary data in mongodb
         final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
