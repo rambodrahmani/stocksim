@@ -39,10 +39,7 @@ public class CandlestickChart extends Chart {
 	 */
 	public CandlestickChart(final String title, final String stockSymbol, final ArrayList<OHLCRow> dataRows) {
 		this.title = title;
-		this.dataset = new DefaultOHLCDataset(
-				stockSymbol,
-				dataRows.toArray( new OHLCDataItem[0]));
-
+		this.dataset = new DefaultOHLCDataset(stockSymbol, dataRows.toArray(new OHLCDataItem[0]));
 		this.applicationFrame = new ApplicationFrame(title);
 	}
 
@@ -55,7 +52,7 @@ public class CandlestickChart extends Chart {
 	private JFreeChart createChart(final OHLCDataset dataset) {
 		final JFreeChart ret = ChartFactory.createCandlestickChart(this.title, "Time",
 				"Price", dataset, true);
-		// adjusting candles with
+		// adjusting candles width
 		XYPlot plot = ret.getXYPlot();
 		CandlestickRenderer renderer = (CandlestickRenderer) plot.getRenderer();
 		renderer.setAutoWidthMethod(CandlestickRenderer.WIDTHMETHOD_AVERAGE);
@@ -80,8 +77,9 @@ public class CandlestickChart extends Chart {
 		final ArrayList<OHLCRow> testRows = new ArrayList<>();
 
 		for (int i = 10; i < 31; i++) {
-			if(i%3!=0)
+			if(i%3 != 0) {
 				continue;
+			}
 			String dateString = "2020-11-" + i;
 			Date testDate = new SimpleDateFormat("yyyy-mm-dd").parse(dateString);
 			

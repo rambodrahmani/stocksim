@@ -19,7 +19,7 @@ public class CassandraQueryBuilder {
         return "SELECT * FROM stocksim.tickers WHERE symbol='" + symbol + "' ORDER BY date DESC;";
     }
     public final static String getTickerExistenceQuery(final String symbol) {
-        return "SELECT symbol FROM stocksim.tickers WHERE symbol='" + symbol + "' limit 1 ;";
+        return "SELECT symbol FROM stocksim.tickers WHERE symbol='" + symbol + "' LIMIT 1;";
     }
 
     public final static String getUpdateInsertQuery() {

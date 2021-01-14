@@ -1,14 +1,11 @@
 package it.unipi.lsmsdb.stocksim.server.app;
 
 import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.lib.util.ArgsParser;
 import it.unipi.lsmsdb.stocksim.server.database.DBManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Clock;
 import java.time.Instant;

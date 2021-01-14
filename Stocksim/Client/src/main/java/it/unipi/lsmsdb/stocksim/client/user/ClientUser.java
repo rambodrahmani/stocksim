@@ -1,10 +1,7 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
-import it.unipi.lsmsdb.stocksim.client.charting.CandlestickChart;
-import it.unipi.lsmsdb.stocksim.client.charting.Chart;
-import it.unipi.lsmsdb.stocksim.client.charting.ChartingFactory;
-import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
+import it.unipi.lsmsdb.stocksim.client.charting.*;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
@@ -113,47 +110,6 @@ public class ClientUser {
     }
 
     /**
-     * Searches for a stock using the ticker symbol, than display
-     * historical data for given parameters
-     */
-    private static void viewStock() {
-        // ask for stock ticker symbol
-        print("Ticker Symbol: ");
-        final String symbol = scanner.nextLine();
-        // ask for start and end dates
-        print("Start Date: ");
-        final String startDate = scanner.nextLine();
-        print("End Date: ");
-        final String endDate = scanner.nextLine();
-        // ask for days granularity: how many days for every row of data
-        print("Days granularity:");
-        final String ndays=scanner.nextLine();
-        try {
-            final Stock s= user.searchStock(symbol);
-            if(s==null) {
-                println("No stock found for the given symbol.\n");
-                return;
-            }
-            final ArrayList<OHLCRow> rows = user.getHistoricalData(symbol,
-                   LocalDate.parse(startDate), LocalDate.parse(endDate), Integer.parseInt(ndays))
-                    .getRows();
-            if (rows != null) {
-                // show the chart starting a new thread
-                ChartingFactory.getCandlestickChart("test", symbol, rows).showChart();
-
-            } else {
-                println("Data not found\n");
-            }
-        } catch (final DateTimeParseException e) {
-            println("Incorrect date format\n");
-        } catch (final NumberFormatException e){
-            println("Incorrect days granularity\n");
-        } catch (CQLSessionException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * User Sign up.
      *
      * @return true in case of success, false otherwise.
@@ -230,6 +186,52 @@ public class ClientUser {
             } else {
                 ClientUtil.println("No stock found for the given symbol.\n");
             }
+        } catch (final CQLSessionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Searches for a stock using the ticker symbol, if available,
+     * shows historical data for the given period.
+     */
+    private static void viewStock() {
+        // ask for stock ticker symbol
+        ClientUtil.print("Ticker Symbol: ");
+        final String symbol = scanner.nextLine();
+
+        // ask for start date
+        ClientUtil.print("Start Date [YYYY-MM-DD]: ");
+        final String startDate = scanner.nextLine();
+
+        // ask for end date
+        ClientUtil.print("End Date [YYYY-MM-DD]: ");
+        final String endDate = scanner.nextLine();
+
+        // ask for days granularity: how many days for every row of data
+        ClientUtil.print("Days granularity: ");
+        final String days = scanner.nextLine();
+
+        try {
+            // check if the stock ticker actually exists
+            final Stock stock = user.searchStock(symbol);
+            if (stock == null) {
+                ClientUtil.println("No stock found for the given symbol.\n");
+                return;
+            }
+
+            final HistoricalData historicalData = user.getHistoricalData(symbol, LocalDate.parse(startDate), LocalDate.parse(endDate), Integer.parseInt(days));
+            final ArrayList<OHLCRow> rows = historicalData.getRows();
+            if (rows != null) {
+                // show the chart
+                ChartingFactory.getCandlestickChart(symbol + " Historical Data", symbol, rows).showChart();
+            } else {
+                ClientUtil.println("Historical data not found.\n");
+            }
+        } catch (final DateTimeParseException e) {
+            ClientUtil.println("Incorrect date format.\n");
+        } catch (final NumberFormatException e){
+            ClientUtil.println("Incorrect days granularity.\n");
         } catch (final CQLSessionException e) {
             e.printStackTrace();
         }

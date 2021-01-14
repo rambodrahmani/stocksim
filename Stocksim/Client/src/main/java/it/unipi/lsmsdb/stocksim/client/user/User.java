@@ -1,12 +1,11 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
-import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
+import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 /**
  * This class represents a StockSim Client User.
@@ -96,6 +95,20 @@ public class User {
     }
 
     /**
+     * Retrieves the {@link HistoricalData} for the given stock symbol, using {@link DBManager}.
+     *
+     * @param symbol the ticker symbol to be searched;
+     * @param startDate start date for the period;
+     * @param endDate end date for the period;
+     * @param granularity days granularity.
+     *
+     * @return the retrieved {@link HistoricalData}, might be empty.
+     */
+    public HistoricalData getHistoricalData(final String symbol, final LocalDate startDate, final LocalDate endDate, final int granularity) throws CQLSessionException {
+        return dbManager.getHistoricalData(symbol, startDate, endDate, granularity);
+    }
+
+    /**
      * Executes user logout.
      *
      * @return null.
@@ -159,12 +172,5 @@ public class User {
      */
     public String getEmail() {
         return email;
-    }
-
-
-    public HistoricalDataset getHistoricalData(
-            String symbol, LocalDate startDate, LocalDate endDate, int ndays)
-            throws CQLSessionException {
-        return dbManager.getHistoricaldata(symbol, startDate, endDate, ndays);
     }
 }

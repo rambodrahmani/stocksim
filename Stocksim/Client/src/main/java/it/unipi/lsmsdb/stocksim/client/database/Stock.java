@@ -1,16 +1,9 @@
 package it.unipi.lsmsdb.stocksim.client.database;
 
-import it.unipi.lsmsdb.stocksim.client.charting.CandlestickChart;
-import it.unipi.lsmsdb.stocksim.client.charting.Chart;
-import it.unipi.lsmsdb.stocksim.client.charting.LineChart;
-import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
 import org.apache.commons.lang.WordUtils;
 import org.bson.Document;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-import static it.unipi.lsmsdb.stocksim.lib.util.Util.*;
+import static it.unipi.lsmsdb.stocksim.lib.util.Util.isValidString;
 
 /**
  * This class represents a Stock.
@@ -27,17 +20,13 @@ public class Stock {
     private final String symbol;
     private final String market;
     private final String logoURL;
-    private final Long marketCap;
+    private final Double marketCap;
     private final Double trailingPE;
     private final String sector;
     private final String website;
     private final String industry;
     private final String longBusinessSummary;
     private final Location location;
-
-
-
-
 
     /**
      * This represents the Stock embedded document location.
@@ -69,20 +58,20 @@ public class Stock {
          */
         public String toString() {
             String ret = "";
-            if (isValidString(this.address) ){
-                ret += ' '+this.address;
+            if (isValidString(this.address)) {
+                ret += ' ' + this.address;
             }
-            if (isValidString(this.city)){
-                ret += ' '+this.city;
+            if (isValidString(this.city)) {
+                ret += ' ' + this.city;
             }
-            if (isValidString(this.state)){
-                ret += ' '+this.state;
+            if (isValidString(this.state)) {
+                ret += ' ' + this.state;
             }
-            if (isValidString(this.country)){
-                ret += ' '+this.country;
+            if (isValidString(this.country)) {
+                ret += ' ' + this.country;
             }
-            if (isValidString(this.phone)){
-                ret += '\n'+this.phone;
+            if (isValidString(this.phone)) {
+                ret += '\n' + this.phone;
             }
             return ret;
         }
@@ -107,7 +96,7 @@ public class Stock {
         // the following fields could be null or undefined
         this.longName = stockDocument.getString("longName");
         this.logoURL = stockDocument.getString("logoURL");
-        this.marketCap = stockDocument.getLong("marketCap");
+        this.marketCap = stockDocument.getDouble("marketCap");
         this.trailingPE = stockDocument.getDouble("trailingPE");
         this.sector = stockDocument.getString("sector");
         this.website = stockDocument.getString("website");
@@ -117,48 +106,65 @@ public class Stock {
 
     /**
      * Converts the Stock into printable {@link String}.
-     * Fields that are null or absent will be left empty (no dash or anything
-     * will be printed).
+     * Fields that are null or absent will be left empty.
+     *
      * @return the {@link String} to be printed to STD Out.
      */
     public String toString() {
         String ret = "";
-        ret += "Short name:\t" + this.shortName + '\n';
+
+        ret += "Short name: " + this.shortName + '\n';
+
         if (isValidString(this.longName)){
-            ret += "longName:\t"+this.longName+ '\n';
+            ret += "longName: "+this.longName+ '\n';
         }
-        ret += "Symbol:\t" + this.symbol + '\n';
-        ret += "Quote type:\t" + this.quoteType + '\n';
-        if (this.marketCap != null && this.marketCap!=0){
-            ret += "Market capitalization:\t"+this.marketCap+ '\n';
+
+        ret += "Symbol: " + this.symbol + '\n';
+
+        ret += "Quote type: " + this.quoteType + '\n';
+
+        if (this.marketCap != null && this.marketCap != 0) {
+            ret += "Market capitalization: " + this.marketCap+ '\n';
         }
-        if (this.trailingPE != null && this.trailingPE!=0){
-            ret += "PE ratio:\t"+this.trailingPE+ '\n';
+
+        if (this.trailingPE != null && this.trailingPE != 0) {
+            ret += "PE ratio: " + this.trailingPE+ '\n';
         }
-        ret += "Market:\t" + this.market + '\n';
-        ret += "Exchange timezone short name:\t" + this.exchangeTimezoneShortName + '\n';
-        ret += "Exchange timezone name:\t" + this.exchangeTimezoneName + '\n';
-        if (isValidString(this.sector)){
-            ret += "Sector:\t"+this.sector+ '\n';
+
+        ret += "Market: " + this.market + '\n';
+
+        ret += "Exchange timezone short name: " + this.exchangeTimezoneShortName + '\n';
+
+        ret += "Exchange timezone name: " + this.exchangeTimezoneName + '\n';
+
+        if (isValidString(this.sector)) {
+            ret += "Sector: " + this.sector + '\n';
         }
-        if (isValidString(this.industry)){
-            ret += "Industry:\t"+this.industry+ '\n';
+
+        if (isValidString(this.industry)) {
+            ret += "Industry: " + this.industry + '\n';
         }
-        ret += "Currency:\t" + this.currency + '\n';
-        final String locString= this.location.toString();
-        if (isValidString(locString)){
-            ret += "Location:\t"+locString+ '\n';
+
+        ret += "Currency:" + this.currency + '\n';
+
+        final String locString = this.location.toString();
+        if (isValidString(locString)) {
+            ret += "Location: " + locString + '\n';
         }
-        if (isValidString(this.logoURL)){
-            ret += "Logo URL:\t"+this.logoURL+ '\n';
+
+        if (isValidString(this.logoURL)) {
+            ret += "Logo URL:" + this.logoURL + '\n';
         }
-        if (isValidString(this.website)){
-            ret += "Website:\t"+this.website+ '\n';
+
+        if (isValidString(this.website)) {
+            ret += "Website: " + this.website + '\n';
         }
-        if (isValidString(this.longBusinessSummary)){
+
+        if (isValidString(this.longBusinessSummary)) {
             ret += "Long business summary:\n" +
                     WordUtils.wrap(this.longBusinessSummary, 80) + '\n';
         }
+
         return ret;
     }
 }
