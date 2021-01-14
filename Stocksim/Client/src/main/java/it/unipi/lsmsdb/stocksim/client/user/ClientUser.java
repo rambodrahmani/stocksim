@@ -7,6 +7,7 @@ import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -90,30 +91,35 @@ public class ClientUser {
                     break;
                 case CREATE_PORTFOLIO:
                     if (isLoggedIn()) {
+                        createPortfolio();
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
                     break;
                 case LIST_PORTFOLIOS:
                     if (isLoggedIn()) {
+                        listPortfolios();
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
                     break;
                 case VIEW_PORTFOLIO:
                     if (isLoggedIn()) {
+                        viewPortfolio();
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
                     break;
                 case SIMULATE_PORTFOLIO:
                     if (isLoggedIn()) {
+                        simulatePortfolio();
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
                     break;
                 case DELETE_PORTFOLIO:
                     if (isLoggedIn()) {
+                        deletePortfolio();
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
@@ -249,14 +255,24 @@ public class ClientUser {
                 return;
             }
 
-            final HistoricalData historicalData = user.getHistoricalData(symbol, LocalDate.parse(startDate), LocalDate.parse(endDate), Integer.parseInt(days));
-            final ArrayList<OHLCRow> rows = historicalData.getRows();
-            if (rows != null) {
-                // show the chart
-                ChartingFactory.getCandlestickChart(symbol + " Historical Data", symbol, rows).showChart();
-                ClientUtil.println("Historical Data opened.\n");
+            // parse dates
+            final LocalDate start = LocalDate.parse(startDate);
+            final LocalDate end = LocalDate.parse(endDate);
+
+            // check if the given date interval is valid
+            if (start.isBefore(end)) {
+                // check if the given date interval is valid
+                final HistoricalData historicalData = user.getHistoricalData(symbol, start, end, Integer.parseInt(days));
+                final ArrayList<OHLCRow> rows = historicalData.getRows();
+                if (rows != null) {
+                    // show the chart
+                    ChartingFactory.getCandlestickChart(symbol + " Historical Data", symbol, rows).showChart();
+                    ClientUtil.println("Historical Data opened.\n");
+                } else {
+                    ClientUtil.println("Historical data not found.\n");
+                }
             } else {
-                ClientUtil.println("Historical data not found.\n");
+                ClientUtil.println("Invalid date interval. The start date must be before the end date.\n");
             }
         } catch (final DateTimeParseException e) {
             ClientUtil.println("Incorrect date format.\n");
@@ -265,6 +281,41 @@ public class ClientUser {
         } catch (final CQLSessionException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Creates a portfolio for the user with the given Stock
+     * tickers.
+     */
+    private static void createPortfolio() {
+        // ask for stock portfolio name
+        ClientUtil.print("Portfolio name: ");
+        final String name = scanner.nextLine();
+
+        // ask for stock tickers
+        ClientUtil.print("Ticker Symbols [comma separated]: ");
+        final String input = scanner.nextLine();
+        final String[] tickers = input.split(",");
+        final ArrayList<Stock> stocks = new ArrayList<>();
+        for (final String ticker : tickers) {
+
+        }
+    }
+
+    private static void listPortfolios() {
+
+    }
+
+    private static void viewPortfolio() {
+
+    }
+
+    private static void simulatePortfolio() {
+
+    }
+
+    private static void deletePortfolio() {
+
     }
 
     /**

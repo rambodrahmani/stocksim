@@ -2,10 +2,12 @@ package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
+import it.unipi.lsmsdb.stocksim.client.database.Portfolio;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  * This class represents a StockSim Client User.
@@ -34,6 +36,8 @@ public class User {
     // user DB Manager
     private final DBManager dbManager = new DBManager();
 
+    // user portfolios
+    private ArrayList<Portfolio> portfolios;
 
     /**
      * Default constructor with all fields.
