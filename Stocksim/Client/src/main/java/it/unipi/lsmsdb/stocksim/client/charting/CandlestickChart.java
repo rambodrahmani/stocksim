@@ -40,7 +40,7 @@ public class CandlestickChart extends Chart {
 	public CandlestickChart(final String title, final String stockSymbol, final ArrayList<OHLCRow> dataRows) {
 		this.title = title;
 		this.dataset = new DefaultOHLCDataset(stockSymbol, dataRows.toArray(new OHLCDataItem[0]));
-		this.applicationFrame = new ApplicationFrame(title);
+		this.applicationFrame = new JFrame(title);
 	}
 
 

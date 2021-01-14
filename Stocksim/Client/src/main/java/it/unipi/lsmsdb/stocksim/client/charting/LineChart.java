@@ -41,8 +41,8 @@ public class LineChart extends Chart {
 	 * @param xAxisData   data for the X axis;
 	 * @param yAxisData   data for the Y axis.
 	 */
-	public LineChart(final String title, final String xAxisLabel, final String yAxisLabel,
-	             final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) throws IllegalArgumentException {
+	public LineChart(final String title, final String xAxisLabel, final String yAxisLabel, final ArrayList<LocalDate> xAxisData,
+					 final ArrayList<Number> yAxisData) throws IllegalArgumentException {
 		if (xAxisData.size() != yAxisData.size()) {
 			throw new IllegalArgumentException("xAxisData and yAxisData must have the same length");
 		}
@@ -51,7 +51,7 @@ public class LineChart extends Chart {
 		this.yAxisLabel = yAxisLabel;
 		this.xAxisData = xAxisData;
 		this.yAxisData = yAxisData;
-		applicationFrame = new ApplicationFrame(title);
+		applicationFrame = new JFrame(title);
 	}
 
 	/**

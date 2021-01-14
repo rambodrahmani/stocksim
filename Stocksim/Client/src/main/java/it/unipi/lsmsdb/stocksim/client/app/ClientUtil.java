@@ -69,6 +69,10 @@ public class ClientUtil extends Util{
         print(String.format("%-18s %5s %-40s%n", UserMenuAction.SEARCH_STOCK.getActionName(), " ", UserMenuAction.SEARCH_STOCK.getActionDescription()));
         print(String.format("%-18s %5s %-40s%n", UserMenuAction.VIEW_STOCK.getActionName(), " ", UserMenuAction.VIEW_STOCK.getActionDescription()));
         print(String.format("%-18s %5s %-40s%n", UserMenuAction.CREATE_PORTFOLIO.getActionName(), " ", UserMenuAction.CREATE_PORTFOLIO.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.LIST_PORTFOLIOS.getActionName(), " ", UserMenuAction.CREATE_PORTFOLIO.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.VIEW_PORTFOLIO.getActionName(), " ", UserMenuAction.CREATE_PORTFOLIO.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.SIMULATE_PORTFOLIO.getActionName(), " ", UserMenuAction.CREATE_PORTFOLIO.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", UserMenuAction.DELETE_PORTFOLIO.getActionName(), " ", UserMenuAction.CREATE_PORTFOLIO.getActionDescription()));
         print(String.format("%-18s %5s %-40s%n", UserMenuAction.LOGOUT.getActionName(), " ", UserMenuAction.LOGOUT.getActionDescription()));
         print(String.format("%-18s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
         print("> ");

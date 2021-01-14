@@ -39,7 +39,7 @@ public class PieChart extends Chart {
 		this.title = title;
 		this.names = names;
 		this.values = values;
-		applicationFrame = new ApplicationFrame(title);
+		applicationFrame = new JFrame(title);
 	}
 
 	/**

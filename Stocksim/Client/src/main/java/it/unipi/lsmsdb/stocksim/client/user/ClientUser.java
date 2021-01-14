@@ -1,17 +1,16 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
-import it.unipi.lsmsdb.stocksim.client.charting.*;
+import it.unipi.lsmsdb.stocksim.client.charting.ChartingFactory;
+import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
+import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
-
-import static it.unipi.lsmsdb.stocksim.lib.util.Util.*;
 
 /**
  * StockSim Client User mode implementation.
@@ -85,6 +84,36 @@ public class ClientUser {
                 case VIEW_STOCK:
                     if (isLoggedIn()) {
                         viewStock();
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
+                case CREATE_PORTFOLIO:
+                    if (isLoggedIn()) {
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
+                case LIST_PORTFOLIOS:
+                    if (isLoggedIn()) {
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
+                case VIEW_PORTFOLIO:
+                    if (isLoggedIn()) {
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
+                case SIMULATE_PORTFOLIO:
+                    if (isLoggedIn()) {
+                    } else {
+                        ClientUtil.println("You need to login first.\n");
+                    }
+                    break;
+                case DELETE_PORTFOLIO:
+                    if (isLoggedIn()) {
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
@@ -225,6 +254,7 @@ public class ClientUser {
             if (rows != null) {
                 // show the chart
                 ChartingFactory.getCandlestickChart(symbol + " Historical Data", symbol, rows).showChart();
+                ClientUtil.println("Historical Data opened.\n");
             } else {
                 ClientUtil.println("Historical data not found.\n");
             }

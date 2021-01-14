@@ -12,7 +12,7 @@ public enum UserMenuAction {
     VIEW_STOCK("view-stock", "view historical data for a stock ticker."),
     CREATE_PORTFOLIO("create-portfolio", "create a new stock portfolio."),
     LIST_PORTFOLIOS("list-portfolios", "list user stock portfolios."),
-    VIEW_PORTFOLIO("view-portfolio", "view user stock portfolio data."),
+    VIEW_PORTFOLIO("view-portfolio", "view user stock portfolio info."),
     SIMULATE_PORTFOLIO("simulate-portfolio", "simulate user stock portfolio."),
     DELETE_PORTFOLIO("delete-portfolio", "delete user stock portfolio."),
     LOGOUT("logout", "logout from current user account."),

@@ -20,7 +20,7 @@ public abstract class Chart {
 	protected String title;
 
 	// application frame where to show the chart
-	protected ApplicationFrame applicationFrame;
+	protected JFrame applicationFrame;
 
 	// JPanel for the chart
 	protected abstract JPanel createPanel();
@@ -30,7 +30,8 @@ public abstract class Chart {
 	 */
 	public void showChart() {
 		applicationFrame.setSize(800, 600);
-		applicationFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		applicationFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		applicationFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		UIUtils.centerFrameOnScreen(applicationFrame);
 		applicationFrame.setContentPane(createPanel());
 		applicationFrame.setVisible(true);
