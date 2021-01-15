@@ -3,6 +3,8 @@ package it.unipi.lsmsdb.stocksim.client.database;
 import org.apache.commons.lang.WordUtils;
 import org.bson.Document;
 
+import java.util.Objects;
+
 import static it.unipi.lsmsdb.stocksim.lib.util.Util.isValidString;
 
 /**
@@ -173,5 +175,18 @@ public class Stock {
         }
 
         return ret;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o || this.symbol.equals(((Stock)o).getSymbol())) return true;
+        Stock stock = (Stock) o;
+        return Objects.equals(currency, stock.currency) && Objects.equals(shortName, stock.shortName) && Objects.equals(longName, stock.longName) && Objects.equals(exchangeTimezoneName, stock.exchangeTimezoneName) && Objects.equals(exchangeTimezoneShortName, stock.exchangeTimezoneShortName) && Objects.equals(quoteType, stock.quoteType) && Objects.equals(symbol, stock.symbol) && Objects.equals(market, stock.market) && Objects.equals(logoURL, stock.logoURL) && Objects.equals(marketCap, stock.marketCap) && Objects.equals(trailingPE, stock.trailingPE) && Objects.equals(sector, stock.sector) && Objects.equals(website, stock.website) && Objects.equals(industry, stock.industry) && Objects.equals(longBusinessSummary, stock.longBusinessSummary) && Objects.equals(location, stock.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currency, shortName, longName, exchangeTimezoneName, exchangeTimezoneShortName, quoteType, symbol, market, logoURL, marketCap, trailingPE, sector, website, industry, longBusinessSummary, location);
     }
 }

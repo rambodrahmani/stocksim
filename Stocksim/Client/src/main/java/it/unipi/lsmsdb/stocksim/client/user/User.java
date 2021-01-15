@@ -96,7 +96,7 @@ public class User {
      * @return the retrieved {@link Stock} in case of success, null otherwise.
      */
     public Stock searchStock(final String symbol) throws CQLSessionException {
-        return dbManager.searchStock(symbol);
+        return dbManager.searchStock(symbol, true);
     }
 
     /**
@@ -143,7 +143,7 @@ public class User {
                 ClientUtil.println(" ]");
             }
         } else {
-            ClientUtil.println("Fetching user portfolios. Please try again later.");
+            ClientUtil.println("Fetching user portfolios.");
         }
     }
 
