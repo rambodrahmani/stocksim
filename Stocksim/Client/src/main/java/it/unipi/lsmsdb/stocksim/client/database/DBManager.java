@@ -6,6 +6,7 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.UpdateResult;
 import it.unipi.lsmsdb.stocksim.client.admin.Admin;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
@@ -22,7 +23,6 @@ import it.unipi.lsmsdb.stocksim.lib.yfinance.YFHistoricalData;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.json.JSONArray;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -30,6 +30,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.push;
 
 /**
  * SotckSim Client DB Manager.
@@ -48,6 +49,9 @@ public class DBManager {
 
     // Mongo DB shared instance
     private MongoDB mongoDB;
+
+    // set after user login
+    private String username;
 
     /**
      * @return Cassandra DB shared instance;
@@ -147,6 +151,10 @@ public class DBManager {
         // find summary data in mongodb
         final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
         final Document stock = getMongoDB().findOne(Filters.eq("symbol", symbol), mongoDBStocks);
+
+        // disconnect from databaes
+        disconnectMongoDB();
+        disconnectCassandraDB();
 
         // check if historical and summary data was found
         ret = (resultSet != null && stock != null);
@@ -313,6 +321,9 @@ public class DBManager {
         final Bson checkFilter = Filters.or(usernameFilter, emailFilter);
         final Document userDocument = getMongoDB().findOne(checkFilter, users);
 
+        // disconnect from mongodb
+        disconnectMongoDB();
+
         // check if at least one user was found
         if (userDocument != null) {
             ret = true;
@@ -409,6 +420,9 @@ public class DBManager {
 
             // set logged in user portfolios
             user.setPortfolios(userPortfolios);
+
+            // set user username for mongodb
+            username = user.getUsername();
         } else {
             ret = false;
         }
@@ -433,6 +447,9 @@ public class DBManager {
             final Document stockDocument = getMongoDB().findOne(Filters.eq("symbol", symbol), mongoDBStocks);
             return new Stock(stockDocument);
         }
+
+        // disconnect from mongodb
+        disconnectMongoDB();
 
         return null;
     }
@@ -486,5 +503,108 @@ public class DBManager {
         disconnectCassandraDB();
 
         return historicalData;
+    }
+
+    /**
+     * Checks if a user portfolio with the given name already exists.
+     *
+     * @param name user portfolio name.
+     *
+     * @return true if a portfolio with the given name exists, false otherwise.
+     */
+    private boolean portfolioExists(final String name) {
+        boolean ret = false;
+
+        // retrieve user collection from mongodb
+        final MongoCollection<Document> users = getMongoDB().getCollection(StocksimCollection.USERS.getCollectionName());
+
+        // get info for user
+        final Bson usernameFilter = eq("username", this.username);
+        final Document userDocument = getMongoDB().findOne(usernameFilter, users);
+
+        // set fields retrieved from db if present, otherwise login failed
+        if (userDocument != null) {
+            // fetch user portfolios array
+            final List<Document> portfolios = userDocument.getList("portfolios", Document.class);
+
+            // check if the user has any portfolio
+            if (portfolios != null) {
+                // find portfolio with the same name
+                for (final Document portfolio : portfolios) {
+                    if (portfolio.getString("name").equals(name)) {
+                        ret = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // disconnect from mongodb
+        disconnectMongoDB();
+
+        return ret;
+    }
+
+    /**
+     * Inserts the given {@link Portfolio} in the user portfolios.
+     *
+     * @param portfolio the {@link Portfolio} to be added.
+     *
+     * @return true if the {@link Portfolio} was added without errors, false otherwise.
+     */
+    private boolean addPortfolio(final Portfolio portfolio) {
+        boolean ret = true;
+
+        // retrieve users collection from mongodb
+        final MongoCollection<Document> users = getMongoDB().getCollection(StocksimCollection.USERS.getCollectionName());
+
+        // update user portfolios array
+        final Bson usernameFilter = eq("username", this.username);
+        final Bson change = push("portfolios", portfolio.getDocument());
+        final UpdateResult updateResult = users.updateOne(usernameFilter, change);
+
+        // check update was executed correctly
+        ret = updateResult.getMatchedCount() == 1 && updateResult.wasAcknowledged();
+
+        return ret;
+    }
+
+    /**
+     * Creates a new user portfolio with the given parameters.
+     *
+     * @param name user portfolio name;
+     * @param symbols user portfolio stock symbols.
+     *
+     * @return the newly created {@link Portfolio}, null otherwise.
+     *
+     * @throws CQLSessionException
+     */
+    public Portfolio createPortfolio(final String name, final String[] symbols) throws CQLSessionException {
+        // first check if a user portfolio with same name already exists
+        if (portfolioExists(name)) {
+            return null;
+        }
+
+        // fetch stock data from mongodb
+        final ArrayList<Stock> stocks = new ArrayList<>();
+        for (final String symbol : symbols) {
+            final Stock stock = searchStock(symbol);
+            if (stock == null) {
+                return null;
+            } else {
+                stocks.add(stock);
+            }
+        }
+
+        // create new user portfolio
+        final Portfolio portfolio = new Portfolio(name, stocks);
+
+        // add user portfolio to mongodb
+        if (!addPortfolio(portfolio)) {
+            // return null if mongodb insertion fails
+            return null;
+        }
+
+        return portfolio;
     }
 }

@@ -1,5 +1,8 @@
 package it.unipi.lsmsdb.stocksim.client.database;
 
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 
 /**
@@ -38,5 +41,23 @@ public class Portfolio {
      */
     public ArrayList<Stock> getStocks() {
         return stocks;
+    }
+
+    /**
+     * @return the {@link Document} to be inserted into MongoDB.
+     */
+    public Document getDocument() {
+        // create new portfolio document for mongo db
+        final Document portfolioDocument = new Document("_id", new ObjectId());
+        portfolioDocument.append("name", getName());
+
+        // add stocks to portfolio document
+        final ArrayList<String> symbols = new ArrayList<>();
+        for (final Stock stock : stocks) {
+            symbols.add(stock.getSymbol());
+        }
+        portfolioDocument.append("tickers", symbols);
+
+        return portfolioDocument;
     }
 }

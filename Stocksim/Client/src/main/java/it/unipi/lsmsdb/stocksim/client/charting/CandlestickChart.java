@@ -3,10 +3,9 @@ package it.unipi.lsmsdb.stocksim.client.charting;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.*;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.CandlestickRenderer;
 import org.jfree.chart.ui.ApplicationFrame;
-import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.xy.DefaultOHLCDataset;
 import org.jfree.data.xy.OHLCDataItem;
 import org.jfree.data.xy.OHLCDataset;
@@ -16,7 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -25,8 +23,6 @@ import java.util.Random;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class CandlestickChart extends Chart {
-
-
 	// historical data
 	private final OHLCDataset dataset;
 
@@ -42,7 +38,6 @@ public class CandlestickChart extends Chart {
 		this.dataset = new DefaultOHLCDataset(stockSymbol, dataRows.toArray(new OHLCDataItem[0]));
 		this.applicationFrame = new JFrame(title);
 	}
-
 
 	/**
 	 * @param dataset the {@link OHLCDataset} used to build the candle stick chart.

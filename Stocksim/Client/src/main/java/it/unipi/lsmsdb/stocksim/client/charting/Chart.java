@@ -1,14 +1,8 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
-import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.chart.ui.UIUtils;
 
 import javax.swing.*;
-
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
  * Abstract Chart class. All charting classes must extend this.

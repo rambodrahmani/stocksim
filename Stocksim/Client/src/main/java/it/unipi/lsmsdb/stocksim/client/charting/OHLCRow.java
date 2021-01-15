@@ -18,7 +18,4 @@ public class OHLCRow extends OHLCDataItem{
 				   final Float low, final Float close, final Float volume) {
 		super(date, open, high, low, close, volume);
 	}
-
-	
-
 }

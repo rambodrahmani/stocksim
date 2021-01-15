@@ -4,11 +4,9 @@ import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.charting.ChartingFactory;
 import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
 import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
-import it.unipi.lsmsdb.stocksim.client.database.Portfolio;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -92,7 +90,11 @@ public class ClientUser {
                     break;
                 case CREATE_PORTFOLIO:
                     if (isLoggedIn()) {
-                        createPortfolio();
+                        if (createPortfolio()) {
+                            ClientUtil.println("Portfolio created correctly.\n");
+                        } else {
+                            ClientUtil.println("Could not create new user Portfolio.\n");
+                        }
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
@@ -174,9 +176,16 @@ public class ClientUser {
         ClientUtil.print("Password [login]: ");
         final String password = scanner.nextLine();
 
-        // create new user for sign up
-        final User newUser = new User(name, surname, email, username, password);
-        ret = newUser.register();
+        // check input strings are all valid
+        if (ClientUtil.isValidString(name) && ClientUtil.isValidString(surname) &&
+            ClientUtil.isValidString(email) && ClientUtil.isValidString(username) &&
+            ClientUtil.isValidString(password)) {
+            // create new user for sign up
+            final User newUser = new User(name, surname, email, username, password);
+            ret = newUser.register();
+        } else {
+            ret = false;
+        }
 
         return ret;
     }
@@ -197,10 +206,8 @@ public class ClientUser {
         ClientUtil.print("Password: ");
         final String password = scanner.nextLine();
 
-        // do the login if not already logged in
-        if (isLoggedIn()) {
-            ClientUtil.println("User login already executed.");
-        } else {
+        // check input strings are all valid
+        if (ClientUtil.isValidString(username) && ClientUtil.isValidString(password)) {
             try {
                 user = new User(username, password);
                 ret = user.login();
@@ -208,6 +215,8 @@ public class ClientUser {
                 ret = false;
                 e.printStackTrace();
             }
+        } else {
+            ret = false;
         }
 
         return ret;
@@ -221,15 +230,18 @@ public class ClientUser {
         ClientUtil.print("Ticker Symbol: ");
         final String symbol = scanner.nextLine();
 
-        try {
-            final Stock stock = user.searchStock(symbol);
-            if (stock != null) {
-                ClientUtil.println(stock.toString());
-            } else {
-                ClientUtil.println("No stock found for the given symbol.\n");
+        // check input string is valid
+        if (ClientUtil.isValidString(symbol)) {
+            try {
+                final Stock stock = user.searchStock(symbol);
+                if (stock != null) {
+                    ClientUtil.println(stock.toString());
+                } else {
+                    ClientUtil.println("No stock found for the given symbol.\n");
+                }
+            } catch (final CQLSessionException e) {
+                e.printStackTrace();
             }
-        } catch (final CQLSessionException e) {
-            e.printStackTrace();
         }
     }
 
@@ -254,39 +266,43 @@ public class ClientUser {
         ClientUtil.print("Days granularity: ");
         final String days = scanner.nextLine();
 
-        try {
-            // check if the stock ticker actually exists
-            final Stock stock = user.searchStock(symbol);
-            if (stock == null) {
-                ClientUtil.println("No stock found for the given symbol.\n");
-                return;
-            }
-
-            // parse dates
-            final LocalDate start = LocalDate.parse(startDate);
-            final LocalDate end = LocalDate.parse(endDate);
-
-            // check if the given date interval is valid
-            if (start.isBefore(end)) {
-                // check if the given date interval is valid
-                final HistoricalData historicalData = user.getHistoricalData(symbol, start, end, Integer.parseInt(days));
-                final ArrayList<OHLCRow> rows = historicalData.getRows();
-                if (rows != null) {
-                    // show the chart
-                    ChartingFactory.getCandlestickChart(symbol + " Historical Data", symbol, rows).showChart();
-                    ClientUtil.println("Historical Data opened.\n");
-                } else {
-                    ClientUtil.println("Historical data not found.\n");
+        // check all input strings are valid
+        if (ClientUtil.isValidString(symbol) && ClientUtil.isValidString(startDate) &&
+            ClientUtil.isValidString(endDate) && ClientUtil.isValidString(days)) {
+            try {
+                // check if the stock ticker actually exists
+                final Stock stock = user.searchStock(symbol);
+                if (stock == null) {
+                    ClientUtil.println("No stock found for the given symbol.\n");
+                    return;
                 }
-            } else {
-                ClientUtil.println("Invalid date interval. The start date must be before the end date.\n");
+
+                // parse dates
+                final LocalDate start = LocalDate.parse(startDate);
+                final LocalDate end = LocalDate.parse(endDate);
+
+                // check if the given date interval is valid
+                if (start.isBefore(end)) {
+                    // check if the given date interval is valid
+                    final HistoricalData historicalData = user.getHistoricalData(symbol, start, end, Integer.parseInt(days));
+                    final ArrayList<OHLCRow> rows = historicalData.getRows();
+                    if (rows != null) {
+                        // show the chart
+                        ChartingFactory.getCandlestickChart(symbol + " Historical Data", symbol, rows).showChart();
+                        ClientUtil.println("Historical Data opened.\n");
+                    } else {
+                        ClientUtil.println("Historical data not found.\n");
+                    }
+                } else {
+                    ClientUtil.println("Invalid date interval. The start date must be before the end date.\n");
+                }
+            } catch (final DateTimeParseException e) {
+                ClientUtil.println("Incorrect date format.\n");
+            } catch (final NumberFormatException e) {
+                ClientUtil.println("Incorrect days granularity.\n");
+            } catch (final CQLSessionException e) {
+                e.printStackTrace();
             }
-        } catch (final DateTimeParseException e) {
-            ClientUtil.println("Incorrect date format.\n");
-        } catch (final NumberFormatException e){
-            ClientUtil.println("Incorrect days granularity.\n");
-        } catch (final CQLSessionException e) {
-            e.printStackTrace();
         }
     }
 
@@ -294,7 +310,9 @@ public class ClientUser {
      * Creates a portfolio for the user with the given Stock
      * tickers.
      */
-    private static void createPortfolio() {
+    private static boolean createPortfolio() {
+        boolean ret = true;
+
         // ask for stock portfolio name
         ClientUtil.print("Portfolio name: ");
         final String name = scanner.nextLine();
@@ -302,11 +320,20 @@ public class ClientUser {
         // ask for stock tickers
         ClientUtil.print("Ticker Symbols [comma separated]: ");
         final String input = scanner.nextLine();
-        final String[] tickers = input.split(",");
-        final ArrayList<Stock> stocks = new ArrayList<>();
-        for (final String ticker : tickers) {
 
+        if (ClientUtil.isValidString(name) && ClientUtil.isValidString(input)) {
+            final String[] tickers = input.split(", ");
+
+            // actually create the portfolio in the DB
+            try {
+                ret = user.createPortfolio(name, tickers);
+            } catch (CQLSessionException e) {
+                e.printStackTrace();
+                ret = false;
+            }
         }
+
+        return ret;
     }
 
     /**

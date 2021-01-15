@@ -17,7 +17,6 @@ import java.util.ArrayList;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class PieChart extends Chart {
-	
 	// list of all the names of the slices that make up the pie
 	private final ArrayList<String> names;
 	

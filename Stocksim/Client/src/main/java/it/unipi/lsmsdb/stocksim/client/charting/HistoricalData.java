@@ -1,7 +1,5 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
-import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
-
 import java.util.ArrayList;
 import java.util.Date;
 

@@ -114,6 +114,23 @@ public class User {
     }
 
     /**
+     * Creates a user {@link Portfolio} with the given name and ticker symbols.
+     *
+     * @param name {@link Portfolio} name;
+     * @param symbols {@link Portfolio} ticker symbols.
+     */
+    public boolean createPortfolio(final String name, final String[] symbols) throws CQLSessionException {
+        final Portfolio newPortfolio = dbManager.createPortfolio(name, symbols);
+
+        // check if the new portfolio was correctly created
+        if (newPortfolio != null) {
+            portfolios.add(newPortfolio);
+        }
+
+        return newPortfolio != null;
+    }
+
+    /**
      * Prints user portfolio.
      */
     public void printPortfolios() {

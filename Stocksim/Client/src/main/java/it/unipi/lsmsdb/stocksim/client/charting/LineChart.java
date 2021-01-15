@@ -19,7 +19,6 @@ import java.util.ArrayList;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class LineChart extends Chart {
-	
 	// label of the X axis
 	private final String xAxisLabel;
 	
