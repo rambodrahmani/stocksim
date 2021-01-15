@@ -148,6 +148,15 @@ public class User {
     }
 
     /**
+     * Deletes the user {@link Portfolio} with the given name.
+     *
+     * @param name {@link Portfolio} name;
+     */
+    public boolean deletePortfolio(final String name) {
+        return dbManager.deletePortfolio(name);
+    }
+
+    /**
      * Executes user logout.
      *
      * @return null.

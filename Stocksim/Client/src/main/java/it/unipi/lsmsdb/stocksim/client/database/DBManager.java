@@ -32,6 +32,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.pull;
 import static com.mongodb.client.model.Updates.push;
 
 /**
@@ -619,5 +620,46 @@ public class DBManager {
         }
 
         return portfolio;
+    }
+
+    /**
+     * Removes the given {@link Portfolio} from the user portfolios.
+     *
+     * @param name the name of the {@link Portfolio} to be removed.
+     *
+     * @return true if the portfolio was removed without errors, false otherwise.
+     */
+    private boolean removePortfolio(final String name) {
+        boolean ret = true;
+
+        // retrieve users collection from mongodb
+        final MongoCollection<Document> users = getMongoDB().getCollection(StocksimCollection.USERS.getCollectionName());
+
+        // update user portfolios array
+        final Bson usernameFilter = eq("username", this.username);
+        final Bson change = pull("portfolios", new Document("name", name));
+        final UpdateResult updateResult = users.updateOne(usernameFilter, change);
+
+        // check update was executed correctly
+        ret = updateResult.getMatchedCount() == 1 && updateResult.wasAcknowledged();
+
+        return ret;
+    }
+
+    /**
+     * Deletes the user portfolio with the given name.
+     *
+     * @param name user portfolio name;
+     */
+    public boolean deletePortfolio(final String name) {
+        boolean ret = true;
+        // first check if a user portfolio with same name already exists
+        if (portfolioExists(name)) {
+            ret = removePortfolio(name);
+        } else {
+            ret = false;
+        }
+
+        return ret;
     }
 }

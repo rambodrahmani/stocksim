@@ -123,7 +123,11 @@ public class ClientUser {
                     break;
                 case DELETE_PORTFOLIO:
                     if (isLoggedIn()) {
-                        deletePortfolio();
+                        if (deletePortfolio()) {
+                            ClientUtil.println("Portfolio deleted.\n");
+                        } else {
+                            ClientUtil.println("Could not delete portfolio.\n");
+                        }
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
@@ -351,8 +355,24 @@ public class ClientUser {
 
     }
 
-    private static void deletePortfolio() {
+    /**
+     * Deletes user portfolio using the name.
+     *
+     * @return true if the portfolio is deleted, false otherwise.
+     */
+    private static boolean deletePortfolio() {
+        boolean ret = true;
 
+        // ask for stock portfolio name
+        ClientUtil.print("Portfolio name: ");
+        final String name = scanner.nextLine();
+
+        // check if the input string is valid
+        if (ClientUtil.isValidString(name)) {
+            ret = user.deletePortfolio(name);
+        }
+
+        return ret;
     }
 
     /**
