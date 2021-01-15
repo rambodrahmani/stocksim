@@ -105,6 +105,13 @@ public class Stock {
     }
 
     /**
+     * @return stock ticker symbol.
+     */
+    public String getSymbol() {
+        return symbol;
+    }
+
+    /**
      * Converts the Stock into printable {@link String}.
      * Fields that are null or absent will be left empty.
      *

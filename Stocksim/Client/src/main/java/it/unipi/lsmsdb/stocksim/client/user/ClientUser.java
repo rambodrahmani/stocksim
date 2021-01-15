@@ -4,6 +4,7 @@ import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.charting.ChartingFactory;
 import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
 import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
+import it.unipi.lsmsdb.stocksim.client.database.Portfolio;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
@@ -99,6 +100,7 @@ public class ClientUser {
                 case LIST_PORTFOLIOS:
                     if (isLoggedIn()) {
                         listPortfolios();
+                        ClientUtil.println("");
                     } else {
                         ClientUtil.println("You need to login first.\n");
                     }
@@ -199,8 +201,13 @@ public class ClientUser {
         if (isLoggedIn()) {
             ClientUtil.println("User login already executed.");
         } else {
-            user = new User(username, password);
-            ret = user.login();
+            try {
+                user = new User(username, password);
+                ret = user.login();
+            } catch (CQLSessionException e) {
+                ret = false;
+                e.printStackTrace();
+            }
         }
 
         return ret;
@@ -302,8 +309,11 @@ public class ClientUser {
         }
     }
 
+    /**
+     * Lists user portfolios.
+     */
     private static void listPortfolios() {
-
+        user.printPortfolios();
     }
 
     private static void viewPortfolio() {

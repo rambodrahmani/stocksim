@@ -367,7 +367,7 @@ public class DBManager {
      *
      * @return true if the login is successful, false otherwise.
      */
-    public boolean userLogin(final User user) {
+    public boolean userLogin(final User user) throws CQLSessionException {
         boolean ret = true;
 
         // get password hash
@@ -389,9 +389,26 @@ public class DBManager {
             user.setEmail(userDocument.getString("email"));
 
             // fetch user portfolios array
+            final ArrayList<Portfolio> userPortfolios = new ArrayList<>();
             final List<Document> portfolios = userDocument.getList("portfolios", Document.class);
-            final List<String> ticker = portfolios.get(0).getList("tickers", String.class);
-            ClientUtil.println(ticker.toString());
+
+            // check if the user has any portfolio
+            if (portfolios != null) {
+                for (final Document portfolio : portfolios) {
+                    final String name = portfolio.getString("name");
+                    final List<String> tickers = portfolio.getList("tickers", String.class);
+                    final ArrayList<Stock> stocks = new ArrayList<>();
+                    for (final String symbol : tickers) {
+                        final Stock stock = searchStock(symbol);
+                        stocks.add(stock);
+                    }
+                    final Portfolio userPortfolio = new Portfolio(name, stocks);
+                    userPortfolios.add(userPortfolio);
+                }
+            }
+
+            // set logged in user portfolios
+            user.setPortfolios(userPortfolios);
         } else {
             ret = false;
         }

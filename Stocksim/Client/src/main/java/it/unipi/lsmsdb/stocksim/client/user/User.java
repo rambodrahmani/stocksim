@@ -1,5 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
+import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 import it.unipi.lsmsdb.stocksim.client.database.Portfolio;
@@ -82,7 +83,7 @@ public class User {
      *
      * @return true if the login is successful, false otherwise.
      */
-    public boolean login() {
+    public boolean login() throws CQLSessionException {
         this.loggedIn = dbManager.userLogin(this);
         return loggedIn;
     }
@@ -110,6 +111,19 @@ public class User {
      */
     public HistoricalData getHistoricalData(final String symbol, final LocalDate startDate, final LocalDate endDate, final int granularity) throws CQLSessionException {
         return dbManager.getHistoricalData(symbol, startDate, endDate, granularity);
+    }
+
+    /**
+     * Prints user portfolio.
+     */
+    public void printPortfolios() {
+        for (final Portfolio portfolio : portfolios) {
+            ClientUtil.print(portfolio.getName() + ": [");
+            for (final Stock stock : portfolio.getStocks()) {
+                ClientUtil.print(" " + stock.getSymbol() + ",");
+            }
+            ClientUtil.println(" ]");
+        }
     }
 
     /**
