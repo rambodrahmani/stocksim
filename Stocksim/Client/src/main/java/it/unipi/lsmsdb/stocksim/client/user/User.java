@@ -139,40 +139,54 @@ public class User {
     /**
      * @param surname the real surname of the user.
      */
-    public void setSurname(String surname) {
+    public void setSurname(final String surname) {
         this.surname = surname;
     }
 
     /**
-     * @return user username.
+     * @param email the email address of the user.
+     */
+    public void setEmail(final String email) {
+        this.email = email;
+    }
+
+    /**
+     * @param portfolios the stock portfolios of the user.
+     */
+    public void setPortfolios(final ArrayList<Portfolio> portfolios) {
+        this.portfolios = portfolios;
+    }
+
+    /**
+     * @return user login username.
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * @return user password.
+     * @return user login password.
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * @return user name.
+     * @return user real name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return user surname.
+     * @return user real surname.
      */
     public String getSurname() {
         return surname;
     }
 
     /**
-     * @return the user email address.
+     * @return user email address.
      */
     public String getEmail() {
         return email;

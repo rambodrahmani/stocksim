@@ -70,6 +70,6 @@ public class Util {
      * @return true if the given string is valid, false otherwise.
      */
     public final static boolean isValidString(final String string) {
-        return (string != null) && (string != "null") && (!string.equals("")) && (string.length() > 0);
+        return (string != null) && (!string.equals("null")) && (!string.equals("")) && (string.length() > 0);
     }
 }

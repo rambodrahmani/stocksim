@@ -1,5 +1,9 @@
 package it.unipi.lsmsdb.stocksim.lib.yfinance;
 
+import it.unipi.lsmsdb.stocksim.lib.util.Util;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
 /**
  * This class represents the asset profile fetched using
  * {@link YahooFinance} API.
@@ -34,6 +38,80 @@ public class YFAssetProfile {
      * Default constructor.
      */
     public YFAssetProfile() {
+    }
+
+    /**
+     * @return MongoDB {@link Document}.
+     */
+    public Document getAssetDocument() {
+        // create new location document: only add available fields
+        final Document locationDocument = new Document();
+        if (Util.isValidString(getState())) {
+            locationDocument.append("state", getState());
+        }
+        if (Util.isValidString(getCity())) {
+            locationDocument.append("city", getCity());
+        }
+        if (Util.isValidString(getCountry())) {
+            locationDocument.append("country", getCountry());
+        }
+        if (Util.isValidString(getPhone())) {
+            locationDocument.append("phone", getPhone());
+        }
+        if (Util.isValidString(getAddress())) {
+            locationDocument.append("address", getAddress());
+        }
+
+        // create new asset document: only add available fields
+        final Document assetDocument = new Document("_id", new ObjectId());
+        if (Util.isValidString(getCurrency())) {
+            assetDocument.append("currency", getCurrency());
+        }
+        if (Util.isValidString(getShortName())) {
+            assetDocument.append("shortName", getShortName());
+        }
+        if (Util.isValidString(getLongName())) {
+            assetDocument.append("longName", getLongName());
+        }
+        if (Util.isValidString(getExchangeTimezoneName())) {
+            assetDocument.append("exchangeTimezoneName", getExchangeTimezoneName());
+        }
+        if (Util.isValidString(getExchangeTimezoneShortName())) {
+            assetDocument.append("exchangeTimezoneShortName", getExchangeTimezoneShortName());
+        }
+        if (Util.isValidString(getQuoteType())) {
+            assetDocument.append("quoteType", getQuoteType());
+        }
+        if (Util.isValidString(getSymbol())) {
+            assetDocument.append("symbol", getSymbol());
+        }
+        if (Util.isValidString(getMarket())) {
+            assetDocument.append("market", getMarket());
+        }
+        if (Util.isValidString(getLogoURL())) {
+            assetDocument.append("logoURL", getLogoURL());
+        }
+        if (getMarketCap() > 0) {
+            assetDocument.append("marketCap", getMarketCap());
+        }
+        if (getTrailingPE() > 0) {
+            assetDocument.append("trailingPE", getTrailingPE());
+        }
+        if (Util.isValidString(getSector())) {
+            assetDocument.append("sector", getSector());
+        }
+        if (Util.isValidString(getWebsite())) {
+            assetDocument.append("website", getWebsite());
+        }
+        if (Util.isValidString(getIndustry())) {
+            assetDocument.append("industry", getIndustry());
+        }
+        if (Util.isValidString(getLongBusinessSummary())) {
+            assetDocument.append("longBusinessSummary", getLongBusinessSummary());
+        }
+        assetDocument.append("location", locationDocument);
+
+        return assetDocument;
     }
 
     /**

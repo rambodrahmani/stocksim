@@ -22,14 +22,12 @@ import it.unipi.lsmsdb.stocksim.lib.yfinance.YFHistoricalData;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.json.JSONArray;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -159,7 +157,7 @@ public class DBManager {
     /**
      * Creates an asset profile in mongodb for the given {@link YFAssetProfile}.
      *
-     * @param yfAssetProfile the {@link YFAssetProfile} to be isnerted.
+     * @param yfAssetProfile the {@link YFAssetProfile} to be inserted.
      *
      * @return true if the asset profile is added correctly, false otherwise.
      */
@@ -169,72 +167,8 @@ public class DBManager {
         // retrieve stocks collection
         final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
 
-        // create new location document: only add available fields
-        final Document locationDocument = new Document();
-        if (ClientUtil.isValidString(yfAssetProfile.getState()) && !yfAssetProfile.getState().equals("null")) {
-            locationDocument.append("state", yfAssetProfile.getState());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getCity()) && !yfAssetProfile.getCity().equals("null")) {
-            locationDocument.append("city", yfAssetProfile.getCity());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getCountry()) && !yfAssetProfile.getCountry().equals("null")) {
-            locationDocument.append("country", yfAssetProfile.getCountry());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getPhone()) && !yfAssetProfile.getPhone().equals("null")) {
-            locationDocument.append("phone", yfAssetProfile.getPhone());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getAddress()) && !yfAssetProfile.getAddress().equals("null")) {
-            locationDocument.append("address", yfAssetProfile.getAddress());
-        }
-
-        // create new asset document: only add available fields
-        final Document assetDocument = new Document("_id", new ObjectId());
-        if (ClientUtil.isValidString(yfAssetProfile.getCurrency()) && !yfAssetProfile.getCurrency().equals("null")) {
-            assetDocument.append("currency", yfAssetProfile.getCurrency());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getShortName()) && !yfAssetProfile.getShortName().equals("null")) {
-            assetDocument.append("shortName", yfAssetProfile.getShortName());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getLongName()) && !yfAssetProfile.getLongName().equals("null")) {
-            assetDocument.append("longName", yfAssetProfile.getLongName());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getExchangeTimezoneName()) && !yfAssetProfile.getExchangeTimezoneName().equals("null")) {
-            assetDocument.append("exchangeTimezoneName", yfAssetProfile.getExchangeTimezoneName());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getExchangeTimezoneShortName()) && !yfAssetProfile.getExchangeTimezoneShortName().equals("null")) {
-            assetDocument.append("exchangeTimezoneShortName", yfAssetProfile.getExchangeTimezoneShortName());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getQuoteType()) && !yfAssetProfile.getQuoteType().equals("null")) {
-            assetDocument.append("quoteType", yfAssetProfile.getQuoteType());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getSymbol()) && !yfAssetProfile.getSymbol().equals("null")) {
-            assetDocument.append("symbol", yfAssetProfile.getSymbol());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getMarket()) && !yfAssetProfile.getMarket().equals("null")) {
-            assetDocument.append("market", yfAssetProfile.getMarket());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getLogoURL()) && !yfAssetProfile.getLogoURL().equals("null")) {
-            assetDocument.append("logoURL", yfAssetProfile.getLogoURL());
-        }
-        if (yfAssetProfile.getMarketCap() > 0) {
-            assetDocument.append("marketCap", yfAssetProfile.getMarketCap());
-        }
-        if (yfAssetProfile.getTrailingPE() > 0) {
-            assetDocument.append("trailingPE", yfAssetProfile.getTrailingPE());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getSector()) && !yfAssetProfile.getSector().equals("null")) {
-            assetDocument.append("sector", yfAssetProfile.getSector());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getWebsite()) && !yfAssetProfile.getWebsite().equals("null")) {
-            assetDocument.append("website", yfAssetProfile.getWebsite());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getIndustry()) && !yfAssetProfile.getIndustry().equals("null")) {
-            assetDocument.append("industry", yfAssetProfile.getIndustry());
-        }
-        if (ClientUtil.isValidString(yfAssetProfile.getLongBusinessSummary()) && !yfAssetProfile.getLongBusinessSummary().equals("null")) {
-            assetDocument.append("longBusinessSummary", yfAssetProfile.getLongBusinessSummary());
-        }
-        assetDocument.append("location", locationDocument);
+        // get MongoDB document
+        final Document assetDocument = yfAssetProfile.getAssetDocument();
 
         // insert the new admin document in the collection
         ret = getMongoDB().insertOne(assetDocument, stocks);
@@ -452,6 +386,12 @@ public class DBManager {
         if (userDocument != null) {
             user.setName(userDocument.getString("name"));
             user.setSurname(userDocument.getString("surname"));
+            user.setEmail(userDocument.getString("email"));
+
+            // fetch user portfolios array
+            final List<Document> portfolios = userDocument.getList("portfolios", Document.class);
+            final List<String> ticker = portfolios.get(0).getList("tickers", String.class);
+            ClientUtil.println(ticker.toString());
         } else {
             ret = false;
         }
