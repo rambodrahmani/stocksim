@@ -134,12 +134,16 @@ public class User {
      * Prints user portfolio.
      */
     public void printPortfolios() {
-        for (final Portfolio portfolio : portfolios) {
-            ClientUtil.print(portfolio.getName() + ": [");
-            for (final Stock stock : portfolio.getStocks()) {
-                ClientUtil.print(" " + stock.getSymbol() + ",");
+        if (portfolios != null) {
+            for (final Portfolio portfolio : portfolios) {
+                ClientUtil.print(portfolio.getName() + ": [");
+                for (final Stock stock : portfolio.getStocks()) {
+                    ClientUtil.print(" " + stock.getSymbol() + ",");
+                }
+                ClientUtil.println(" ]");
             }
-            ClientUtil.println(" ]");
+        } else {
+            ClientUtil.println("Fetching user portfolios. Please try again later.");
         }
     }
 

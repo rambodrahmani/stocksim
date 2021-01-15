@@ -103,13 +103,13 @@ public class Server {
                     if (currentHour < 20) {
                         final int sleepHours = 20 - currentHour;
                         ServerUtil.print("[UPDATER THREAD] Going to sleep for " + sleepHours + " hours before next update.\n> ");
-                        Thread.sleep(sleepHours * 60 * 60 *1000);
+                        Thread.sleep(sleepHours * 60 * 60 * 1000);
                     } else {
                         ServerUtil.println("[UPDATER THREAD] Starting historical data update.");
                         dbManager.updateDB();
                         final int sleepHours = (24 - Clock.systemDefaultZone().instant().atZone(nyZoneId).getHour()) + 20;
                         ServerUtil.print("[UPDATER THREAD] Going to sleep for " + sleepHours + " hours before next update.\n> ");
-                        Thread.sleep(sleepHours * 60 * 60 *1000);
+                        Thread.sleep(sleepHours * 60 * 60 * 1000);
                     }
                 }
             } catch (final InterruptedException e) {

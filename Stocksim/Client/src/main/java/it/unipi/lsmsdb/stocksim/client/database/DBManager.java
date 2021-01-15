@@ -25,6 +25,8 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.sql.Date;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -399,27 +401,38 @@ public class DBManager {
             user.setSurname(userDocument.getString("surname"));
             user.setEmail(userDocument.getString("email"));
 
-            // fetch user portfolios array
-            final ArrayList<Portfolio> userPortfolios = new ArrayList<>();
-            final List<Document> portfolios = userDocument.getList("portfolios", Document.class);
+            // portfolios fetch runnable
+            final Runnable portfoliosRunnable = () -> {
+                try {
+                    // fetch user portfolios array
+                    final ArrayList<Portfolio> userPortfolios = new ArrayList<>();
+                    final List<Document> portfolios = userDocument.getList("portfolios", Document.class);
 
-            // check if the user has any portfolio
-            if (portfolios != null) {
-                for (final Document portfolio : portfolios) {
-                    final String name = portfolio.getString("name");
-                    final List<String> tickers = portfolio.getList("tickers", String.class);
-                    final ArrayList<Stock> stocks = new ArrayList<>();
-                    for (final String symbol : tickers) {
-                        final Stock stock = searchStock(symbol);
-                        stocks.add(stock);
+                    // check if the user has any portfolio
+                    if (portfolios != null) {
+                        for (final Document portfolio : portfolios) {
+                            final String name = portfolio.getString("name");
+                            final List<String> tickers = portfolio.getList("tickers", String.class);
+                            final ArrayList<Stock> stocks = new ArrayList<>();
+                            for (final String symbol : tickers) {
+                                final Stock stock = searchStock(symbol);
+                                stocks.add(stock);
+                            }
+                            final Portfolio userPortfolio = new Portfolio(name, stocks);
+                            userPortfolios.add(userPortfolio);
+                        }
                     }
-                    final Portfolio userPortfolio = new Portfolio(name, stocks);
-                    userPortfolios.add(userPortfolio);
-                }
-            }
 
-            // set logged in user portfolios
-            user.setPortfolios(userPortfolios);
+                    // set logged in user portfolios
+                    user.setPortfolios(userPortfolios);
+                } catch (final CQLSessionException e) {
+                    e.printStackTrace();
+                }
+            };
+
+            // start portfolios fetch thread
+            final Thread portfoliosThread = new Thread(portfoliosRunnable, "Fetch Login Portfolios");
+            portfoliosThread.start();
 
             // set user username for mongodb
             username = user.getUsername();
