@@ -29,14 +29,13 @@ public class CandlestickChart extends Chart {
 	/**
 	 * Default constructor.
 	 *
-	 * @param title {@link ApplicationFrame} window title.
+	 * @param chartTitle {@link ApplicationFrame} window title.
 	 * @param stockSymbol candle stick chart stock symbol.
 	 * @param dataRows historical data.
 	 */
-	public CandlestickChart(final String title, final String stockSymbol, final ArrayList<OHLCRow> dataRows) {
-		this.title = title;
+	public CandlestickChart(final String chartTitle, final String stockSymbol, final ArrayList<OHLCRow> dataRows) {
+		this.chartTitle = chartTitle;
 		this.dataset = new DefaultOHLCDataset(stockSymbol, dataRows.toArray(new OHLCDataItem[0]));
-		this.applicationFrame = new JFrame(title);
 	}
 
 	/**
@@ -45,7 +44,7 @@ public class CandlestickChart extends Chart {
 	 * @return the {@link JFreeChart} created using the given {@link OHLCDataset}.
 	 */
 	private JFreeChart createChart(final OHLCDataset dataset) {
-		final JFreeChart ret = ChartFactory.createCandlestickChart(this.title, "Time",
+		final JFreeChart ret = ChartFactory.createCandlestickChart(this.chartTitle, "Time",
 				"Price", dataset, true);
 		// adjusting candles width
 		XYPlot plot = ret.getXYPlot();
@@ -61,36 +60,5 @@ public class CandlestickChart extends Chart {
 	protected JPanel createPanel() {
 		final JFreeChart jFreeChart = createChart(this.dataset);
 		return new ChartPanel(jFreeChart);
-	}
-
-	/**
-	 * Developer harness test entry point.
-	 *
-	 * @param args command line arguments.
-	 */
-	public static void main(String[] args) throws ParseException {
-		final ArrayList<OHLCRow> testRows = new ArrayList<>();
-
-		for (int i = 10; i < 31; i++) {
-			if(i%3 != 0) {
-				continue;
-			}
-			String dateString = "2020-11-" + i;
-			Date testDate = new SimpleDateFormat("yyyy-mm-dd").parse(dateString);
-			
-			Random rand = new Random();
-			
-			Float testOpen = (float)5 + i;
-			Float testHigh = (float)15 + i;
-			Float testLow = (float)2 + i;
-			Float testClose = (float)10 + i;
-			Float testVolume = rand.nextFloat()*i;
-			
-			final OHLCRow row = new OHLCRow(testDate, testOpen, testHigh, testLow, testClose, testVolume);
-			testRows.add(row);
-		}
-		
-		final CandlestickChart candlestickChart = ChartingFactory.getCandlestickChart("Candela di prova", "MSFT", testRows);
-		candlestickChart.showChart();
 	}
 }

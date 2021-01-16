@@ -1,15 +1,14 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
-import it.unipi.lsmsdb.stocksim.client.charting.ChartingFactory;
-import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
-import it.unipi.lsmsdb.stocksim.client.charting.OHLCRow;
+import it.unipi.lsmsdb.stocksim.client.charting.*;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -292,7 +291,10 @@ public class ClientUser {
                     final ArrayList<OHLCRow> rows = historicalData.getRows();
                     if (rows != null) {
                         // show the chart
-                        ChartingFactory.getCandlestickChart(symbol + " Historical Data", symbol, rows).showChart();
+                        final CandlestickChart candlestickChart = ChartingFactory.getCandlestickChart(symbol + " Candlestick", symbol, rows);
+                        final ArrayList<Chart> charts = new ArrayList<>();
+                        charts.add(candlestickChart);
+                        ChartUtil.showCharts(charts, symbol + " Historical Data");
                         ClientUtil.println("Historical Data opened.\n");
                     } else {
                         ClientUtil.println("Historical data not found.\n");
@@ -347,12 +349,32 @@ public class ClientUser {
         user.printPortfolios();
     }
 
+    /**
+     * Displays portfolio information.
+     */
     private static void viewPortfolio() {
+        // ask for stock portfolio name
+        ClientUtil.print("Portfolio name: ");
+        final String name = scanner.nextLine();
 
+        // check if the input string is valid
+        if (ClientUtil.isValidString(name)) {
+
+        }
     }
 
+    /**
+     * Runs simulation and displays statistics for the given portfolio.
+     */
     private static void simulatePortfolio() {
+        // ask for stock portfolio name
+        ClientUtil.print("Portfolio name: ");
+        final String name = scanner.nextLine();
 
+        // check if the input string is valid
+        if (ClientUtil.isValidString(name)) {
+
+        }
     }
 
     /**

@@ -10,7 +10,7 @@ import java.util.Date;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class OHLCRow extends OHLCDataItem{
+public class OHLCRow extends OHLCDataItem {
 	/**
 	 * Default constructor wrapping the driver class constructor
 	 */

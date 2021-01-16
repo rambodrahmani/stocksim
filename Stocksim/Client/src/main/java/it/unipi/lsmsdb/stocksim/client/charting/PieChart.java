@@ -26,19 +26,18 @@ public class PieChart extends Chart {
 	/**
 	 * Default constructor.
 	 *
-	 * @param title  title of the {@link ApplicationFrame} chart;
+	 * @param chartTitle  title of the {@link ApplicationFrame} chart;
 	 * @param names list of the names of the slices that make up the pie;
 	 * @param values list of the values of the slices that make up the pie.
 	 */
-	public PieChart(final String title, final ArrayList<String> names, final ArrayList<Number> values) throws IllegalArgumentException {
+	public PieChart(final String chartTitle, final ArrayList<String> names, final ArrayList<Number> values) throws IllegalArgumentException {
 		if (names.size() != values.size()) {
 			throw new IllegalArgumentException("Slices names and values must have the same length.");
 		}
 
-		this.title = title;
+		this.chartTitle = chartTitle;
 		this.names = names;
 		this.values = values;
-		applicationFrame = new JFrame(title);
 	}
 
 	/**
@@ -60,7 +59,7 @@ public class PieChart extends Chart {
 	 * @return the {@link JFreeChart} created using the given {@link PieDataset}.
 	 */
 	private JFreeChart createChart(final PieDataset dataset) {
-		final JFreeChart pieChart = ChartFactory.createPieChart(title, dataset, true, true, false);
+		final JFreeChart pieChart = ChartFactory.createPieChart(this.chartTitle, dataset, true, true, false);
 		return pieChart;
 	}
 
@@ -70,41 +69,5 @@ public class PieChart extends Chart {
 	protected JPanel createPanel() {
 		final JFreeChart chart = createChart((PieDataset) createDataset());
 		return new ChartPanel(chart);
-	}
-
-	/**
-	 * Developer harness test entry point.
-	 *
-	 * @param args command line arguments.
-	 */
-	public static void main(final String[] args) {
-		// pie chart slices names
-		final ArrayList<String> slicesNames = new ArrayList<String>();
-		slicesNames.add("Monday");
-		slicesNames.add("Tuesday");
-		slicesNames.add("Wednesday");
-		slicesNames.add("Thursday");
-
-		// pie chart slices values
-		final ArrayList<Number> slicesValues = new ArrayList<Number>();
-		slicesValues.add(10);
-		slicesValues.add(20);
-		slicesValues.add(30);
-		slicesValues.add(40);
-
-		try {
-			// create pie chart using the given names and values
-			final PieChart pieChart = ChartingFactory.getPieChart("Torta di prova", slicesNames, slicesValues);
-
-			// check if the chart was correctly created
-			if (pieChart != null) {
-				System.out.println("Instance created successfully.");
-				pieChart.showChart();
-			} else {
-				System.out.println("No.");
-			}
-		} catch (final IllegalArgumentException e) {
-			e.printStackTrace();
-		}
 	}
 }

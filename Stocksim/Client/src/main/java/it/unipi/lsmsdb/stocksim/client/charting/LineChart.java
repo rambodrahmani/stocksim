@@ -34,23 +34,22 @@ public class LineChart extends Chart {
 	/**
 	 * Default constructor.
 	 *
-	 * @param title       title of the chart {@link ApplicationFrame};
+	 * @param chartTitle  title of the chart {@link ApplicationFrame};
 	 * @param xAxisLabel  label for the X axis;
 	 * @param yAxisLabel  label for the Y axis;
 	 * @param xAxisData   data for the X axis;
 	 * @param yAxisData   data for the Y axis.
 	 */
-	public LineChart(final String title, final String xAxisLabel, final String yAxisLabel, final ArrayList<LocalDate> xAxisData,
+	public LineChart(final String chartTitle, final String xAxisLabel, final String yAxisLabel, final ArrayList<LocalDate> xAxisData,
 					 final ArrayList<Number> yAxisData) throws IllegalArgumentException {
 		if (xAxisData.size() != yAxisData.size()) {
 			throw new IllegalArgumentException("xAxisData and yAxisData must have the same length");
 		}
-		this.title = title;
+		this.chartTitle = chartTitle;
 		this.xAxisLabel = xAxisLabel;
 		this.yAxisLabel = yAxisLabel;
 		this.xAxisData = xAxisData;
 		this.yAxisData = yAxisData;
-		applicationFrame = new JFrame(title);
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class LineChart extends Chart {
 	 * @return the {@link JFreeChart} created using the given {@link CategoryDataset}.
 	 */
 	private JFreeChart createChart(final CategoryDataset dataset) {
-		final JFreeChart lineChart = ChartFactory.createLineChart(this.title, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
+		final JFreeChart lineChart = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
 		return lineChart;
 	}
 
@@ -82,30 +81,5 @@ public class LineChart extends Chart {
 	protected JPanel createPanel() {
 		final JFreeChart chart = createChart((CategoryDataset) createDataset());
 		return new ChartPanel(chart);
-	}
-
-	/**
-	 * Developer harness test entry point.
-	 *
-	 * @param args command line arguments.
-	 */
-	public static void main(final String[] args) {
-		final ArrayList<LocalDate> dates = new ArrayList<LocalDate>();
-		final ArrayList<Number> values = new ArrayList<Number>();
-
-		for (int i = 1; i < 31; i++) {
-			final LocalDate date = LocalDate.of(2020, 12, i);
-			dates.add(date);
-			values.add((float) Math.random());
-		}
-
-		try {
-			final LineChart lineChart = ChartingFactory.getLineChart("LineChart di prova", "Asse X", "Asse Y", dates, values);
-			if (lineChart != null) {
-				lineChart.showChart();
-			}
-		} catch (final IllegalArgumentException e) {
-			e.printStackTrace();
-		}
 	}
 }

@@ -17,7 +17,7 @@ import static it.unipi.lsmsdb.stocksim.client.app.Client.LOGGER_CONTEXT;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class ClientUtil extends Util{
+public class ClientUtil extends Util {
     /**
      * Prints the main menu for the Server usage.
      */
