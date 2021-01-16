@@ -487,43 +487,48 @@ public class DBManager {
      * @return the retrieved {@link HistoricalData}, might be empty.
      */
     public HistoricalData getHistoricalData(final String symbol, final LocalDate startDate, final LocalDate endDate, final int granularity) throws CQLSessionException {
-        final HistoricalData historicalData = new HistoricalData();
+        final HistoricalData ret = new HistoricalData();
 
+        // retrieve historical data from cassandra using aggregation function
         final ResultSet resultSet = getCassandraDB().query(
                 "select PeriodParam(" + granularity + ", date, " +
-                        "open, close, high, low, volume,adj_close) " +
+                        "open, close, high, low, volume, adj_close) " +
                         "as Period from stocksim.tickers where date < '" + endDate + "' " +
                         "and date > '" + startDate + "' and symbol='" + symbol + "';"
         );
 
+        // for each row in the retrieved historical data
         for (final Row row : resultSet) {
+            // retrieve [date -> map] structure
             final Map<LocalDate, Map> data = row.getMap("Period", LocalDate.class, Map.class);
-
             if (data == null) {
                 continue;
             }
 
+            // parse map keys/values
             final Set<LocalDate> keySet = data.keySet();
-            for (LocalDate finalDate : keySet) {
-                // every date identify OHLC data for one candle
-                final Map<String, Float> candle = data.get(finalDate);
-                if (candle == null) {
+            for (final LocalDate finalDate : keySet) {
+                // retrieve ohlc map
+                final Map<String, Float> ohlc = data.get(finalDate);
+                if (ohlc == null) {
                     continue;
                 }
 
-                historicalData.append(Date.from(finalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                        candle.get("open"),
-                        candle.get("high"),
-                        candle.get("low"),
-                        candle.get("close"),
-                        candle.get("volume"));
+                // extract ohlc values
+                ret.append(Date.from(finalDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                        ohlc.get("open"),
+                        ohlc.get("high"),
+                        ohlc.get("low"),
+                        ohlc.get("close"),
+                        ohlc.get("volume"),
+                        ohlc.get("adj_close"));
             }
         }
 
         // disconnect from cassandra db
         disconnectCassandraDB();
 
-        return historicalData;
+        return ret;
     }
 
     /**

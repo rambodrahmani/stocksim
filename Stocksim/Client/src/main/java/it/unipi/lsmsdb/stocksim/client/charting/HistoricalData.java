@@ -30,8 +30,8 @@ public class HistoricalData {
      * @param volume
      */
     public void append(final Date date, final Float open, final Float high,
-                  final Float low, final Float close, final Float volume) {
-        rows.add(new OHLCRow(date, open, high, low, close, volume));
+                  final Float low, final Float close, final Float volume, final Float adjClose) {
+        rows.add(new OHLCRow(date, open, high, low, close, volume, adjClose));
     }
 
     /**

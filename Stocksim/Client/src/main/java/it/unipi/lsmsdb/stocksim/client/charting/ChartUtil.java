@@ -75,11 +75,13 @@ public class ChartUtil {
                 final Float testLow = (float) 2 + i;
                 final Float testClose = (float) 10 + i;
                 final Float testVolume = rand.nextFloat() * i;
+                final Float testAdjClose = (float) 30 + i;
 
-                final OHLCRow row = new OHLCRow(testDate, testOpen, testHigh, testLow, testClose, testVolume);
+                final OHLCRow row = new OHLCRow(testDate, testOpen, testHigh, testLow, testClose, testVolume, testAdjClose);
                 testRows.add(row);
             }
-            final CandlestickChart candlestickChart = ChartingFactory.getCandlestickChart("Candela di prova", "MSFT", testRows);
+            final CandlestickChart candlestickChart = ChartingFactory.getCandlestickChart("Candela di prova",
+                    "Time", "Values","MSFT", testRows);
 
             // LINE CHART
             final ArrayList<LocalDate> dates = new ArrayList<LocalDate>();
@@ -104,16 +106,24 @@ public class ChartUtil {
             slicesValues.add(40);
             final PieChart pieChart = ChartingFactory.getPieChart("Torta di prova", slicesNames, slicesValues);
 
+            // TIME SERIES CHART
+            final TimeSeriesChart timeSeriesChart = ChartingFactory.getTimeSeriesChart("Time Series di prova", "Time",
+                    "Price", dates, values);
+
             final ArrayList<Chart> charts = new ArrayList<>();
-            if (candlestickChart != null) {
-                charts.add(candlestickChart);
+            if (pieChart != null) {
+                //charts.add(pieChart);
             }
             if (lineChart != null) {
                 //charts.add(lineChart);
             }
-            if (pieChart != null) {
-                charts.add(pieChart);
+            if (candlestickChart != null) {
+                charts.add(candlestickChart);
             }
+            if (timeSeriesChart != null) {
+                charts.add(timeSeriesChart);
+            }
+
 
             ChartUtil.showCharts(charts, "Developer Harness Test");
         } catch (final ParseException | IllegalArgumentException e) {

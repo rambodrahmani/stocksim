@@ -4,7 +4,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
@@ -34,14 +33,14 @@ public class LineChart extends Chart {
 	/**
 	 * Default constructor.
 	 *
-	 * @param chartTitle  title of the chart {@link ApplicationFrame};
-	 * @param xAxisLabel  label for the X axis;
-	 * @param yAxisLabel  label for the Y axis;
-	 * @param xAxisData   data for the X axis;
-	 * @param yAxisData   data for the Y axis.
+	 * @param chartTitle {@link Chart} title;
+	 * @param xAxisLabel label for the X axis;
+	 * @param yAxisLabel label for the Y axis;
+	 * @param xAxisData data for the X axis;
+	 * @param yAxisData data for the Y axis.
 	 */
-	public LineChart(final String chartTitle, final String xAxisLabel, final String yAxisLabel, final ArrayList<LocalDate> xAxisData,
-					 final ArrayList<Number> yAxisData) throws IllegalArgumentException {
+	public LineChart(final String chartTitle, final String xAxisLabel, final String yAxisLabel,
+					 final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) throws IllegalArgumentException {
 		if (xAxisData.size() != yAxisData.size()) {
 			throw new IllegalArgumentException("xAxisData and yAxisData must have the same length");
 		}
@@ -71,13 +70,14 @@ public class LineChart extends Chart {
 	 * @return the {@link JFreeChart} created using the given {@link CategoryDataset}.
 	 */
 	private JFreeChart createChart(final CategoryDataset dataset) {
-		final JFreeChart lineChart = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
-		return lineChart;
+		final JFreeChart ret = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
+		return ret;
 	}
 
 	/**
 	 * @return the {@link ChartPanel} that displays the specified chart.
 	 */
+	@Override
 	protected JPanel createPanel() {
 		final JFreeChart chart = createChart((CategoryDataset) createDataset());
 		return new ChartPanel(chart);

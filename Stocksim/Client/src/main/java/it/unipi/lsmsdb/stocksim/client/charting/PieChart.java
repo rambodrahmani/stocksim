@@ -3,7 +3,6 @@ package it.unipi.lsmsdb.stocksim.client.charting;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
@@ -26,7 +25,7 @@ public class PieChart extends Chart {
 	/**
 	 * Default constructor.
 	 *
-	 * @param chartTitle  title of the {@link ApplicationFrame} chart;
+	 * @param chartTitle {@link Chart} title;
 	 * @param names list of the names of the slices that make up the pie;
 	 * @param values list of the values of the slices that make up the pie.
 	 */
@@ -66,6 +65,7 @@ public class PieChart extends Chart {
 	/**
 	 * @return the {@link ChartPanel} that displays the specified chart.
 	 */
+	@Override
 	protected JPanel createPanel() {
 		final JFreeChart chart = createChart((PieDataset) createDataset());
 		return new ChartPanel(chart);

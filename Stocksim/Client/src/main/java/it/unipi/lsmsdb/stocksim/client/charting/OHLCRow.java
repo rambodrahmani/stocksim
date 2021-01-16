@@ -11,11 +11,21 @@ import java.util.Date;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class OHLCRow extends OHLCDataItem {
+	final Float adjClose;
+
 	/**
-	 * Default constructor wrapping the driver class constructor
+	 * Default constructor wrapping the driver class constructor.
 	 */
 	public OHLCRow(final Date date, final Float open, final Float high,
-				   final Float low, final Float close, final Float volume) {
+				   final Float low, final Float close, final Float volume, final Float adjClose) {
 		super(date, open, high, low, close, volume);
+		this.adjClose = adjClose;
+	}
+
+	/**
+	 * @return Adjusted Close price.
+	 */
+	public Float getAdjClose() {
+		return adjClose;
 	}
 }
