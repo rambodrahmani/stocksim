@@ -1,14 +1,17 @@
 package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
-import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
+import it.unipi.lsmsdb.stocksim.client.charting.*;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 import it.unipi.lsmsdb.stocksim.client.database.Portfolio;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
+import org.bson.Document;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a StockSim Client User.
@@ -96,7 +99,7 @@ public class User {
      * @return the retrieved {@link Stock} in case of success, null otherwise.
      */
     public Stock searchStock(final String symbol) throws CQLSessionException {
-        return dbManager.searchStock(symbol, true);
+        return dbManager.searchStock(symbol);
     }
 
     /**
@@ -111,6 +114,85 @@ public class User {
      */
     public HistoricalData getHistoricalData(final String symbol, final LocalDate startDate, final LocalDate endDate, final int granularity) throws CQLSessionException {
         return dbManager.getHistoricalData(symbol, startDate, endDate, granularity);
+    }
+
+    /**
+     * Retrieves and shows historical data and infor for the given ticker symbol.
+     *
+     * @param symbol stock ticker symbol;
+     * @param startDate historical data start date;
+     * @param endDate historical data end date;
+     * @param granularity historical data days granularity.
+     *
+     * @throws CQLSessionException
+     */
+    public void viewStock(final String symbol, final String startDate, final String endDate, final String granularity) throws CQLSessionException {
+        // get historical data runnable
+        final Runnable historicalDataRunnable = () -> {
+            try {
+                // parse string dates
+                final LocalDate start = LocalDate.parse(startDate);
+                final LocalDate end = LocalDate.parse(endDate);
+
+                // check if the given date interval is valid
+                if (start.isBefore(end)) {
+                    // retrieve stock historical data
+                    final HistoricalData historicalData = getHistoricalData(symbol, start, end, Integer.parseInt(granularity));
+                    final ArrayList<OHLCRow> rows = historicalData.getRows();
+
+                    // check if historical data was correctly retrieved
+                    if (rows != null) {
+                        // create candle stick chart
+                        final CandlestickChart candlestickChart = ChartingFactory.getCandlestickChart(symbol + " Candlestick",
+                                "Time", "Price", symbol, rows);
+
+                        // retrieve FULL stock historical data
+                        final HistoricalData fullHistoricalData = getHistoricalData(symbol, start, end, 1);
+                        final ArrayList<OHLCRow> fullRows = fullHistoricalData.getRows();
+
+                        // check if FULL historical data was correctly retrieved
+                        if (fullRows != null) {
+                            // create line chart
+                            final ArrayList<LocalDate> dates = new ArrayList<LocalDate>();
+                            final ArrayList<Number> values = new ArrayList<Number>();
+                            for (int i = fullRows.size() - 1; i > 0; i--) {
+                                final LocalDate date = fullRows.get(i).getDate()
+                                        .toInstant()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toLocalDate();
+                                dates.add(date);
+                                values.add(fullRows.get(i).getAdjClose());
+                            }
+                            final TimeSeriesChart timeSeriesChart = ChartingFactory.getTimeSeriesChart(symbol + " Adjusted Close", "Time", "Adjusted Close Price", dates, values);
+
+                            // populate charts to be displayed
+                            final ArrayList<Chart> charts = new ArrayList<>();
+                            charts.add(candlestickChart);
+                            charts.add(timeSeriesChart);
+
+                            // display charts
+                            ChartUtil.showCharts(charts, symbol + " Historical Data");
+                        }
+                    }
+                } else {
+                    ClientUtil.println("Invalid date interval. The start date must be before the end date.\n");
+                }
+            } catch (final CQLSessionException e) {
+                e.printStackTrace();
+            }
+        };
+
+        // start historical data retrieval thread
+        final Thread historicalDataThread = new Thread(historicalDataRunnable, "Historical Data Retrieval");
+        historicalDataThread.start();
+
+        // check if the stock ticker actually exists
+        final Stock stock = searchStock(symbol);
+        if (stock != null) {
+            ClientUtil.println(stock.toString());
+        } else {
+            ClientUtil.println("No stock found for the given symbol.\n");
+        }
     }
 
     /**
@@ -234,5 +316,13 @@ public class User {
      */
     public String getEmail() {
         return email;
+    }
+
+    /**
+     * Quits user.
+     * Disconnect from all databases.
+     */
+    public void quit() {
+        dbManager.disconnect();
     }
 }

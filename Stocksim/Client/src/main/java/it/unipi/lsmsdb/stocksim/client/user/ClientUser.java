@@ -140,7 +140,7 @@ public class ClientUser {
                     }
                     break;
                 case QUIT:
-                    System.exit(0);
+                    quit();
                     break;
                 default:
                     ClientUtil.println("Invalid command.\n");
@@ -273,58 +273,7 @@ public class ClientUser {
         if (ClientUtil.isValidString(symbol) && ClientUtil.isValidString(startDate) &&
             ClientUtil.isValidString(endDate) && ClientUtil.isValidString(granularity)) {
             try {
-                // check if the stock ticker actually exists
-                final Stock stock = user.searchStock(symbol);
-                if (stock != null) {
-                    ClientUtil.println(stock.toString());
-                } else {
-                    ClientUtil.println("No stock found for the given symbol.\n");
-                    return;
-                }
-
-                // parse string dates
-                final LocalDate start = LocalDate.parse(startDate);
-                final LocalDate end = LocalDate.parse(endDate);
-
-                // check if the given date interval is valid
-                if (start.isBefore(end)) {
-                    // retrieve stock historical data
-                    final HistoricalData historicalData = user.getHistoricalData(symbol, start, end, Integer.parseInt(granularity));
-                    final ArrayList<OHLCRow> rows = historicalData.getRows();
-
-                    // check if historical data was correctly retrieved
-                    if (rows != null) {
-                        // create candle stick chart
-                        final CandlestickChart candlestickChart = ChartingFactory.getCandlestickChart(symbol + " Candlestick",
-                                "Time", "Price", symbol, rows);
-
-                        // create line chart
-                        final ArrayList<LocalDate> dates = new ArrayList<LocalDate>();
-                        final ArrayList<Number> values = new ArrayList<Number>();
-                        for (int i = rows.size()-1; i > 0; i--) {
-                            final LocalDate date = rows.get(i).getDate()
-                                    .toInstant()
-                                    .atZone(ZoneId.systemDefault())
-                                    .toLocalDate();
-                            dates.add(date);
-                            values.add(rows.get(i).getAdjClose());
-                        }
-                        final TimeSeriesChart timeSeriesChart = ChartingFactory.getTimeSeriesChart(symbol + " Adjusted Close", "Time", "Adjusted Close Price", dates, values);
-
-                        // populate charts to be displayed
-                        final ArrayList<Chart> charts = new ArrayList<>();
-                        charts.add(candlestickChart);
-                        charts.add(timeSeriesChart);
-
-                        // display charts
-                        ChartUtil.showCharts(charts, symbol + " Historical Data");
-                        ClientUtil.println("Historical Data opened.\n");
-                    } else {
-                        ClientUtil.println("Historical data not found.\n");
-                    }
-                } else {
-                    ClientUtil.println("Invalid date interval. The start date must be before the end date.\n");
-                }
+                user.viewStock(symbol, startDate, endDate, granularity);
             } catch (final DateTimeParseException e) {
                 ClientUtil.println("Incorrect date format.\n");
             } catch (final NumberFormatException e) {
@@ -425,6 +374,14 @@ public class ClientUser {
      */
     private static void logout() {
         user = user.logout();
+    }
+
+    /**
+     * Quits application.
+     */
+    private static void quit() {
+        user.quit();
+        System.exit(0);
     }
 
     /**

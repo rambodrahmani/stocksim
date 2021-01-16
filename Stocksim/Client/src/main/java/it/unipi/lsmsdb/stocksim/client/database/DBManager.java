@@ -100,6 +100,14 @@ public class DBManager {
     }
 
     /**
+     * Disconnects from all databases.
+     */
+    public void disconnect() {
+        disconnectMongoDB();
+        disconnectCassandraDB();
+    }
+
+    /**
      * Executes an admin login.
      *
      * @param admin admin to be logged in.
@@ -129,9 +137,6 @@ public class DBManager {
             ret = false;
         }
 
-        // disconnect from mongodb
-        disconnectMongoDB();
-
         return ret;
     }
 
@@ -139,12 +144,11 @@ public class DBManager {
      * Checks if historical and summary data is available for the given symbol.
      *
      * @param symbol the ticker symbol to be searched for.
-     * @param disconnect true if disconnection from the db is required.
      *
      * @return true if historical and summary data is available in the db,
      *         false otherwise.
      */
-    public boolean checkTickerExists(final String symbol, final boolean disconnect) throws CQLSessionException {
+    public boolean checkTickerExists(final String symbol) throws CQLSessionException {
         boolean ret = true;
 
         // query symbol available historical data
@@ -153,12 +157,6 @@ public class DBManager {
         // find summary data in mongodb
         final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
         final Document stock = getMongoDB().findOne(Filters.eq("symbol", symbol), mongoDBStocks);
-
-        if (disconnect) {
-            // disconnect from databaes
-            disconnectMongoDB();
-            disconnectCassandraDB();
-        }
 
         // check if historical and summary data was found
         ret = (resultSet != null && stock != null);
@@ -185,9 +183,6 @@ public class DBManager {
         // insert the new admin document in the collection
         ret = getMongoDB().insertOne(assetDocument, stocks);
 
-        // disconnect from mongodb
-        disconnectMongoDB();
-
         return ret;
     }
 
@@ -212,9 +207,6 @@ public class DBManager {
                     (float) historicalData.getOpen(), (float) historicalData.getVolume());
             final ResultSet updateResultSet = getCassandraDB().execute(bounded);
         }
-
-        // disconnect from cassandra DB
-        disconnectCassandraDB();
 
         return ret;
     }
@@ -242,9 +234,6 @@ public class DBManager {
 
         // insert the new admin document in the collection
         ret = getMongoDB().insertOne(adminDocument, admins);
-
-        // disconnect from mongodb
-        disconnectMongoDB();
 
         return ret;
     }
@@ -274,9 +263,6 @@ public class DBManager {
         // try to delete admin credentials from the database
         ret = getMongoDB().deleteOne(loginFilter, admins);
 
-        // disconnect from mongodb
-        disconnectMongoDB();
-
         return ret;
     }
 
@@ -298,9 +284,6 @@ public class DBManager {
 
         // try to delete admin credentials from the database
         ret = getMongoDB().deleteOne(emailFilter, users);
-
-        // disconnect from mongo db
-        disconnectMongoDB();
 
         return ret;
     }
@@ -324,9 +307,6 @@ public class DBManager {
         final Bson emailFilter = eq("email", user.getEmail());
         final Bson checkFilter = Filters.or(usernameFilter, emailFilter);
         final Document userDocument = getMongoDB().findOne(checkFilter, users);
-
-        // disconnect from mongodb
-        disconnectMongoDB();
 
         // check if at least one user was found
         if (userDocument != null) {
@@ -368,9 +348,6 @@ public class DBManager {
 
         // insert the new admin document in the collection
         ret = getMongoDB().insertOne(userDocument, users);
-
-        // disconnect from mongodb
-        disconnectMongoDB();
 
         return ret;
     }
@@ -417,7 +394,7 @@ public class DBManager {
                             final List<String> tickers = portfolio.getList("tickers", String.class);
                             final ArrayList<Stock> stocks = new ArrayList<>();
                             for (final String symbol : tickers) {
-                                final Stock stock = searchStock(symbol, false);
+                                final Stock stock = searchStock(symbol);
                                 stocks.add(stock);
                             }
                             final Portfolio userPortfolio = new Portfolio(name, stocks);
@@ -427,12 +404,6 @@ public class DBManager {
 
                     // set logged in user portfolios
                     user.setPortfolios(userPortfolios);
-
-                    // disconnect from mongodb
-                    disconnectMongoDB();
-
-                    // connection opened by the serchStock invocation
-                    disconnectCassandraDB();
                 } catch (final CQLSessionException e) {
                     e.printStackTrace();
                 }
@@ -455,21 +426,15 @@ public class DBManager {
      * Searches both Cassandra DB and Mongo DB for the given ticker symbol.
      *
      * @param symbol the ticker symbol to be searched for.
-     * @param disconnect true if disconnection from the db is required.
      *
      * @return the retrieved {@link Stock}, null otherwise.
      */
-    public Stock searchStock(final String symbol, final boolean disconnect) throws CQLSessionException {
-        if (checkTickerExists(symbol, disconnect)) {
+    public Stock searchStock(final String symbol) throws CQLSessionException {
+        if (checkTickerExists(symbol)) {
             // find summary data in mongodb
             final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
             final Document stockDocument = getMongoDB().findOne(Filters.eq("symbol", symbol), mongoDBStocks);
             return new Stock(stockDocument);
-        }
-
-        if (disconnect) {
-            // disconnect from mongodb
-            disconnectMongoDB();
         }
 
         return null;
@@ -525,9 +490,6 @@ public class DBManager {
             }
         }
 
-        // disconnect from cassandra db
-        disconnectCassandraDB();
-
         return ret;
     }
 
@@ -564,9 +526,6 @@ public class DBManager {
                 }
             }
         }
-
-        // disconnect from mongodb
-        disconnectMongoDB();
 
         return ret;
     }
@@ -614,7 +573,7 @@ public class DBManager {
         // fetch stock data from mongodb
         final ArrayList<Stock> stocks = new ArrayList<>();
         for (final String symbol : symbols) {
-            final Stock stock = searchStock(symbol, false);
+            final Stock stock = searchStock(symbol);
             if (stock == null) {
                 return null;
             } else {
@@ -632,10 +591,6 @@ public class DBManager {
             // return null if mongodb insertion fails
             return null;
         }
-
-        // disconnect from all dbs: connections opened by the serchStock invocation
-        disconnectMongoDB();
-        disconnectCassandraDB();
 
         return portfolio;
     }

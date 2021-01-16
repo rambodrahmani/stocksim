@@ -85,7 +85,7 @@ public class Admin {
         boolean ret  = true;
 
         // check if symbol is not already present in the db
-        final boolean tickerExists = dbManager.checkTickerExists(symbol, true);
+        final boolean tickerExists = dbManager.checkTickerExists(symbol);
         if (tickerExists) {
             return false;
         }

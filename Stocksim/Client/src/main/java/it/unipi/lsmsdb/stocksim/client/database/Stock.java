@@ -122,10 +122,10 @@ public class Stock {
     public String toString() {
         String ret = "";
 
-        ret += "Short name: " + this.shortName + '\n';
+        ret += "Short Name: " + this.shortName + '\n';
 
         if (isValidString(this.longName)){
-            ret += "longName: "+this.longName+ '\n';
+            ret += "Long Name: "+this.longName+ '\n';
         }
 
         ret += "Symbol: " + this.symbol + '\n';
@@ -154,7 +154,7 @@ public class Stock {
             ret += "Industry: " + this.industry + '\n';
         }
 
-        ret += "Currency:" + this.currency + '\n';
+        ret += "Currency: " + this.currency + '\n';
 
         final String locString = this.location.toString();
         if (isValidString(locString)) {
@@ -162,7 +162,7 @@ public class Stock {
         }
 
         if (isValidString(this.logoURL)) {
-            ret += "Logo URL:" + this.logoURL + '\n';
+            ret += "Logo URL: " + this.logoURL + '\n';
         }
 
         if (isValidString(this.website)) {
