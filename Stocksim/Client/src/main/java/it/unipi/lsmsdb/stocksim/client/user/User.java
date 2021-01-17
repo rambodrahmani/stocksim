@@ -10,6 +10,7 @@ import org.bson.Document;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,12 +109,12 @@ public class User {
      * @param symbol the ticker symbol to be searched;
      * @param startDate start date for the period;
      * @param endDate end date for the period;
-     * @param granularity days granularity.
+     * @param daysInterval time interval days.
      *
      * @return the retrieved {@link HistoricalData}, might be empty.
      */
-    public HistoricalData getHistoricalData(final String symbol, final LocalDate startDate, final LocalDate endDate, final int granularity) throws CQLSessionException {
-        return dbManager.getHistoricalData(symbol, startDate, endDate, granularity);
+    public HistoricalData getHistoricalData(final String symbol, final LocalDate startDate, final LocalDate endDate, final int daysInterval) throws CQLSessionException {
+        return dbManager.getHistoricalData(symbol, startDate, endDate, daysInterval);
     }
 
     /**
@@ -126,7 +127,8 @@ public class User {
      *
      * @throws CQLSessionException
      */
-    public void viewStock(final String symbol, final String startDate, final String endDate, final String granularity) throws CQLSessionException {
+    public void viewStock(final String symbol, final String startDate, final String endDate, final String granularity)
+            throws CQLSessionException, DateTimeParseException, NumberFormatException {
         // get historical data runnable
         final Runnable historicalDataRunnable = () -> {
             try {

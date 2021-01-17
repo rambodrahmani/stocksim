@@ -447,25 +447,20 @@ public class DBManager {
      * @param symbol the ticker symbol to be searched;
      * @param startDate start date for the period;
      * @param endDate end date for the period;
-     * @param granularity days granularity.
+     * @param daysInterval time interval days.
      *
      * @return the retrieved {@link HistoricalData}, might be empty.
      */
-    public HistoricalData getHistoricalData(final String symbol, final LocalDate startDate, final LocalDate endDate, final int granularity) throws CQLSessionException {
+    public HistoricalData getHistoricalData(final String symbol, final LocalDate startDate, final LocalDate endDate, final int daysInterval) throws CQLSessionException {
         final HistoricalData ret = new HistoricalData();
 
-        // retrieve historical data from cassandra using aggregation function
-        final ResultSet resultSet = getCassandraDB().query(
-                "select PeriodParam(" + granularity + ", date, " +
-                        "open, close, high, low, volume, adj_close) " +
-                        "as Period from stocksim.tickers where date < '" + endDate + "' " +
-                        "and date > '" + startDate + "' and symbol='" + symbol + "';"
-        );
+        // retrieve historical data from cassandra using OHLC aggregation function
+        final ResultSet resultSet = getCassandraDB().query(CassandraQueryBuilder.getAggregateOHLCQuery(symbol, startDate, endDate, daysInterval));
 
         // for each row in the retrieved historical data
         for (final Row row : resultSet) {
             // retrieve [date -> map] structure
-            final Map<LocalDate, Map> data = row.getMap("Period", LocalDate.class, Map.class);
+            final Map<LocalDate, Map> data = row.getMap("ohlcaggregation", LocalDate.class, Map.class);
             if (data == null) {
                 continue;
             }
