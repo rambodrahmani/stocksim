@@ -229,22 +229,40 @@ public class ClientUser {
      * Searches for a stock using the ticker symbol.
      */
     private static void searchStock() {
-        // ask for stock ticker symbol
-        ClientUtil.print("Ticker Symbol: ");
-        final String symbol = scanner.nextLine();
+        ClientUtil.printSearchMenu(user);
+        final String searchCommand = scanner.nextLine();
+        try {
+            final SearchMenuAction searchAction = SearchMenuAction.valueOf(searchCommand.toUpperCase().replace("-", "_"));
+            switch (searchAction) {
+                case SYMBOL_SEARCH:
+                    // ask for stock ticker symbol
+                    ClientUtil.print("Ticker Symbol: ");
+                    final String symbol = scanner.nextLine();
 
-        // check input string is valid
-        if (ClientUtil.isValidString(symbol)) {
-            try {
-                final Stock stock = user.searchStock(symbol);
-                if (stock != null) {
-                    ClientUtil.println(stock.toString());
-                } else {
-                    ClientUtil.println("No stock found for the given symbol.\n");
-                }
-            } catch (final CQLSessionException e) {
-                e.printStackTrace();
+                    // check input string is valid
+                    if (ClientUtil.isValidString(symbol)) {
+                        try {
+                            final Stock stock = user.searchStock(symbol);
+                            if (stock != null) {
+                                ClientUtil.println(stock.toString());
+                            } else {
+                                ClientUtil.println("No stock found for the given symbol.\n");
+                            }
+                        } catch (final CQLSessionException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case INDUSTRY_SEARCH:
+                    break;
+                case COUNTRY_SEARCH:
+                    break;
+                default:
+                    ClientUtil.println("Invalid search command.\n");
+                    break;
             }
+        } catch (final IllegalArgumentException e) {
+            ClientUtil.println("Invalid search command.\n");
         }
     }
 
@@ -380,7 +398,9 @@ public class ClientUser {
      * Quits application.
      */
     private static void quit() {
-        user.quit();
+        if (user != null) {
+            user.quit();
+        }
         System.exit(0);
     }
 

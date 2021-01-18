@@ -69,8 +69,9 @@ public class LineChart extends Chart {
 	 *
 	 * @return the {@link JFreeChart} created using the given {@link CategoryDataset}.
 	 */
-	private JFreeChart createChart(final CategoryDataset dataset) {
-		final JFreeChart ret = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
+	protected JFreeChart createChart(final AbstractDataset dataset) {
+		final JFreeChart ret = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, (CategoryDataset)dataset,
+				PlotOrientation.VERTICAL, true, true, false);
 		return ret;
 	}
 
@@ -79,7 +80,7 @@ public class LineChart extends Chart {
 	 */
 	@Override
 	protected JPanel createPanel() {
-		final JFreeChart chart = createChart((CategoryDataset) createDataset());
+		final JFreeChart chart = createChart(createDataset());
 		return new ChartPanel(chart);
 	}
 }

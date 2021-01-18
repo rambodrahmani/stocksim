@@ -3,6 +3,7 @@ package it.unipi.lsmsdb.stocksim.client.charting;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -47,7 +48,7 @@ public class TimeSeriesChart extends Chart {
     /**
      * @return the {@link XYDataset} obtained from the raw data.
      */
-    private XYDataset createDataset( ) {
+    protected AbstractDataset createDataset( ) {
         final SimpleDateFormat standardDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         final TimeSeries series = new TimeSeries("Stock Data");
 
@@ -68,8 +69,9 @@ public class TimeSeriesChart extends Chart {
      *
      * @return the {@link JFreeChart} created using the given {@link XYDataset}.
      */
-    private JFreeChart createChart(final XYDataset dataset) {
-        final JFreeChart ret = ChartFactory.createTimeSeriesChart(this.chartTitle, this.timeAxisLabel, this.valuesAxisLabel, dataset, false, false, false);
+    protected JFreeChart createChart(final AbstractDataset dataset) {
+        final JFreeChart ret = ChartFactory.createTimeSeriesChart(this.chartTitle, this.timeAxisLabel, this.valuesAxisLabel,
+                (XYDataset)dataset, false, false, false);
         return ret;
     }
 

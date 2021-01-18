@@ -1,5 +1,6 @@
 package it.unipi.lsmsdb.stocksim.client.database;
 
+import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 

@@ -5,6 +5,8 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.CandlestickRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.xy.DefaultOHLCDataset;
 import org.jfree.data.xy.OHLCDataItem;
 import org.jfree.data.xy.OHLCDataset;
@@ -18,8 +20,11 @@ import java.util.ArrayList;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class CandlestickChart extends Chart {
+	// stock ticker symbol
+	final String stockSymbol;
+
 	// historical data
-	private final OHLCDataset dataset;
+	private final ArrayList<OHLCRow> dataRows;
 
 	// time axis label string
 	private final String timeAxisLabel;
@@ -41,7 +46,15 @@ public class CandlestickChart extends Chart {
 		this.chartTitle = chartTitle;
 		this.timeAxisLabel = timeAxisLabel;
 		this.valuesAxisLabel = valuesAxisLabel;
-		this.dataset = new DefaultOHLCDataset(stockSymbol, dataRows.toArray(new OHLCDataItem[0]));
+		this.stockSymbol = stockSymbol;
+		this.dataRows = dataRows;
+	}
+
+	/**
+	 * @return the {@link DefaultOHLCDataset} obtained from the raw data.
+	 */
+	protected AbstractDataset createDataset() {
+		return new DefaultOHLCDataset(this.stockSymbol, this.dataRows.toArray(new OHLCDataItem[0]));
 	}
 
 	/**
@@ -49,9 +62,9 @@ public class CandlestickChart extends Chart {
 	 *
 	 * @return the {@link JFreeChart} created using the given {@link OHLCDataset}.
 	 */
-	private JFreeChart createChart(final OHLCDataset dataset) {
+	protected JFreeChart createChart(final AbstractDataset dataset) {
 		final JFreeChart ret = ChartFactory.createCandlestickChart(this.chartTitle, this.timeAxisLabel,
-				this.valuesAxisLabel, dataset, true);
+				this.valuesAxisLabel, (OHLCDataset)dataset, true);
 		// adjusting candles width
 		final XYPlot plot = ret.getXYPlot();
 		final CandlestickRenderer renderer = (CandlestickRenderer) plot.getRenderer();
@@ -65,7 +78,7 @@ public class CandlestickChart extends Chart {
 	 */
 	@Override
 	protected JPanel createPanel() {
-		final JFreeChart jFreeChart = createChart(this.dataset);
+		final JFreeChart jFreeChart = createChart(createDataset());
 		return new ChartPanel(jFreeChart);
 	}
 }

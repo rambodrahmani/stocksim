@@ -76,7 +76,7 @@ public class DBManager {
     }
 
     /**
-     * @return Mongo DB shared instance;
+     * @return Mongo DB shared instance.
      */
     private MongoDB getMongoDB() {
         if (mongoDB == null) {
@@ -393,8 +393,8 @@ public class DBManager {
                             final String name = portfolio.getString("name");
                             final List<String> tickers = portfolio.getList("tickers", String.class);
                             final ArrayList<Stock> stocks = new ArrayList<>();
-                            for (final String symbol : tickers) {
-                                final Stock stock = searchStock(symbol);
+                            for (final String ticker : tickers) {
+                                final Stock stock = searchStock(ticker);
                                 stocks.add(stock);
                             }
                             final Portfolio userPortfolio = new Portfolio(name, stocks);

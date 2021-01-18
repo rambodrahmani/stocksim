@@ -84,22 +84,18 @@ public class Main {
         }
 
         // aggregate examples
-        final Bson equity= eq("quoteType", "EQUITY"); //filter(s)
+        final Bson equity = eq("quoteType", "EQUITY"); //filter(s)
         // name of the field projected, field to accumulate
         // type of accumulation (sum, avg...)
         final BsonField marketCapAccumulator=Accumulators.sum("totalCap","$marketCap");
-        AggregateIterable<Document> aggregateList =
-                                            // grouping attribute
-                dbManager.aggregate(equity, "sector", marketCapAccumulator, collection1);
-        for (Document document : aggregateList) {
+        AggregateIterable<Document> aggregateList = dbManager.aggregate(equity, "sector", marketCapAccumulator, collection1);
+        for (final Document document : aggregateList) {
             System.out.println(document);
         }
         // avg example with nested attribute
         final BsonField PEAccumulator=Accumulators.avg("avgPE","$trailingPE");
-        aggregateList =
-                dbManager.aggregate(equity, "location.country",
-                        PEAccumulator, collection1);
-        for (Document document : aggregateList) {
+        aggregateList = dbManager.aggregate(equity, "location.country", PEAccumulator, collection1);
+        for (final Document document : aggregateList) {
             System.out.println(document);
         }
     }

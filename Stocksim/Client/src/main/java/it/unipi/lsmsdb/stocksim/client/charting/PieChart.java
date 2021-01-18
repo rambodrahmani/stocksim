@@ -57,8 +57,8 @@ public class PieChart extends Chart {
 	 *
 	 * @return the {@link JFreeChart} created using the given {@link PieDataset}.
 	 */
-	private JFreeChart createChart(final PieDataset dataset) {
-		final JFreeChart pieChart = ChartFactory.createPieChart(this.chartTitle, dataset, true, true, false);
+	protected JFreeChart createChart(final AbstractDataset dataset) {
+		final JFreeChart pieChart = ChartFactory.createPieChart(this.chartTitle, (PieDataset)dataset, true, true, false);
 		return pieChart;
 	}
 
@@ -67,7 +67,7 @@ public class PieChart extends Chart {
 	 */
 	@Override
 	protected JPanel createPanel() {
-		final JFreeChart chart = createChart((PieDataset) createDataset());
+		final JFreeChart chart = createChart(createDataset());
 		return new ChartPanel(chart);
 	}
 }

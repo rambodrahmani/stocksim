@@ -1,5 +1,9 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.AbstractDataset;
+import org.jfree.data.xy.XYDataset;
+
 import javax.swing.*;
 
 /**
@@ -11,6 +15,12 @@ public abstract class Chart {
 	// title of the chart window
 	protected String chartTitle;
 
-	// JPanel for the chart
+	// creates the dataset
+	protected abstract AbstractDataset createDataset();
+
+	// creates the JFreeChart using the dataset
+	protected abstract JFreeChart createChart(final AbstractDataset dataset);
+
+	// creates the JPanel with the chart
 	protected abstract JPanel createPanel();
 }

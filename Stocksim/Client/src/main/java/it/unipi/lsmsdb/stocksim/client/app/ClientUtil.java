@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import it.unipi.lsmsdb.stocksim.client.admin.AdminMenuAction;
+import it.unipi.lsmsdb.stocksim.client.user.SearchMenuAction;
 import it.unipi.lsmsdb.stocksim.client.user.User;
 import it.unipi.lsmsdb.stocksim.client.user.UserMenuAction;
 import it.unipi.lsmsdb.stocksim.lib.util.Util;
@@ -74,6 +75,17 @@ public class ClientUtil extends Util {
         print(String.format("%-18s %5s %-40s%n", UserMenuAction.DELETE_PORTFOLIO.getActionName(), " ", UserMenuAction.DELETE_PORTFOLIO.getActionDescription()));
         print(String.format("%-18s %5s %-40s%n", UserMenuAction.LOGOUT.getActionName(), " ", UserMenuAction.LOGOUT.getActionDescription()));
         print(String.format("%-18s %5s %-40s%n", UserMenuAction.QUIT.getActionName(), " ", UserMenuAction.QUIT.getActionDescription()));
+        print("> ");
+    }
+
+    /**
+     * Prints the main menu for search functionalities.
+     */
+    public final static void printSearchMenu(final User user) {
+        print("[" + user.getUsername() + "] Available Search Commands:\n");
+        print(String.format("%-18s %5s %-40s%n", SearchMenuAction.SYMBOL_SEARCH.getActionName(), " ", SearchMenuAction.SYMBOL_SEARCH.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", SearchMenuAction.INDUSTRY_SEARCH.getActionName(), " ", SearchMenuAction.INDUSTRY_SEARCH.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", SearchMenuAction.COUNTRY_SEARCH.getActionName(), " ", SearchMenuAction.COUNTRY_SEARCH.getActionDescription()));
         print("> ");
     }
 
