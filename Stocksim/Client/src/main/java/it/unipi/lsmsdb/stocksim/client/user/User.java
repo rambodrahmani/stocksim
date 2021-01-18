@@ -103,6 +103,10 @@ public class User {
         return dbManager.searchStock(symbol);
     }
 
+    public void showIndustriesMarketCap() {
+        dbManager.showIndustriesMarketCap();
+    }
+
     /**
      * Retrieves the {@link HistoricalData} for the given stock symbol, using {@link DBManager}.
      *

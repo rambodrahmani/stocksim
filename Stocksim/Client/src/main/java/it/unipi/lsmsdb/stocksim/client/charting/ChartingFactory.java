@@ -2,6 +2,7 @@ package it.unipi.lsmsdb.stocksim.client.charting;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * JFreeChart Charts factory.
@@ -72,8 +73,9 @@ public class ChartingFactory {
 		return ret;
 	}
 
-	public static BarChart getBarChart(final String chartTitle, final String categoryAxisLabel, final String valueAxisLabel) {
-		final BarChart ret = new BarChart(chartTitle, categoryAxisLabel, valueAxisLabel);
+	public static BarChart getBarChart(final String chartTitle, final String categoryAxisLabel, final String valueAxisLabel,
+									   final ArrayList<String> categories, final ArrayList<String> bars, final ArrayList<List<Double>> values) {
+		final BarChart ret = new BarChart(chartTitle, categoryAxisLabel, valueAxisLabel, categories, bars, values);
 		return ret;
 	}
 }

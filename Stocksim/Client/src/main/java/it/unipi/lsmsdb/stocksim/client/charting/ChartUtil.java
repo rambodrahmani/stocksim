@@ -5,12 +5,11 @@ import org.jfree.chart.ui.UIUtils;
 import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Utility class for {@link org.jfree.chart.JFreeChart}.
@@ -117,7 +116,26 @@ public class ChartUtil {
                     "Price", dates, values);
 
             // BAR CHART
-            final BarChart barChart = ChartingFactory.getBarChart("Bar Chart di Prova", "Category", "Score");
+            final ArrayList<String> categories = new ArrayList<>();
+            categories.add("Market Capitalization");
+            final ArrayList<String> bars = new ArrayList<>();
+            bars.add("AAPL");
+            bars.add("MSFT");
+            bars.add("TSLA");
+            bars.add("FB");
+            bars.add("ADBE");
+            bars.add("ALLO");
+            bars.add("PICO");
+            final ArrayList<List<Double>> barChartValues = new ArrayList<>();
+            barChartValues.add(Arrays.asList(1.0));
+            barChartValues.add(Arrays.asList(2.0));
+            barChartValues.add(Arrays.asList(3.0));
+            barChartValues.add(Arrays.asList(4.0));
+            barChartValues.add(Arrays.asList(5.0));
+            barChartValues.add(Arrays.asList(6.0));
+            barChartValues.add(Arrays.asList(7.0));
+            final BarChart barChart = ChartingFactory.getBarChart("Bar Chart di Prova", "Category", "Score",
+                    categories, bars, barChartValues);
 
             final ArrayList<Chart> charts = new ArrayList<>();
             if (pieChart != null) {

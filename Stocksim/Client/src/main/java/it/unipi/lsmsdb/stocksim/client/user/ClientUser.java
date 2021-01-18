@@ -254,6 +254,7 @@ public class ClientUser {
                     }
                     break;
                 case INDUSTRY_SEARCH:
+                    industrySearch();
                     break;
                 case COUNTRY_SEARCH:
                     break;
@@ -263,6 +264,38 @@ public class ClientUser {
             }
         } catch (final IllegalArgumentException e) {
             ClientUtil.println("Invalid search command.\n");
+        }
+    }
+
+    /**
+     *
+     */
+    private static void industrySearch() {
+        // show industry pipeline aggregation bar chart
+
+        // ask for stock industry name
+        ClientUtil.print("Industry Name: ");
+        final String industry = scanner.nextLine();
+
+        // check input string is valid
+        if (ClientUtil.isValidString(industry)) {
+
+        }
+    }
+
+    /**
+     *
+     */
+    private static void countrySearch() {
+        // show country pipeline aggregation bar chart
+
+        // ask for stock industry name
+        ClientUtil.print("Country Name: ");
+        final String country = scanner.nextLine();
+
+        // check input string is valid
+        if (ClientUtil.isValidString(country)) {
+
         }
     }
 

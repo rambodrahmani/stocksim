@@ -440,6 +440,10 @@ public class DBManager {
         return null;
     }
 
+    public void showIndustriesMarketCap() {
+
+    }
+
     /**
      * Retrieves the {@link HistoricalData} for the given stock symbol, using the given
      * period with given days granularity.

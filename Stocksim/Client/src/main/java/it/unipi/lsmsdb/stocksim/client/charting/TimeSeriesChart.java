@@ -36,9 +36,9 @@ import java.util.Date;
     /**
      * Default constructor.
      *
-     * @param chartTitle the chart for the {@link JFreeChart}.
-     * @param timeAxisLabel
-     * @param valuesAxisLabel
+     * @param chartTitle the title for the {@link JFreeChart};
+     * @param timeAxisLabel {@link org.jfree.chart.plot.XYPlot} time axis label;
+     * @param valuesAxisLabel {@link org.jfree.chart.plot.XYPlot} values axis label;
      */
     protected TimeSeriesChart(final String chartTitle, final String timeAxisLabel, final String valuesAxisLabel,
                            final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) {
