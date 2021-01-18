@@ -84,7 +84,7 @@ public class ClientUtil extends Util {
     public final static void printSearchMenu(final User user) {
         print("[" + user.getUsername() + "] Available Search Commands:\n");
         print(String.format("%-18s %5s %-40s%n", SearchMenuAction.SYMBOL_SEARCH.getActionName(), " ", SearchMenuAction.SYMBOL_SEARCH.getActionDescription()));
-        print(String.format("%-18s %5s %-40s%n", SearchMenuAction.INDUSTRY_SEARCH.getActionName(), " ", SearchMenuAction.INDUSTRY_SEARCH.getActionDescription()));
+        print(String.format("%-18s %5s %-40s%n", SearchMenuAction.SECTOR_SEARCH.getActionName(), " ", SearchMenuAction.SECTOR_SEARCH.getActionDescription()));
         print(String.format("%-18s %5s %-40s%n", SearchMenuAction.COUNTRY_SEARCH.getActionName(), " ", SearchMenuAction.COUNTRY_SEARCH.getActionDescription()));
         print("> ");
     }

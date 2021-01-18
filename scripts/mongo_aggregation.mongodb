@@ -1,22 +1,55 @@
 use stocksim;
-db.stocks.find();
+
+
+// find a snapshot of the total capitalization of each industry
 db.stocks.aggregate([
-    {$match:{$and:[
-        {quoteType:"EQUITY"},
-        {sector:{$ne:null}},
-        {sector:{$ne:""}}]
-        }},
-    {$group:{
-        _id:"$sector", total:{$sum:"$marketCap"}}
-    }]);
-    
+    {
+        $match: {
+                    $and: [
+                        { industry: {$ne:null} }, { industry: {$ne:""} }
+                    ]
+                }
+    },
+    {
+        $group: {_id: "$industry", marketCap: {$sum:"$marketCap"}, avgPE: {$avg:"$trailingPE"}}
+    }
+]);
+
+
+// find a snapshot of the total capitalization of each market sector
 db.stocks.aggregate([
-    {$match:
-        {quoteType:"EQUITY"}
-       }   ,
-    {$group:{
-        _id:"$location.country", avgPE:{$avg:"$trailingPE"}}
-    }]);
+    {
+        $match: {
+                    $and: [
+                        { sector: {$ne:null} }, { sector: {$ne:""} }
+                    ]
+                }
+    },
+    {
+        $group: {_id: "$sector", marketCap: {$sum:"$marketCap"}, avgPE: {$avg:"$trailingPE"}}
+    }
+]);
 
 
+// find a snapshot of the total capitalization of each country
+db.stocks.aggregate([
+    {
+        $match: {}
+    },
+    {
+        $group: {_id: "$location.country", marketCap: {$sum: "$marketCap"}, avgPE: {$avg:"$trailingPE"}}
+    }
+]);
 
+
+// find the composition of a portfolio in term of industry
+db.stocks.aggregate(
+    {
+        $match: {
+            symbol: { $in:["RACE", "AAPL", "MSFT", "TSLA", "FB", "ADBE", "ALLO", "PICO", "ODC", "USTB", "DLB", "BGX", "SRL", "EAST", "NSSC"] }
+        }
+    }, 
+    {
+        $group:{_id:"$industry", total:{$sum:1}, symbols:{ $push: '$symbol' }}
+    }
+);

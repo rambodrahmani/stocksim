@@ -103,8 +103,11 @@ public class User {
         return dbManager.searchStock(symbol);
     }
 
-    public void showIndustriesMarketCap() {
-        dbManager.showIndustriesMarketCap();
+    /**
+     * Shows industries market capitalization {@link BarChart}.
+     */
+    public void showSectorsMarketCap() {
+        dbManager.showSectorsMarketCap();
     }
 
     /**

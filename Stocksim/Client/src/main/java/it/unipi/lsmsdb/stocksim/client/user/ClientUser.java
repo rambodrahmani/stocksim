@@ -253,8 +253,8 @@ public class ClientUser {
                         }
                     }
                     break;
-                case INDUSTRY_SEARCH:
-                    industrySearch();
+                case SECTOR_SEARCH:
+                    sectorSearch();
                     break;
                 case COUNTRY_SEARCH:
                     break;
@@ -268,17 +268,19 @@ public class ClientUser {
     }
 
     /**
-     *
+     * Shows sectors market capitalization {@link BarChart} and asks for
+     * the sector name to execute the search.
      */
-    private static void industrySearch() {
-        // show industry pipeline aggregation bar chart
+    private static void sectorSearch() {
+        // show sector pipeline aggregation bar chart
+        user.showSectorsMarketCap();
 
-        // ask for stock industry name
-        ClientUtil.print("Industry Name: ");
-        final String industry = scanner.nextLine();
+        // ask for sector name
+        ClientUtil.print("Sector Name: ");
+        final String sector = scanner.nextLine();
 
         // check input string is valid
-        if (ClientUtil.isValidString(industry)) {
+        if (ClientUtil.isValidString(sector)) {
 
         }
     }
@@ -289,7 +291,7 @@ public class ClientUser {
     private static void countrySearch() {
         // show country pipeline aggregation bar chart
 
-        // ask for stock industry name
+        // ask for country name
         ClientUtil.print("Country Name: ");
         final String country = scanner.nextLine();
 

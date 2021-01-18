@@ -4,11 +4,16 @@ import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.lsmsdb.stocksim.client.admin.Admin;
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
+import it.unipi.lsmsdb.stocksim.client.charting.BarChart;
 import it.unipi.lsmsdb.stocksim.client.charting.HistoricalData;
 import it.unipi.lsmsdb.stocksim.client.user.User;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
@@ -440,8 +445,20 @@ public class DBManager {
         return null;
     }
 
-    public void showIndustriesMarketCap() {
-
+    /**
+     * Shows industries market capitalization {@link BarChart}.
+     */
+    public void showSectorsMarketCap() {
+        final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+        final AggregateIterable<Document> industriesAggregationIterable = stocks.aggregate(Arrays.asList(
+                Aggregates.match(Filters.and(Filters.ne("sector", null), Filters.ne("sector", ""))),
+                Aggregates.group("$sector", Accumulators.sum("marketCap", "$marketCap"), Accumulators.avg("avgPE", "$trailingPE"))
+        ));
+        final MongoCursor<Document> iterator = industriesAggregationIterable.iterator();
+        while (iterator.hasNext()) {
+            final Document next = iterator.next();
+            ClientUtil.println(next.toString());
+        }
     }
 
     /**

@@ -7,7 +7,7 @@ package it.unipi.lsmsdb.stocksim.client.user;
  */
 public enum SearchMenuAction {
     SYMBOL_SEARCH("symbol-search", "search for a stock ticker using its ticker."),
-    INDUSTRY_SEARCH("industry-search", "search for a stock ticker using the industry sector."),
+    SECTOR_SEARCH("sector-search", "search for a stock ticker using the sector."),
     COUNTRY_SEARCH("country-search", "search for a stock ticker using the country.");
 
     // action name for the main menu
