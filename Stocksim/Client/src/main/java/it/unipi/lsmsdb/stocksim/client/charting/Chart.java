@@ -2,7 +2,6 @@ package it.unipi.lsmsdb.stocksim.client.charting;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.AbstractDataset;
-import org.jfree.data.xy.XYDataset;
 
 import javax.swing.*;
 

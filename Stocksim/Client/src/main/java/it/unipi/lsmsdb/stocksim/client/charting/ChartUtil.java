@@ -18,6 +18,12 @@ import java.util.Random;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class ChartUtil {
+    /**
+     * Opens a {@link JFrame} containing the given {@link Chart} in a {@link JSplitPane}.
+     *
+     * @param charts array of {@link Chart} to be displayed.
+     * @param winTitle {@link JFrame} window title.
+     */
     public final static void showCharts(final ArrayList<Chart> charts, final String winTitle) {
         // application frame where to show the charts
         final JFrame jFrame = new JFrame(winTitle);
@@ -110,6 +116,9 @@ public class ChartUtil {
             final TimeSeriesChart timeSeriesChart = ChartingFactory.getTimeSeriesChart("Time Series di prova", "Time",
                     "Price", dates, values);
 
+            // BAR CHART
+            final BarChart barChart = ChartingFactory.getBarChart("Bar Chart di Prova", "Category", "Score");
+
             final ArrayList<Chart> charts = new ArrayList<>();
             if (pieChart != null) {
                 //charts.add(pieChart);
@@ -118,12 +127,14 @@ public class ChartUtil {
                 //charts.add(lineChart);
             }
             if (candlestickChart != null) {
-                charts.add(candlestickChart);
+                //charts.add(candlestickChart);
             }
             if (timeSeriesChart != null) {
                 charts.add(timeSeriesChart);
             }
-
+            if (barChart != null) {
+                charts.add(barChart);
+            }
 
             ChartUtil.showCharts(charts, "Developer Harness Test");
         } catch (final ParseException | IllegalArgumentException e) {

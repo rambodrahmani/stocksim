@@ -11,6 +11,7 @@ import java.util.Date;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class OHLCRow extends OHLCDataItem {
+	// additional float value to save the adjusted close value
 	final Float adjClose;
 
 	/**

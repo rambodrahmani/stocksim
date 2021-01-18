@@ -16,7 +16,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TimeSeriesChart extends Chart {
+/**
+ * Time series Chart implementation using {@link JFreeChart}.
+ *
+ * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
+ */public class TimeSeriesChart extends Chart {
     // time axis label string
     private final String timeAxisLabel;
 
@@ -36,7 +40,7 @@ public class TimeSeriesChart extends Chart {
      * @param timeAxisLabel
      * @param valuesAxisLabel
      */
-    public TimeSeriesChart(final String chartTitle, final String timeAxisLabel, final String valuesAxisLabel,
+    protected TimeSeriesChart(final String chartTitle, final String timeAxisLabel, final String valuesAxisLabel,
                            final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) {
         this.chartTitle = chartTitle;
         this.timeAxisLabel = timeAxisLabel;

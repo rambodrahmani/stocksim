@@ -55,9 +55,25 @@ public class ChartingFactory {
 		return ret;
 	};
 
+	/**
+	 * Creates and returns a time series chart with the given parameters.
+	 *
+	 * @param chartTitle the {@link org.jfree.chart.JFreeChart} title;
+	 * @param timeAxisLabel {@link org.jfree.chart.plot.XYPlot} time axis label;
+	 * @param valuesAxisLabel {@link org.jfree.chart.plot.XYPlot} values axis label;
+	 * @param xAxisData {@link org.jfree.chart.plot.XYPlot} time axis data;
+	 * @param yAxisData {@link org.jfree.chart.plot.XYPlot} vaues axis data.
+	 *
+	 * @return instance of the created {@link TimeSeriesChart}.
+	 */
 	public static TimeSeriesChart getTimeSeriesChart(final String chartTitle, final String timeAxisLabel, final String valuesAxisLabel,
 													 final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) {
 		final TimeSeriesChart ret = new TimeSeriesChart(chartTitle, timeAxisLabel, valuesAxisLabel, xAxisData, yAxisData);
+		return ret;
+	}
+
+	public static BarChart getBarChart(final String chartTitle, final String categoryAxisLabel, final String valueAxisLabel) {
+		final BarChart ret = new BarChart(chartTitle, categoryAxisLabel, valueAxisLabel);
 		return ret;
 	}
 }

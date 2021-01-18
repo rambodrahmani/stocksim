@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 /**
- * PieChart implementation.
+ * Pie Chart implementation using {@link JFreeChart}.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
@@ -29,7 +29,7 @@ public class PieChart extends Chart {
 	 * @param names list of the names of the slices that make up the pie;
 	 * @param values list of the values of the slices that make up the pie.
 	 */
-	public PieChart(final String chartTitle, final ArrayList<String> names, final ArrayList<Number> values) throws IllegalArgumentException {
+	protected PieChart(final String chartTitle, final ArrayList<String> names, final ArrayList<Number> values) throws IllegalArgumentException {
 		if (names.size() != values.size()) {
 			throw new IllegalArgumentException("Slices names and values must have the same length.");
 		}

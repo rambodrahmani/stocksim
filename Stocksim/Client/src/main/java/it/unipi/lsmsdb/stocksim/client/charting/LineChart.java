@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * Line Chart implementation using a {@link JFreeChart}.
+ * Line Chart implementation using {@link JFreeChart}.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
@@ -39,8 +39,8 @@ public class LineChart extends Chart {
 	 * @param xAxisData data for the X axis;
 	 * @param yAxisData data for the Y axis.
 	 */
-	public LineChart(final String chartTitle, final String xAxisLabel, final String yAxisLabel,
-					 final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) throws IllegalArgumentException {
+	protected LineChart(final String chartTitle, final String xAxisLabel, final String yAxisLabel,
+					    final ArrayList<LocalDate> xAxisData, final ArrayList<Number> yAxisData) throws IllegalArgumentException {
 		if (xAxisData.size() != yAxisData.size()) {
 			throw new IllegalArgumentException("xAxisData and yAxisData must have the same length");
 		}

@@ -5,7 +5,6 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.CandlestickRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.xy.DefaultOHLCDataset;
 import org.jfree.data.xy.OHLCDataItem;
@@ -15,7 +14,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 /**
- * Candlestick Chart implementation using a {@link JFreeChart}.
+ * Candlestick Chart implementation using {@link JFreeChart}.
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
@@ -41,7 +40,7 @@ public class CandlestickChart extends Chart {
 	 * @param stockSymbol candle stick chart stock symbol;
 	 * @param dataRows historical data.
 	 */
-	public CandlestickChart(final String chartTitle, final String timeAxisLabel, final String valuesAxisLabel,
+	protected CandlestickChart(final String chartTitle, final String timeAxisLabel, final String valuesAxisLabel,
 							final String stockSymbol, final ArrayList<OHLCRow> dataRows) {
 		this.chartTitle = chartTitle;
 		this.timeAxisLabel = timeAxisLabel;
