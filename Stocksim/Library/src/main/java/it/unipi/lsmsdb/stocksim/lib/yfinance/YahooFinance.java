@@ -312,45 +312,49 @@ public class YahooFinance {
 
         // fetch historical data
         final JSONObject historicalData = new JSONObject(IOUtils.toString(new URL(getV8URL()), StandardCharsets.UTF_8));
-        final JSONArray timestamp = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONArray("timestamp");
-        final JSONObject quote = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("quote").getJSONObject(0);
-        final JSONArray adjclose = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("adjclose").getJSONObject(0).getJSONArray("adjclose");
 
-        for (int i = 0 ; i < timestamp.length(); i++) {
-            final int epochSecs = timestamp.getInt(i);
-            final LocalDate updateDate = Instant.ofEpochSecond(epochSecs).atZone(ZoneId.systemDefault()).toLocalDate();
+        final JSONObject result = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0);
+        if (result.has("timestamp")) {
+            final JSONArray timestamp = result.getJSONArray("timestamp");
+            final JSONObject quote = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("quote").getJSONObject(0);
+            final JSONArray adjclose = historicalData.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("indicators").getJSONArray("adjclose").getJSONObject(0).getJSONArray("adjclose");
 
-            double adj_close = 0;
-            if (!adjclose.isNull(i)) {
-                adj_close = adjclose.getDouble(i);
+            for (int i = 0 ; i < timestamp.length(); i++) {
+                final int epochSecs = timestamp.getInt(i);
+                final LocalDate updateDate = Instant.ofEpochSecond(epochSecs).atZone(ZoneId.systemDefault()).toLocalDate();
+
+                double adj_close = 0;
+                if (!adjclose.isNull(i)) {
+                    adj_close = adjclose.getDouble(i);
+                }
+
+                double close = 0;
+                if (!quote.getJSONArray("close").isNull(i)) {
+                    close = quote.getJSONArray("close").getDouble(i);
+                }
+
+                double high = 0;
+                if (!quote.getJSONArray("high").isNull(i)) {
+                    high = quote.getJSONArray("high").getDouble(i);
+                }
+
+                double low = 0;
+                if (!quote.getJSONArray("low").isNull(i)) {
+                    low = quote.getJSONArray("low").getDouble(i);
+                }
+
+                double open = 0;
+                if (!quote.getJSONArray("open").isNull(i)) {
+                    open = quote.getJSONArray("open").getDouble(i);
+                }
+
+                double volume = 0;
+                if (!quote.getJSONArray("volume").isNull(i)) {
+                    volume = quote.getJSONArray("volume").getDouble(i);
+                }
+
+                ret.add(new YFHistoricalData(updateDate, adj_close, close, high, low, open, volume));
             }
-
-            double close = 0;
-            if (!quote.getJSONArray("close").isNull(i)) {
-                close = quote.getJSONArray("close").getDouble(i);
-            }
-
-            double high = 0;
-            if (!quote.getJSONArray("high").isNull(i)) {
-                high = quote.getJSONArray("high").getDouble(i);
-            }
-
-            double low = 0;
-            if (!quote.getJSONArray("low").isNull(i)) {
-                low = quote.getJSONArray("low").getDouble(i);
-            }
-
-            double open = 0;
-            if (!quote.getJSONArray("open").isNull(i)) {
-                open = quote.getJSONArray("open").getDouble(i);
-            }
-
-            double volume = 0;
-            if (!quote.getJSONArray("volume").isNull(i)) {
-                volume = quote.getJSONArray("volume").getDouble(i);
-            }
-
-            ret.add(new YFHistoricalData(updateDate, adj_close, close, high, low, open, volume));
         }
 
         return ret;

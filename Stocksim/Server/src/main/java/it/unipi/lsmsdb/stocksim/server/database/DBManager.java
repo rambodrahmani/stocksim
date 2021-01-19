@@ -242,12 +242,16 @@ public class DBManager {
                             // update historical data
                             ServerUtil.getLogger().info("Request URL: " + yahooFinance.getV8URL());
                             final ArrayList<YFHistoricalData> yfHistoricalData = yahooFinance.getHistoricalData();
-                            for (final YFHistoricalData historicalData : yfHistoricalData) {
-                                final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(CassandraQueryBuilder.getUpdateInsertQuery());
-                                final BoundStatement bounded = preparedStatement.bind(symbol, historicalData.getDate(), (float) historicalData.getAdjClose(),
-                                        (float) historicalData.getClose(), (float) historicalData.getHigh(), (float) historicalData.getLow(),
-                                        (float) historicalData.getOpen(), (float) historicalData.getVolume());
-                                getCassandraDB().execute(bounded);
+                            if (yfHistoricalData.size() > 0) {
+                                for (final YFHistoricalData historicalData : yfHistoricalData) {
+                                    final PreparedStatement preparedStatement = getCassandraDB().prepareStatement(CassandraQueryBuilder.getUpdateInsertQuery());
+                                    final BoundStatement bounded = preparedStatement.bind(symbol, historicalData.getDate(), (float) historicalData.getAdjClose(),
+                                            (float) historicalData.getClose(), (float) historicalData.getHigh(), (float) historicalData.getLow(),
+                                            (float) historicalData.getOpen(), (float) historicalData.getVolume());
+                                    getCassandraDB().execute(bounded);
+                                }
+                            } else {
+                                ServerUtil.println("No new historical data available on Yahoo Finance.");
                             }
 
                             ServerUtil.println("Historical data updated for " + symbol + ". Moving on.\n");
