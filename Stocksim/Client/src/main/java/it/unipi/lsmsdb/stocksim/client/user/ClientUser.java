@@ -258,6 +258,7 @@ public class ClientUser {
                     sectorSearch();
                     break;
                 case COUNTRY_SEARCH:
+                    countrySearch();
                     break;
                 default:
                     ClientUtil.println("Invalid search command.\n");
@@ -265,6 +266,7 @@ public class ClientUser {
             }
         } catch (final IllegalArgumentException e) {
             ClientUtil.println("Invalid search command.\n");
+            e.printStackTrace();
         }
     }
 
@@ -282,20 +284,16 @@ public class ClientUser {
 
         // check input string is valid
         if (ClientUtil.isValidString(sector)) {
-            try {
-                final ArrayList<Document> documents = user.searchSector(sector);
-                if (documents.size() > 0) {
-                    ClientUtil.print("[");
-                    for (final Document stockDocument : documents) {
-                        final Stock stock = new Stock(stockDocument);
-                        ClientUtil.print(" " + stock.getSymbol() + ",");
-                    }
-                    ClientUtil.println(" ]\n");
-                } else {
-                    ClientUtil.print("No stock found for the given sector.\n");
+            final ArrayList<Document> documents = user.searchSector(sector);
+            if (documents.size() > 0) {
+                ClientUtil.print("[");
+                for (final Document stockDocument : documents) {
+                    final Stock stock = new Stock(stockDocument);
+                    ClientUtil.print(" " + stock.getSymbol() + ",");
                 }
-            } catch (final CQLSessionException e) {
-                e.printStackTrace();
+                ClientUtil.println(" ]\n");
+            } else {
+                ClientUtil.print("No stock found for the given sector.\n");
             }
         }
     }
@@ -305,6 +303,7 @@ public class ClientUser {
      */
     private static void countrySearch() {
         // show country pipeline aggregation bar chart
+        user.showCountriesAggregation();
 
         // ask for country name
         ClientUtil.print("Country Name: ");
@@ -312,7 +311,17 @@ public class ClientUser {
 
         // check input string is valid
         if (ClientUtil.isValidString(country)) {
-
+            final ArrayList<Document> documents = user.searchCountry(country);
+            if (documents.size() > 0) {
+                ClientUtil.print("[");
+                for (final Document stockDocument : documents) {
+                    final Stock stock = new Stock(stockDocument);
+                    ClientUtil.print(" " + stock.getSymbol() + ",");
+                }
+                ClientUtil.println(" ]\n");
+            } else {
+                ClientUtil.print("No stock found for the given sector.\n");
+            }
         }
     }
 

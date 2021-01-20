@@ -446,15 +446,22 @@ public class DBManager {
     }
 
     /**
-     * Shows industries market capitalization {@link BarChart}.
+     * Retrieves industries market capitalization and trailing P/E aggregation.
      */
-    public ArrayList<SectorAggregation> showSectorsAggregation() {
+    public ArrayList<SectorAggregation> getSectorsAggregation() {
         final ArrayList<SectorAggregation> ret = new ArrayList<>();
 
         final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
         final AggregateIterable<Document> industriesAggregationIterable = stocks.aggregate(Arrays.asList(
                 Aggregates.match(Filters.and(Filters.ne("sector", null), Filters.ne("sector", ""))),
-                Aggregates.group("$sector", Accumulators.sum("marketCapitalization", "$marketCap"), Accumulators.avg("avgTrailingPE", "$trailingPE"))
+                Aggregates.group("$sector", Accumulators.sum("marketCapitalization", "$marketCap"), Accumulators.avg("avgTrailingPE", "$trailingPE")),
+                Aggregates.match(
+                        Filters.and(
+                                Filters.ne("_id", null), Filters.ne("_id", ""),
+                                Filters.ne("marketCapitalization", null), Filters.ne("marketCapitalization", ""),
+                                Filters.ne("avgTrailingPE", null), Filters.ne("avgTrailingPE", "")
+                        )
+                )
         ));
 
         // iterate mongo aggregation results
@@ -472,16 +479,62 @@ public class DBManager {
     }
 
     /**
+     * Retrieves countries market capitalization and trailing P/E aggregation.
+     */
+    public ArrayList<CountryAggregation> getCountriesAggregation() {
+        final ArrayList<CountryAggregation> ret = new ArrayList<>();
+
+        final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+        final AggregateIterable<Document> industriesAggregationIterable = stocks.aggregate(Arrays.asList(
+                Aggregates.group("$location.country", Accumulators.sum("marketCapitalization", "$marketCap"), Accumulators.avg("avgTrailingPE", "$trailingPE")),
+                Aggregates.match(
+                        Filters.and(
+                                Filters.ne("_id", null), Filters.ne("_id", ""),
+                                Filters.ne("marketCapitalization", null), Filters.ne("marketCapitalization", ""),
+                                Filters.ne("avgTrailingPE", null), Filters.ne("avgTrailingPE", "")
+                        )
+                )
+        ));
+
+        // iterate mongo aggregation results
+        final MongoCursor<Document> iterator = industriesAggregationIterable.iterator();
+        while (iterator.hasNext()) {
+            final Document next = iterator.next();
+            final String country = next.getString("_id");
+            final Double marketCapitalization = next.getDouble("marketCapitalization");
+            final Double avgTrailingPE = next.getDouble("avgTrailingPE");
+            final CountryAggregation countryAggregation = new CountryAggregation(country, marketCapitalization, avgTrailingPE);
+            ret.add(countryAggregation);
+        }
+
+        return ret;
+    }
+
+    /**
      * Searches Mongo DB for stocks for the given sector.
      *
      * @param sector the sector to be searched for stocks.
      *
      * @return the retrieved list of {@link Stock}, might be empty.
      */
-    public ArrayList<Document> searchSector(final String sector) throws CQLSessionException {
+    public ArrayList<Document> searchSector(final String sector)  {
         // find summary data in mongodb
         final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
         final ArrayList<Document> stockDocuments = getMongoDB().findMany(Filters.eq("sector", sector), mongoDBStocks);
+        return stockDocuments;
+    }
+
+    /**
+     * Searches Mongo DB for stocks for the given country.
+     *
+     * @param country the country to be searched for stocks.
+     *
+     * @return the retrieved list of {@link Stock}, might be empty.
+     */
+    public ArrayList<Document> searchCountry(final String country)  {
+        // find summary data in mongodb
+        final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+        final ArrayList<Document> stockDocuments = getMongoDB().findMany(Filters.eq("location.country", country), mongoDBStocks);
         return stockDocuments;
     }
 

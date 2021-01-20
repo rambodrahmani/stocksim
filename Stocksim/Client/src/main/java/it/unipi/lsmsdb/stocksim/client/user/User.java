@@ -2,10 +2,7 @@ package it.unipi.lsmsdb.stocksim.client.user;
 
 import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.charting.*;
-import it.unipi.lsmsdb.stocksim.client.database.DBManager;
-import it.unipi.lsmsdb.stocksim.client.database.Portfolio;
-import it.unipi.lsmsdb.stocksim.client.database.SectorAggregation;
-import it.unipi.lsmsdb.stocksim.client.database.Stock;
+import it.unipi.lsmsdb.stocksim.client.database.*;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 import org.bson.Document;
 
@@ -106,10 +103,10 @@ public class User {
     }
 
     /**
-     * Shows industries market capitalization {@link BarChart}.
+     * Shows sectors market capitalization and trailing P/E {@link BarChart}.
      */
     public void showSectorsAggregation() {
-        final ArrayList<SectorAggregation> sectorsAggregation = dbManager.showSectorsAggregation();
+        final ArrayList<SectorAggregation> sectorsAggregation = dbManager.getSectorsAggregation();
 
         // prepare bar chart raw data
         final ArrayList<String> mcCategories = new ArrayList<>();
@@ -131,19 +128,60 @@ public class User {
         mcBarChartValues.add(marketCaps);
         tpBarChartValues.add(trailingPEs);
 
-        final BarChart barChart = ChartingFactory.getBarChart("Sectors Total Market Capitalization", "", "",
+        final BarChart mcBarChart = ChartingFactory.getBarChart("Sectors Total Market Capitalization", "", "",
                 mcCategories, bars, mcBarChartValues);
 
-        final BarChart barChart2 = ChartingFactory.getBarChart("Sectors Average Trailing P/E", "", "",
+        final BarChart tpBarChart = ChartingFactory.getBarChart("Sectors Average Trailing P/E", "", "",
                 tpCategories, bars, tpBarChartValues);
 
         // populate charts to be displayed
         final ArrayList<Chart> charts = new ArrayList<>();
-        charts.add(barChart);
-        charts.add(barChart2);
+        charts.add(mcBarChart);
+        charts.add(tpBarChart);
 
         // display charts
         ChartUtil.showCharts(charts, "Sectors Aggregation", false);
+    }
+
+    /**
+     * Shows industries market capitalization {@link BarChart}.
+     */
+    public void showCountriesAggregation() {
+        final ArrayList<CountryAggregation> countriesAggregation = dbManager.getCountriesAggregation();
+
+        // prepare bar chart raw data
+        final ArrayList<String> mcCategories = new ArrayList<>();
+        mcCategories.add("Total Market Capitalization");
+        final ArrayList<String> tpCategories = new ArrayList<>();
+        tpCategories.add("Average Trailing P/E");
+        final ArrayList<String> bars = new ArrayList<>();
+        final ArrayList<List<Double>> mcBarChartValues = new ArrayList<>();
+        final ArrayList<List<Double>> tpBarChartValues = new ArrayList<>();
+        final List<Double> marketCaps = new ArrayList<>();
+        final List<Double> trailingPEs = new ArrayList<>();
+
+        // populate bar chart raw data
+        for (final CountryAggregation countryAggregation : countriesAggregation) {
+            bars.add(countryAggregation.getCountry());
+            marketCaps.add(countryAggregation.getMarketCapitalization());
+            trailingPEs.add(countryAggregation.getAvgTrailingPE());
+        }
+        mcBarChartValues.add(marketCaps);
+        tpBarChartValues.add(trailingPEs);
+
+        final BarChart mcBarChart = ChartingFactory.getBarChart("Countries Total Market Capitalization", "", "",
+                mcCategories, bars, mcBarChartValues);
+
+        final BarChart tpBarChart = ChartingFactory.getBarChart("Countries Average Trailing P/E", "", "",
+                tpCategories, bars, tpBarChartValues);
+
+        // populate charts to be displayed
+        final ArrayList<Chart> charts = new ArrayList<>();
+        charts.add(mcBarChart);
+        charts.add(tpBarChart);
+
+        // display charts
+        ChartUtil.showCharts(charts, "Countries Aggregation", false);
     }
 
     /**
@@ -153,8 +191,19 @@ public class User {
      *
      * @return the retrieved {@link Stock} in case of success, null otherwise.
      */
-    public ArrayList<Document> searchSector(final String sector) throws CQLSessionException {
+    public ArrayList<Document> searchSector(final String sector) {
         return dbManager.searchSector(sector);
+    }
+
+    /**
+     * Search for the stocks for the given country using the {@link DBManager}.
+     *
+     * @param country the country to be searched for stocks;
+     *
+     * @return the retrieved {@link Stock} in case of success, null otherwise.
+     */
+    public ArrayList<Document> searchCountry(final String country) {
+        return dbManager.searchCountry(country);
     }
 
     /**

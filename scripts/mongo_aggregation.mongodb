@@ -12,11 +12,20 @@ db.stocks.aggregate([
     },
     {
         $group: {_id: "$industry", marketCapitalization: {$sum:"$marketCap"}, avgTrailingPE: {$avg:"$trailingPE"}}
+    },
+    {
+        $match: {
+                    $and: [
+                        { _id: {$ne:null} }, { _id: {$ne:""} },
+                        { marketCapitalization: {$ne:null} }, { marketCapitalization: {$ne:""} },
+                        { avgTrailingPE: {$ne:null} }, { avgTrailingPE: {$ne:""} }
+                    ]
+                }
     }
 ]);
 
 
-// find a snapshot of the total capitalization of each market sector
+// find a snapshot of the total capitalization of each sector
 db.stocks.aggregate([
     {
         $match: {
@@ -26,7 +35,16 @@ db.stocks.aggregate([
                 }
     },
     {
-        $group: {_id: "$sector", marketCap: {$sum:"$marketCap"}, avgPE: {$avg:"$trailingPE"}}
+        $group: {_id: "$sector", marketCapitalization: {$sum:"$marketCap"}, avgTrailingPE: {$avg:"$trailingPE"}}
+    },
+    {
+        $match: {
+                    $and: [
+                        { _id: {$ne:null} }, { _id: {$ne:""} },
+                        { marketCapitalization: {$ne:null} }, { marketCapitalization: {$ne:""} },
+                        { avgTrailingPE: {$ne:null} }, { avgTrailingPE: {$ne:""} }
+                    ]
+                }
     }
 ]);
 
@@ -34,10 +52,16 @@ db.stocks.aggregate([
 // find a snapshot of the total capitalization of each country
 db.stocks.aggregate([
     {
-        $match: {}
+        $group: {_id: "$location.country", marketCapitalization: {$sum: "$marketCap"}, avgTrailingPE: {$avg:"$trailingPE"}}
     },
     {
-        $group: {_id: "$location.country", marketCap: {$sum: "$marketCap"}, avgPE: {$avg:"$trailingPE"}}
+        $match: {
+                    $and: [
+                        { _id: {$ne:null} }, { _id: {$ne:""} },
+                        { marketCapitalization: {$ne:null} }, { marketCapitalization: {$ne:""} },
+                        { avgTrailingPE: {$ne:null} }, { avgTrailingPE: {$ne:""} }
+                    ]
+                }
     }
 ]);
 

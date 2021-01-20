@@ -104,7 +104,7 @@ public class Stock {
         try {
             this.trailingPE = stockDocument.getDouble("trailingPE");
         } catch (final ClassCastException e) {
-            this.trailingPE = Double.parseDouble(stockDocument.getInteger("trailingPE").toString());
+            this.trailingPE = 0.0;
         }
 
         this.sector = stockDocument.getString("sector");

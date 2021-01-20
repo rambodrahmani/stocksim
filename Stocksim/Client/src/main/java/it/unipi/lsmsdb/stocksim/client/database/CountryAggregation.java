@@ -5,20 +5,20 @@ package it.unipi.lsmsdb.stocksim.client.database;
  *
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
-public class SectorAggregation {
-    private final String sector;
+public class CountryAggregation {
+    private final String country;
     private final Double marketCapitalization;
     private final Double avgTrailingPE;
 
     /**
      * Default constructor.
      *
-     * @param sector sector name;
-     * @param marketCapitalization sector total market capitalization;
-     * @param avgTrailingPE sector average trailing P/E.
+     * @param country country name;
+     * @param marketCapitalization country total market capitalization;
+     * @param avgTrailingPE country average trailing P/E.
      */
-    public SectorAggregation(final String sector, final Double marketCapitalization, final Double avgTrailingPE) {
-        this.sector = sector;
+    public CountryAggregation(final String country, final Double marketCapitalization, final Double avgTrailingPE) {
+        this.country = country;
         this.marketCapitalization = marketCapitalization;
         this.avgTrailingPE = avgTrailingPE;
     }
@@ -27,8 +27,8 @@ public class SectorAggregation {
      * SETTERS & GETTERS
      */
 
-    public String getSector() {
-        return sector;
+    public String getCountry() {
+        return country;
     }
 
     public Double getMarketCapitalization() {
