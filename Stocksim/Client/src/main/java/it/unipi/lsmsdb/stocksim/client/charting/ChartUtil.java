@@ -22,12 +22,15 @@ public class ChartUtil {
      *
      * @param charts array of {@link Chart} to be displayed.
      * @param winTitle {@link JFrame} window title.
+     * @param fullScreen if true, the {@link JFrame} will be maximized.
      */
-    public final static void showCharts(final ArrayList<Chart> charts, final String winTitle) {
+    public final static void showCharts(final ArrayList<Chart> charts, final String winTitle, final boolean fullScreen) {
         // application frame where to show the charts
         final JFrame jFrame = new JFrame(winTitle);
         jFrame.setSize(800, 600);
-        jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        if (fullScreen) {
+            jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        }
         jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         UIUtils.centerFrameOnScreen(jFrame);
 
@@ -118,6 +121,7 @@ public class ChartUtil {
             // BAR CHART
             final ArrayList<String> categories = new ArrayList<>();
             categories.add("Market Capitalization");
+            categories.add("Trailing P/E");
             final ArrayList<String> bars = new ArrayList<>();
             bars.add("AAPL");
             bars.add("MSFT");
@@ -127,13 +131,9 @@ public class ChartUtil {
             bars.add("ALLO");
             bars.add("PICO");
             final ArrayList<List<Double>> barChartValues = new ArrayList<>();
-            barChartValues.add(Arrays.asList(1.0));
-            barChartValues.add(Arrays.asList(2.0));
-            barChartValues.add(Arrays.asList(3.0));
-            barChartValues.add(Arrays.asList(4.0));
-            barChartValues.add(Arrays.asList(5.0));
-            barChartValues.add(Arrays.asList(6.0));
-            barChartValues.add(Arrays.asList(7.0));
+            barChartValues.add(Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0));
+            barChartValues.add(Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0));
+
             final BarChart barChart = ChartingFactory.getBarChart("Bar Chart di Prova", "Category", "Score",
                     categories, bars, barChartValues);
 
@@ -154,7 +154,7 @@ public class ChartUtil {
                 charts.add(barChart);
             }
 
-            ChartUtil.showCharts(charts, "Developer Harness Test");
+            ChartUtil.showCharts(charts, "Developer Harness Test", true);
         } catch (final ParseException | IllegalArgumentException e) {
             e.printStackTrace();
         }

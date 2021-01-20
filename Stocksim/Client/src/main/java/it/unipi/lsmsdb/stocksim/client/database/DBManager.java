@@ -448,17 +448,41 @@ public class DBManager {
     /**
      * Shows industries market capitalization {@link BarChart}.
      */
-    public void showSectorsMarketCap() {
+    public ArrayList<SectorAggregation> showSectorsAggregation() {
+        final ArrayList<SectorAggregation> ret = new ArrayList<>();
+
         final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
         final AggregateIterable<Document> industriesAggregationIterable = stocks.aggregate(Arrays.asList(
                 Aggregates.match(Filters.and(Filters.ne("sector", null), Filters.ne("sector", ""))),
-                Aggregates.group("$sector", Accumulators.sum("marketCap", "$marketCap"), Accumulators.avg("avgPE", "$trailingPE"))
+                Aggregates.group("$sector", Accumulators.sum("marketCapitalization", "$marketCap"), Accumulators.avg("avgTrailingPE", "$trailingPE"))
         ));
+
+        // iterate mongo aggregation results
         final MongoCursor<Document> iterator = industriesAggregationIterable.iterator();
         while (iterator.hasNext()) {
             final Document next = iterator.next();
-            ClientUtil.println(next.toString());
+            final String sector = next.getString("_id");
+            final Double marketCapitalization = next.getDouble("marketCapitalization");
+            final Double avgTrailingPE = next.getDouble("avgTrailingPE");
+            final SectorAggregation sectorAggregation = new SectorAggregation(sector, marketCapitalization, avgTrailingPE);
+            ret.add(sectorAggregation);
         }
+
+        return ret;
+    }
+
+    /**
+     * Searches Mongo DB for stocks for the given sector.
+     *
+     * @param sector the sector to be searched for stocks.
+     *
+     * @return the retrieved list of {@link Stock}, might be empty.
+     */
+    public ArrayList<Document> searchSector(final String sector) throws CQLSessionException {
+        // find summary data in mongodb
+        final MongoCollection<Document> mongoDBStocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+        final ArrayList<Document> stockDocuments = getMongoDB().findMany(Filters.eq("sector", sector), mongoDBStocks);
+        return stockDocuments;
     }
 
     /**

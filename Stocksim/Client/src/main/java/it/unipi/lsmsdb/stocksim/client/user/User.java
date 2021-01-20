@@ -4,6 +4,7 @@ import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.charting.*;
 import it.unipi.lsmsdb.stocksim.client.database.DBManager;
 import it.unipi.lsmsdb.stocksim.client.database.Portfolio;
+import it.unipi.lsmsdb.stocksim.client.database.SectorAggregation;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
 import org.bson.Document;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -106,8 +108,53 @@ public class User {
     /**
      * Shows industries market capitalization {@link BarChart}.
      */
-    public void showSectorsMarketCap() {
-        dbManager.showSectorsMarketCap();
+    public void showSectorsAggregation() {
+        final ArrayList<SectorAggregation> sectorsAggregation = dbManager.showSectorsAggregation();
+
+        // prepare bar chart raw data
+        final ArrayList<String> mcCategories = new ArrayList<>();
+        mcCategories.add("Total Market Capitalization");
+        final ArrayList<String> tpCategories = new ArrayList<>();
+        tpCategories.add("Average Trailing P/E");
+        final ArrayList<String> bars = new ArrayList<>();
+        final ArrayList<List<Double>> mcBarChartValues = new ArrayList<>();
+        final ArrayList<List<Double>> tpBarChartValues = new ArrayList<>();
+        final List<Double> marketCaps = new ArrayList<>();
+        final List<Double> trailingPEs = new ArrayList<>();
+
+        // populate bar chart raw data
+        for (final SectorAggregation sectorAggregation : sectorsAggregation) {
+            bars.add(sectorAggregation.getSector());
+            marketCaps.add(sectorAggregation.getMarketCapitalization());
+            trailingPEs.add(sectorAggregation.getAvgTrailingPE());
+        }
+        mcBarChartValues.add(marketCaps);
+        tpBarChartValues.add(trailingPEs);
+
+        final BarChart barChart = ChartingFactory.getBarChart("Sectors Total Market Capitalization", "", "",
+                mcCategories, bars, mcBarChartValues);
+
+        final BarChart barChart2 = ChartingFactory.getBarChart("Sectors Average Trailing P/E", "", "",
+                tpCategories, bars, tpBarChartValues);
+
+        // populate charts to be displayed
+        final ArrayList<Chart> charts = new ArrayList<>();
+        charts.add(barChart);
+        charts.add(barChart2);
+
+        // display charts
+        ChartUtil.showCharts(charts, "Sectors Aggregation", false);
+    }
+
+    /**
+     * Search for the stocks for the given sector using the {@link DBManager}.
+     *
+     * @param sector the sector to be searched for stocks;
+     *
+     * @return the retrieved {@link Stock} in case of success, null otherwise.
+     */
+    public ArrayList<Document> searchSector(final String sector) throws CQLSessionException {
+        return dbManager.searchSector(sector);
     }
 
     /**
@@ -180,7 +227,7 @@ public class User {
                             charts.add(timeSeriesChart);
 
                             // display charts
-                            ChartUtil.showCharts(charts, symbol + " Historical Data");
+                            ChartUtil.showCharts(charts, symbol + " Historical Data", true);
                         }
                     }
                 } else {

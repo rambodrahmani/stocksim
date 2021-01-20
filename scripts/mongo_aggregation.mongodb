@@ -11,7 +11,7 @@ db.stocks.aggregate([
                 }
     },
     {
-        $group: {_id: "$industry", marketCap: {$sum:"$marketCap"}, avgPE: {$avg:"$trailingPE"}}
+        $group: {_id: "$industry", marketCapitalization: {$sum:"$marketCap"}, avgTrailingPE: {$avg:"$trailingPE"}}
     }
 ]);
 

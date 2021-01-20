@@ -42,7 +42,7 @@ public class ChartingFactory {
 	}
 
 	/**
-	 * Creates and returns a candle stick with the given parameters.
+	 * Creates and returns a {@link CandlestickChart} with the given parameters.
 	 *
 	 * @param chartTitle the {@link org.jfree.chart.JFreeChart} title.
 	 * @param stockSymbol candle stick chart stock symbol.
@@ -57,7 +57,7 @@ public class ChartingFactory {
 	};
 
 	/**
-	 * Creates and returns a time series chart with the given parameters.
+	 * Creates and returns a {@link TimeSeriesChart} with the given parameters.
 	 *
 	 * @param chartTitle the {@link org.jfree.chart.JFreeChart} title;
 	 * @param timeAxisLabel {@link org.jfree.chart.plot.XYPlot} time axis label;
@@ -73,6 +73,18 @@ public class ChartingFactory {
 		return ret;
 	}
 
+	/**
+	 * Creates and returns a {@link BarChart}
+	 *
+	 * @param chartTitle {@link BarChart} title;
+	 * @param categoryAxisLabel bar chart category axis label;
+	 * @param valueAxisLabel bar chart values axis label;
+	 * @param categories bar chart categories;
+	 * @param bars bar chart bars;
+	 * @param values bar chart bars values.
+	 *
+	 * @return instance of the created {@link BarChart}.
+	 */
 	public static BarChart getBarChart(final String chartTitle, final String categoryAxisLabel, final String valueAxisLabel,
 									   final ArrayList<String> categories, final ArrayList<String> bars, final ArrayList<List<Double>> values) {
 		final BarChart ret = new BarChart(chartTitle, categoryAxisLabel, valueAxisLabel, categories, bars, values);

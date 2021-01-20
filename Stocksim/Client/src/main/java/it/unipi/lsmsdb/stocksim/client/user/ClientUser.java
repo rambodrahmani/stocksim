@@ -4,6 +4,7 @@ import it.unipi.lsmsdb.stocksim.client.app.ClientUtil;
 import it.unipi.lsmsdb.stocksim.client.charting.*;
 import it.unipi.lsmsdb.stocksim.client.database.Stock;
 import it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException;
+import org.bson.Document;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -273,7 +274,7 @@ public class ClientUser {
      */
     private static void sectorSearch() {
         // show sector pipeline aggregation bar chart
-        user.showSectorsMarketCap();
+        user.showSectorsAggregation();
 
         // ask for sector name
         ClientUtil.print("Sector Name: ");
@@ -281,7 +282,21 @@ public class ClientUser {
 
         // check input string is valid
         if (ClientUtil.isValidString(sector)) {
-
+            try {
+                final ArrayList<Document> documents = user.searchSector(sector);
+                if (documents.size() > 0) {
+                    ClientUtil.print("[");
+                    for (final Document stockDocument : documents) {
+                        final Stock stock = new Stock(stockDocument);
+                        ClientUtil.print(" " + stock.getSymbol() + ",");
+                    }
+                    ClientUtil.println(" ]\n");
+                } else {
+                    ClientUtil.print("No stock found for the given sector.\n");
+                }
+            } catch (final CQLSessionException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -3,6 +3,9 @@ package it.unipi.lsmsdb.stocksim.client.charting;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
@@ -49,7 +52,7 @@ public class BarChart extends Chart {
 
         for (int i = 0; i < categories.size(); i++) {
             for (int j = 0; j < bars.size(); j++) {
-                dataset.addValue(values.get(j).get(i) , categories.get(i) , bars.get(j));
+                dataset.addValue(values.get(i).get(j) , categories.get(i) , bars.get(j));
             }
         }
 
@@ -60,6 +63,11 @@ public class BarChart extends Chart {
     protected JFreeChart createChart(AbstractDataset dataset) {
         final JFreeChart pieChart = ChartFactory.createBarChart(this.chartTitle, this.categoryAxisLabel, this.valueAxisLabel,
                 (DefaultCategoryDataset) dataset, PlotOrientation.VERTICAL, true, true, false);
+
+        // display category axis labels vertically
+        final CategoryPlot catPlot = pieChart.getCategoryPlot();
+        final CategoryAxis domainAxis = catPlot.getDomainAxis();
+        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
         return pieChart;
     }
 

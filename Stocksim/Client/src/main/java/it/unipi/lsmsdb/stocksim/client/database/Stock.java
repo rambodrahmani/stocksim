@@ -23,7 +23,7 @@ public class Stock {
     private final String market;
     private final String logoURL;
     private final Double marketCap;
-    private final Double trailingPE;
+    private Double trailingPE;
     private final String sector;
     private final String website;
     private final String industry;
@@ -99,7 +99,14 @@ public class Stock {
         this.longName = stockDocument.getString("longName");
         this.logoURL = stockDocument.getString("logoURL");
         this.marketCap = stockDocument.getDouble("marketCap");
-        this.trailingPE = stockDocument.getDouble("trailingPE");
+
+        // trailing PE might not be a double
+        try {
+            this.trailingPE = stockDocument.getDouble("trailingPE");
+        } catch (final ClassCastException e) {
+            this.trailingPE = Double.parseDouble(stockDocument.getInteger("trailingPE").toString());
+        }
+
         this.sector = stockDocument.getString("sector");
         this.website = stockDocument.getString("website");
         this.industry = stockDocument.getString("industry");
