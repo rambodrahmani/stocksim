@@ -285,21 +285,13 @@ public class ClientUser {
         // check input string is valid
         if (ClientUtil.isValidString(sector)) {
             final ArrayList<Document> documents = user.searchSector(sector);
-            if (documents.size() > 0) {
-                ClientUtil.print("[");
-                for (final Document stockDocument : documents) {
-                    final Stock stock = new Stock(stockDocument);
-                    ClientUtil.print(" " + stock.getSymbol() + ",");
-                }
-                ClientUtil.println(" ]\n");
-            } else {
-                ClientUtil.print("No stock found for the given sector.\n");
-            }
+            printStockDocuments(documents);
         }
     }
 
     /**
-     *
+     * Shows countries market capitalization {@link BarChart} and asks for
+     * the country name to execute the search.
      */
     private static void countrySearch() {
         // show country pipeline aggregation bar chart
@@ -312,16 +304,25 @@ public class ClientUser {
         // check input string is valid
         if (ClientUtil.isValidString(country)) {
             final ArrayList<Document> documents = user.searchCountry(country);
-            if (documents.size() > 0) {
-                ClientUtil.print("[");
-                for (final Document stockDocument : documents) {
-                    final Stock stock = new Stock(stockDocument);
-                    ClientUtil.print(" " + stock.getSymbol() + ",");
-                }
-                ClientUtil.println(" ]\n");
-            } else {
-                ClientUtil.print("No stock found for the given sector.\n");
+            printStockDocuments(documents);
+        }
+    }
+
+    /**
+     * Utility method used to print to the terminal a list of MongoDB {@link Document}.
+     *
+     * @param documents the MongoDB documents to be printed to the terminal.
+     */
+    private static void printStockDocuments(final ArrayList<Document> documents) {
+        if (documents.size() > 0) {
+            ClientUtil.print("[");
+            for (final Document stockDocument : documents) {
+                final Stock stock = new Stock(stockDocument);
+                ClientUtil.print(" " + stock.getSymbol() + ",");
             }
+            ClientUtil.println(" ]\n");
+        } else {
+            ClientUtil.print("No stock found for the given sector.\n");
         }
     }
 
