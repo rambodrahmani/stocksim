@@ -335,6 +335,42 @@ public class User {
     }
 
     /**
+     * Shows the given user {@link Portfolio} composition using a {@link PieChart}.
+     *
+     * @param name user {@link Portfolio} name.
+     */
+    public void viewPortfolio(final String name) throws CQLSessionException {
+        if (portfolios != null) {
+            for (final Portfolio portfolio : portfolios) {
+                if (portfolio.getName().equals(name)) {
+                    final ArrayList<PortfolioAggregation> portfolioAggregations = dbManager.getPortfolioAggregation(portfolio.getStocks());
+
+                    // pie chart
+                    final ArrayList<String> slicesNames = new ArrayList<String>();
+                    final ArrayList<Number> slicesValues = new ArrayList<Number>();
+
+                    // populate pie chart data structures
+                    for (final PortfolioAggregation portfolioAggregation : portfolioAggregations) {
+                        slicesNames.add(portfolioAggregation.toString());
+                        slicesValues.add(portfolioAggregation.getTotal()/portfolioAggregations.size());
+                    }
+
+                    final PieChart pieChart = ChartingFactory.getPieChart(name + " Sectors", slicesNames, slicesValues);
+
+                    // populate charts to be displayed
+                    final ArrayList<Chart> charts = new ArrayList<>();
+                    charts.add(pieChart);
+
+                    // display charts
+                    ChartUtil.showCharts(charts, name + " Aggregation Result", false);
+                }
+            }
+        } else {
+            ClientUtil.println("Fetching user portfolios.");
+        }
+    }
+
+    /**
      * Deletes the user {@link Portfolio} with the given name.
      *
      * @param name {@link Portfolio} name;

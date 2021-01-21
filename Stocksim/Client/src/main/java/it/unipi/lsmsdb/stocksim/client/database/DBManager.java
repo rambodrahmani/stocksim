@@ -485,7 +485,7 @@ public class DBManager {
         final ArrayList<CountryAggregation> ret = new ArrayList<>();
 
         final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
-        final AggregateIterable<Document> industriesAggregationIterable = stocks.aggregate(Arrays.asList(
+        final AggregateIterable<Document> countriesAggregationIterable = stocks.aggregate(Arrays.asList(
                 Aggregates.group("$location.country", Accumulators.sum("marketCapitalization", "$marketCap"), Accumulators.avg("avgTrailingPE", "$trailingPE")),
                 Aggregates.match(
                         Filters.and(
@@ -497,7 +497,7 @@ public class DBManager {
         ));
 
         // iterate mongo aggregation results
-        final MongoCursor<Document> iterator = industriesAggregationIterable.iterator();
+        final MongoCursor<Document> iterator = countriesAggregationIterable.iterator();
         while (iterator.hasNext()) {
             final Document next = iterator.next();
             final String country = next.getString("_id");
@@ -686,6 +686,41 @@ public class DBManager {
         }
 
         return portfolio;
+    }
+
+    public ArrayList<PortfolioAggregation> getPortfolioAggregation(final ArrayList<Stock> portfolioStocks) throws CQLSessionException {
+        final ArrayList<PortfolioAggregation> ret = new ArrayList<>();
+
+        // get symbols list from stocks
+        final ArrayList<String> symbols = new ArrayList<>();
+        for (final Stock stock : portfolioStocks) {
+            symbols.add(stock.getSymbol());
+        }
+
+        // mongo db portfolio aggregation
+        final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+        final AggregateIterable<Document> industriesAggregationIterable = stocks.aggregate(Arrays.asList(
+                Aggregates.match(
+                        Filters.in("symbol", symbols)
+                ),
+                Aggregates.group("$sector", Accumulators.sum("total", 1), Accumulators.push("symbols", "$symbol"))
+        ));
+
+        // iterate mongo aggregation results
+        final MongoCursor<Document> iterator = industriesAggregationIterable.iterator();
+        while (iterator.hasNext()) {
+            final Document next = iterator.next();
+            final String sector = next.getString("_id");
+            final double total = (double)next.getInteger("total");
+            final ArrayList<Stock> sectorStocks = new ArrayList<>();
+            for (final String symbol : next.getList("symbols", String.class)) {
+                sectorStocks.add(searchStock(symbol));
+            }
+            final PortfolioAggregation portfolioAggregation = new PortfolioAggregation(sector, total, sectorStocks);
+            ret.add(portfolioAggregation);
+        }
+
+        return ret;
     }
 
     /**

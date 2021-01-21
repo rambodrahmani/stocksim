@@ -266,7 +266,6 @@ public class ClientUser {
             }
         } catch (final IllegalArgumentException e) {
             ClientUtil.println("Invalid search command.\n");
-            e.printStackTrace();
         }
     }
 
@@ -409,7 +408,11 @@ public class ClientUser {
 
         // check if the input string is valid
         if (ClientUtil.isValidString(name)) {
-
+            try {
+                user.viewPortfolio(name);
+            } catch (final CQLSessionException e) {
+                ClientUtil.println("Error while executing portfolio aggregation.\n");
+            }
         }
     }
 

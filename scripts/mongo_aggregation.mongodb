@@ -74,6 +74,6 @@ db.stocks.aggregate(
         }
     }, 
     {
-        $group:{_id:"$industry", total:{$sum:1}, symbols:{ $push: '$symbol' }}
+        $group:{_id:"$sector", total:{$sum:1}, symbols:{ $push: '$symbol' }}
     }
 );
