@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class OHLCRow extends OHLCDataItem {
 	// additional float value to save the adjusted close value
-	final Float adjClose;
+	final Number adjClose;
 
 	/**
 	 * Default constructor wrapping the driver class constructor.
@@ -26,7 +26,7 @@ public class OHLCRow extends OHLCDataItem {
 	/**
 	 * @return Adjusted Close price.
 	 */
-	public Float getAdjClose() {
+	public Number getAdjClose() {
 		return adjClose;
 	}
 }

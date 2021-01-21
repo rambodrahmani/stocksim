@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -350,6 +351,10 @@ public class User {
         if (portfolios != null) {
             for (final Portfolio portfolio : portfolios) {
                 if (portfolio.getName().equals(name)) {
+                    // portfolio found
+                    ret = true;
+
+                    // get portfolio stocks sectors aggregation
                     final ArrayList<PortfolioAggregation> portfolioAggregations = dbManager.getPortfolioAggregation(portfolio.getStocks());
 
                     // pie chart
@@ -377,7 +382,6 @@ public class User {
                     ChartUtil.showCharts(charts, name + " Aggregation Result", false);
 
                     // portfolio found, exit loop
-                    ret = true;
                     break;
                 }
             }
@@ -394,32 +398,105 @@ public class User {
      * @param name user portfolio name;
      * @param startDate historical data start date;
      * @param endDate historical data end date;
-     * @param granularity historical data days granularity.
+     * @param daysInterval time interval days.
      *
      * @return true if the specified Portfolio is found, false otherwise.
      *
      * @throws CQLSessionException
      */
-    public void simulatePortfolio(final String name, final String startDate, final String endDate, final String granularity)
+    public boolean simulatePortfolio(final String name, final String startDate, final String endDate, final int daysInterval)
             throws CQLSessionException, DateTimeParseException, NumberFormatException {
+        boolean ret = false;
+
         // parse string dates
         final LocalDate start = LocalDate.parse(startDate);
         final LocalDate end = LocalDate.parse(endDate);
 
-        // find user portfolio to be simulated
-        Portfolio portfolio;
-        for (final Portfolio userPortfolio : portfolios) {
-            if (userPortfolio.getName().equals(name)) {
-                portfolio = userPortfolio;
-                break;
+        // check if the given date interval is valid
+        if (start.isBefore(end)) {
+            // find user portfolio to be simulated
+            for (final Portfolio portfolio : portfolios) {
+                if (portfolio.getName().equals(name)) {
+                    // portfolio found
+                    ret = true;
+
+                    // retrieve portfolio stocks historical data
+                    final ArrayList<HistoricalData> historicalDatas = new ArrayList<>();
+                    final ArrayList<Integer> shares = new ArrayList<>();
+                    for (final Stock stock : portfolio.getStocks()) {
+                        historicalDatas.add(dbManager.getHistoricalData(stock.getSymbol(), start, end, daysInterval));
+                    }
+
+                    // generate weighted avg historical data
+                    final ArrayList<Date> dates = new ArrayList<>();
+                    final ArrayList<Number> opens = new ArrayList<>();
+                    final ArrayList<Number> highs = new ArrayList<>();
+                    final ArrayList<Number> lows = new ArrayList<>();
+                    final ArrayList<Number> closes = new ArrayList<>();
+                    final ArrayList<Number> volumes = new ArrayList<>();
+                    final ArrayList<Number> adjCloses = new ArrayList<>();
+                    for (int j = 0; j < historicalDatas.size(); j++) {
+                        final ArrayList<OHLCRow> ohlcRows = historicalDatas.get(j).getRows();
+                        if (j == 0) {
+                            for (int i = 0; i < ohlcRows.size(); i++) {
+                                dates.add(ohlcRows.get(i).getDate());
+                                opens.add(ohlcRows.get(i).getOpen());
+                                highs.add(ohlcRows.get(i).getHigh());
+                                lows.add(ohlcRows.get(i).getLow());
+                                closes.add(ohlcRows.get(i).getClose());
+                                volumes.add(ohlcRows.get(i).getVolume());
+                                adjCloses.add(ohlcRows.get(i).getAdjClose());
+                            }
+                        } else {
+                            for (int i = 0; i < ohlcRows.size(); i++) {
+                                opens.set(i, opens.get(i).floatValue() + ohlcRows.get(i).getOpen().floatValue());
+                                highs.set(i, highs.get(i).floatValue() + ohlcRows.get(i).getHigh().floatValue());
+                                lows.set(i, lows.get(i).floatValue() + ohlcRows.get(i).getLow().floatValue());
+                                closes.set(i, closes.get(i).floatValue() + ohlcRows.get(i).getClose().floatValue());
+                                volumes.set(i, volumes.get(i).floatValue() + ohlcRows.get(i).getVolume().floatValue());
+                                adjCloses.set(i, adjCloses.get(i).floatValue() + ohlcRows.get(i).getAdjClose().floatValue());
+                            }
+                        }
+                    }
+                    final HistoricalData avgHistoricalDatas = new HistoricalData();
+                    for (int i = 0; i < dates.size(); i++) {
+                        avgHistoricalDatas.append(
+                                dates.get(i),
+                                opens.get(i).floatValue(),
+                                highs.get(i).floatValue(),
+                                lows.get(i).floatValue(),
+                                closes.get(i).floatValue(),
+                                volumes.get(i).floatValue(),
+                                adjCloses.get(i).floatValue()
+                        );
+                    }
+
+                    // plot weighted avg historical data candlestick
+                    final ArrayList<OHLCRow> rows = avgHistoricalDatas.getRows();
+
+                    // check if historical data was correctly retrieved
+                    if (rows != null) {
+                        // create candle stick chart
+                        final CandlestickChart candlestickChart = ChartingFactory.getCandlestickChart("Portfolio Candlestick",
+                                "Time", "Price", "Portfolio", rows);
+
+                        // populate charts to be displayed
+                        final ArrayList<Chart> charts = new ArrayList<>();
+                        charts.add(candlestickChart);
+
+                        // display charts
+                        ChartUtil.showCharts(charts, "Portfolio Historical Data", true);
+                    }
+
+                    // portfolio found, exit loop
+                    break;
+                }
             }
+        } else {
+            ClientUtil.println("Invalid date interval. The start date must be before the end date.\n");
         }
 
-        // retrieve portfolio stocks historical data
-        final ArrayList<HistoricalData> historicalDatas = new ArrayList<>();
-        //for (final Stock stock : portfolio.getStocks()) {
-
-        //}
+        return ret;
     }
 
     /**

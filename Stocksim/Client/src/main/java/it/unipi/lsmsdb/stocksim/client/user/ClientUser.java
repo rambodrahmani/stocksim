@@ -446,7 +446,13 @@ public class ClientUser {
         // check all input strings are valid
         if (ClientUtil.isValidString(name) && ClientUtil.isValidString(startDate) &&
             ClientUtil.isValidString(endDate) && ClientUtil.isValidString(granularity)) {
-
+            try {
+                if (!user.simulatePortfolio(name, startDate, endDate, Integer.parseInt(granularity))) {
+                    ClientUtil.println("Portfolio not found.\n");
+                }
+            } catch (final CQLSessionException e) {
+                ClientUtil.println("Error while executing portfolio simulation.\n");
+            }
         }
     }
 
