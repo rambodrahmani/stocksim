@@ -414,7 +414,9 @@ public class ClientUser {
         // check if the input string is valid
         if (ClientUtil.isValidString(name)) {
             try {
-                user.viewPortfolio(name);
+                if (!user.viewPortfolio(name)) {
+                    ClientUtil.println("Portfolio not found.\n");
+                }
             } catch (final CQLSessionException e) {
                 ClientUtil.println("Error while executing portfolio aggregation.\n");
             }
@@ -429,8 +431,21 @@ public class ClientUser {
         ClientUtil.print("Portfolio name: ");
         final String name = scanner.nextLine();
 
-        // check if the input string is valid
-        if (ClientUtil.isValidString(name)) {
+        // ask for start date
+        ClientUtil.print("Start Date [YYYY-MM-DD]: ");
+        final String startDate = scanner.nextLine();
+
+        // ask for end date
+        ClientUtil.print("End Date [YYYY-MM-DD]: ");
+        final String endDate = scanner.nextLine();
+
+        // ask for days granularity: how many days for every row of data
+        ClientUtil.print("Days granularity: ");
+        final String granularity = scanner.nextLine();
+
+        // check all input strings are valid
+        if (ClientUtil.isValidString(name) && ClientUtil.isValidString(startDate) &&
+            ClientUtil.isValidString(endDate) && ClientUtil.isValidString(granularity)) {
 
         }
     }

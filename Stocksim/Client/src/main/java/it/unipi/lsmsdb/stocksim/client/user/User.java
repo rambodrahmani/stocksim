@@ -221,7 +221,7 @@ public class User {
     }
 
     /**
-     * Retrieves and shows historical data and infor for the given ticker symbol.
+     * Retrieves and shows historical data and info for the given ticker symbol.
      *
      * @param symbol stock ticker symbol;
      * @param startDate historical data start date;
@@ -341,8 +341,12 @@ public class User {
      * Shows the given user {@link Portfolio} composition using a {@link PieChart}.
      *
      * @param name user {@link Portfolio} name.
+     *
+     * @return true if the specified Portfolio is found, false otherwise.
      */
-    public void viewPortfolio(final String name) throws CQLSessionException {
+    public boolean viewPortfolio(final String name) throws CQLSessionException {
+        boolean ret = false;
+
         if (portfolios != null) {
             for (final Portfolio portfolio : portfolios) {
                 if (portfolio.getName().equals(name)) {
@@ -371,11 +375,51 @@ public class User {
 
                     // display charts
                     ChartUtil.showCharts(charts, name + " Aggregation Result", false);
+
+                    // portfolio found, exit loop
+                    ret = true;
+                    break;
                 }
             }
         } else {
             ClientUtil.println("Fetching user portfolios.");
         }
+
+        return ret;
+    }
+
+    /**
+     * Simulates the given user {@link Portfolio} historical data.
+     *
+     * @param name user portfolio name;
+     * @param startDate historical data start date;
+     * @param endDate historical data end date;
+     * @param granularity historical data days granularity.
+     *
+     * @return true if the specified Portfolio is found, false otherwise.
+     *
+     * @throws CQLSessionException
+     */
+    public void simulatePortfolio(final String name, final String startDate, final String endDate, final String granularity)
+            throws CQLSessionException, DateTimeParseException, NumberFormatException {
+        // parse string dates
+        final LocalDate start = LocalDate.parse(startDate);
+        final LocalDate end = LocalDate.parse(endDate);
+
+        // find user portfolio to be simulated
+        Portfolio portfolio;
+        for (final Portfolio userPortfolio : portfolios) {
+            if (userPortfolio.getName().equals(name)) {
+                portfolio = userPortfolio;
+                break;
+            }
+        }
+
+        // retrieve portfolio stocks historical data
+        final ArrayList<HistoricalData> historicalDatas = new ArrayList<>();
+        //for (final Stock stock : portfolio.getStocks()) {
+
+        //}
     }
 
     /**
