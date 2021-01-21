@@ -396,13 +396,16 @@ public class DBManager {
                     if (portfolios != null) {
                         for (final Document portfolio : portfolios) {
                             final String name = portfolio.getString("name");
-                            final List<String> tickers = portfolio.getList("tickers", String.class);
+                            final List<Document> stocksDocuments = portfolio.getList("stocks", Document.class);
                             final ArrayList<Stock> stocks = new ArrayList<>();
-                            for (final String ticker : tickers) {
-                                final Stock stock = searchStock(ticker);
+                            final ArrayList<Integer> shares = new ArrayList<>();
+                            for (final Document stockDocument : stocksDocuments) {
+                                final Stock stock = searchStock(stockDocument.getString("symbol"));
+                                final Integer share = stockDocument.getInteger("share");
                                 stocks.add(stock);
+                                shares.add(share);
                             }
-                            final Portfolio userPortfolio = new Portfolio(name, stocks);
+                            final Portfolio userPortfolio = new Portfolio(name, stocks, shares);
                             userPortfolios.add(userPortfolio);
                         }
                     }
@@ -652,12 +655,13 @@ public class DBManager {
      *
      * @param name user portfolio name;
      * @param symbols user portfolio stock symbols.
+     * @param shares the amount of shares for each {@link Stock} in the portfolio.
      *
      * @return the newly created {@link Portfolio}, null otherwise.
      *
      * @throws CQLSessionException
      */
-    public Portfolio createPortfolio(final String name, final String[] symbols) throws CQLSessionException {
+    public Portfolio createPortfolio(final String name, final String[] symbols, final ArrayList<Integer> shares) throws CQLSessionException {
         // first check if a user portfolio with same name already exists
         if (portfolioExists(name)) {
             return null;
@@ -677,7 +681,7 @@ public class DBManager {
         }
 
         // create new user portfolio
-        final Portfolio portfolio = new Portfolio(name, stocks);
+        final Portfolio portfolio = new Portfolio(name, stocks, shares);
 
         // add user portfolio to mongodb
         if (!addPortfolio(portfolio)) {

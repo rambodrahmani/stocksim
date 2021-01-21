@@ -304,10 +304,11 @@ public class User {
      * Creates a user {@link Portfolio} with the given name and ticker symbols.
      *
      * @param name {@link Portfolio} name;
-     * @param symbols {@link Portfolio} ticker symbols.
+     * @param symbols {@link Portfolio} ticker symbols;
+     * @param shares the amount of shares for each {@link Stock} in the portfolio.
      */
-    public boolean createPortfolio(final String name, final String[] symbols) throws CQLSessionException {
-        final Portfolio newPortfolio = dbManager.createPortfolio(name, symbols);
+    public boolean createPortfolio(final String name, final String[] symbols, final ArrayList<Integer> shares) throws CQLSessionException {
+        final Portfolio newPortfolio = dbManager.createPortfolio(name, symbols, shares);
 
         // check if the new portfolio was correctly created
         if (newPortfolio != null) {
@@ -324,8 +325,10 @@ public class User {
         if (portfolios != null) {
             for (final Portfolio portfolio : portfolios) {
                 ClientUtil.print(portfolio.getName() + ": [");
-                for (final Stock stock : portfolio.getStocks()) {
-                    ClientUtil.print(" " + stock.getSymbol() + ",");
+                final ArrayList<Stock> portfolioStocks = portfolio.getStocks();
+                final ArrayList<Integer> portfolioShares = portfolio.getShares();
+                for (int i = 0; i < portfolioStocks.size(); i++) {
+                    ClientUtil.print(" " + portfolioStocks.get(i).getSymbol() + " (" + portfolioShares.get(i) + "),");
                 }
                 ClientUtil.println(" ]");
             }
@@ -346,13 +349,18 @@ public class User {
                     final ArrayList<PortfolioAggregation> portfolioAggregations = dbManager.getPortfolioAggregation(portfolio.getStocks());
 
                     // pie chart
-                    final ArrayList<String> slicesNames = new ArrayList<String>();
-                    final ArrayList<Number> slicesValues = new ArrayList<Number>();
+                    final ArrayList<String> slicesNames = new ArrayList<>();
+                    final ArrayList<Number> slicesValues = new ArrayList<>();
 
                     // populate pie chart data structures
                     for (final PortfolioAggregation portfolioAggregation : portfolioAggregations) {
+                        int totalShare = 0;
+                        final ArrayList<Stock> stocks = portfolioAggregation.getStocks();
+                        for (final Stock stock : stocks) {
+                            totalShare += portfolio.getShare(stock.getSymbol());
+                        }
                         slicesNames.add(portfolioAggregation.toString());
-                        slicesValues.add(portfolioAggregation.getTotal()/portfolioAggregations.size());
+                        slicesValues.add(totalShare*(portfolioAggregation.getTotal()/portfolioAggregations.size()));
                     }
 
                     final PieChart pieChart = ChartingFactory.getPieChart(name + " Sectors", slicesNames, slicesValues);

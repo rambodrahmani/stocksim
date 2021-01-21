@@ -373,15 +373,24 @@ public class ClientUser {
         final String name = scanner.nextLine();
 
         // ask for stock tickers
-        ClientUtil.print("Ticker Symbols [comma separated]: ");
-        final String input = scanner.nextLine();
+        ClientUtil.print("Stock Symbols [comma separated]: ");
+        final String symbolsInput = scanner.nextLine();
 
-        if (ClientUtil.isValidString(name) && ClientUtil.isValidString(input)) {
-            final String[] tickers = input.split(", ");
+        // ask for stock shares
+        ClientUtil.print("Stock Shares [comma separated]: ");
+        final String sharesInput = scanner.nextLine();
+
+        if (ClientUtil.isValidString(name) && ClientUtil.isValidString(symbolsInput) && ClientUtil.isValidString(sharesInput)) {
+            final String[] tickers = symbolsInput.split(", ");
+            final String[] sharesStrings = sharesInput.split(", ");
+            final ArrayList<Integer> shares = new ArrayList<>();
+            for (final String shareString : sharesStrings) {
+                shares.add(Integer.parseInt(shareString));
+            }
 
             // actually create the portfolio in the DB
             try {
-                ret = user.createPortfolio(name, tickers);
+                ret = user.createPortfolio(name, tickers, shares);
             } catch (CQLSessionException e) {
                 e.printStackTrace();
                 ret = false;

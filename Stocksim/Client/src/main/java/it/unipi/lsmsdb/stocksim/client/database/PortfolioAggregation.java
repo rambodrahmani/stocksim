@@ -34,6 +34,13 @@ public class PortfolioAggregation {
         return total;
     }
 
+    /**
+     * @return Portfolio aggregation stocks;
+     */
+    public ArrayList<Stock> getStocks() {
+        return stocks;
+    }
+
     @Override
     public String toString() {
         // retrieve stocks list as string
