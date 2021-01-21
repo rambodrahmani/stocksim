@@ -661,7 +661,7 @@ public class DBManager {
      *
      * @throws CQLSessionException
      */
-    public Portfolio createPortfolio(final String name, final String[] symbols, final ArrayList<Integer> shares) throws CQLSessionException {
+    public Portfolio createPortfolio(final String name, final String[] symbols, final String[] shares) throws CQLSessionException {
         // first check if a user portfolio with same name already exists
         if (portfolioExists(name)) {
             return null;
@@ -669,19 +669,21 @@ public class DBManager {
 
         // fetch stock data from mongodb
         final ArrayList<Stock> stocks = new ArrayList<>();
-        for (final String symbol : symbols) {
-            final Stock stock = searchStock(symbol);
+        final ArrayList<Integer> stocksShares = new ArrayList<>();
+        for (int i = 0; i < symbols.length; i++) {
+            final Stock stock = searchStock(symbols[i]);
             if (stock == null) {
                 return null;
             } else {
                 if (!stocks.contains(stock)) {
                     stocks.add(stock);
+                    stocksShares.add(Integer.parseInt(shares[i]));
                 }
             }
         }
 
         // create new user portfolio
-        final Portfolio portfolio = new Portfolio(name, stocks, shares);
+        final Portfolio portfolio = new Portfolio(name, stocks, stocksShares);
 
         // add user portfolio to mongodb
         if (!addPortfolio(portfolio)) {

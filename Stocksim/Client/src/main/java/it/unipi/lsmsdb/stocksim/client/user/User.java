@@ -307,7 +307,7 @@ public class User {
      * @param symbols {@link Portfolio} ticker symbols;
      * @param shares the amount of shares for each {@link Stock} in the portfolio.
      */
-    public boolean createPortfolio(final String name, final String[] symbols, final ArrayList<Integer> shares) throws CQLSessionException {
+    public boolean createPortfolio(final String name, final String[] symbols, final String[] shares) throws CQLSessionException {
         final Portfolio newPortfolio = dbManager.createPortfolio(name, symbols, shares);
 
         // check if the new portfolio was correctly created

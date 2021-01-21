@@ -374,7 +374,7 @@ public class ClientUser {
 
         // ask for stock tickers
         ClientUtil.print("Stock Symbols [comma separated]: ");
-        final String symbolsInput = scanner.nextLine();
+        final String symbolsInput = scanner.nextLine().toUpperCase();
 
         // ask for stock shares
         ClientUtil.print("Stock Shares [comma separated]: ");
@@ -382,11 +382,7 @@ public class ClientUser {
 
         if (ClientUtil.isValidString(name) && ClientUtil.isValidString(symbolsInput) && ClientUtil.isValidString(sharesInput)) {
             final String[] tickers = symbolsInput.split(", ");
-            final String[] sharesStrings = sharesInput.split(", ");
-            final ArrayList<Integer> shares = new ArrayList<>();
-            for (final String shareString : sharesStrings) {
-                shares.add(Integer.parseInt(shareString));
-            }
+            final String[] shares = sharesInput.split(", ");
 
             // actually create the portfolio in the DB
             try {
