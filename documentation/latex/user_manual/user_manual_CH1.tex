@@ -10,7 +10,7 @@ the \textbf{StockSim Server} program. It is not intended to be distributed to
 end users. It is thought to be running 24/7.\\
 \\
 The StockSim Server has two different startup modes: the first one
-\begin{lstlisting}[basicstyle=\footnotesize,language=bash,numbers=left,
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 $ java -jar Server.jar
 
@@ -56,7 +56,7 @@ quit         quit Stocksim server.
 which executes the \texttt{historical data update} procedure right after
 startup. Whereas, the second startup mode can be triggered using the
 \texttt{--no-update} command line argument:
-\begin{lstlisting}[basicstyle=\footnotesize,language=bash,numbers=left,
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 $ java -jar Server.jar --no-update
 
@@ -108,7 +108,7 @@ and the user can decide the action to be performed.\\
 In the previously shown examples, we should pay attention to the following
 \begin{itemize}
     \item \texttt{DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.}
-    \item \texttt{the sotcksim server automatically detects the last update
+    \item \texttt{the stocksim server automatically detects the last update
     date, the number of days since the last update and fetches the required
     data using Yahoo Finance for EACH and EVERY ticker symbol.}
     \item \texttt{Historical Data Update logs.}

@@ -32,4 +32,15 @@
 \BOOKMARK [0][-]{chapter.8}{StockSim Server Manual}{part.2}% 32
 \BOOKMARK [0][-]{chapter.9}{StockSim Client Manual}{part.2}% 33
 \BOOKMARK [1][-]{section.9.1}{StockSim Client User Mode}{chapter.9}% 34
-\BOOKMARK [1][-]{section.9.2}{StockSim Client Admin Mode}{chapter.9}% 35
+\BOOKMARK [2][-]{subsection.9.1.1}{Search stock}{section.9.1}% 35
+\BOOKMARK [2][-]{subsection.9.1.2}{View stock}{section.9.1}% 36
+\BOOKMARK [2][-]{subsection.9.1.3}{Create portfolio}{section.9.1}% 37
+\BOOKMARK [2][-]{subsection.9.1.4}{List portfolios}{section.9.1}% 38
+\BOOKMARK [2][-]{subsection.9.1.5}{View portfolio}{section.9.1}% 39
+\BOOKMARK [2][-]{subsection.9.1.6}{Simulate portfolio}{section.9.1}% 40
+\BOOKMARK [2][-]{subsection.9.1.7}{Delete portfolio}{section.9.1}% 41
+\BOOKMARK [1][-]{section.9.2}{StockSim Client Admin Mode}{chapter.9}% 42
+\BOOKMARK [2][-]{subsection.9.2.1}{Add ticker}{section.9.2}% 43
+\BOOKMARK [2][-]{subsection.9.2.2}{Add admin}{section.9.2}% 44
+\BOOKMARK [2][-]{subsection.9.2.3}{Remove admin}{section.9.2}% 45
+\BOOKMARK [2][-]{subsection.9.2.4}{Remove user}{section.9.2}% 46
