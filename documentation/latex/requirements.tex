@@ -9,7 +9,6 @@ application description provided in the introductory chapter. Non-functional
 requirements, described in detail in the second section of this chapter, are the
 characteristics that ensure satisfactory interaction with users and real world
 utility of the product.
-
 \section{Actors}
 Based on the application design, four main actors can be identified:
 \begin{itemize}
@@ -18,28 +17,25 @@ Based on the application design, four main actors can be identified:
     own private credentials for the login; in order to exploit the application
     main functionalities, he must register a new user account; therefore, the
     registration is the only action allowed for a Guest;
-
-    \item A \textbf{Registered user} is someone who sign up on the application;
+    \item A \textbf{Registered user} is someone who signed up on the application;
     this actor owns private credentials (username and password) for the login;
     he can login as a user into the client application and utilize its main
-    features to watch stocks information, compose portfolios and simulate them. 
-   
+    features to search for stocks, get historical information about them,
+    compose portfolios and simulate them.
     \item An \textbf{Admin user} is someone who is registered on the application
-    with administration credentials; this actor can login as an admin into the
-    client to perform maintenance operations; these operations include, among
-    others, checking the integrity of the entire database and add new stocks to
-    it;
-
+    with administration credentials; this actor can login as an admin using the
+    StockSim client running in \texttt{admin} mode to perform maintenance
+    operations; these operations include, among others, adding a new stock to
+    the database, adding new admin credentials, removing normal and admin users;
     \item The \textbf{Data Updater} is a thread running on StockSim Server; this 
     thread is supposed to be always running, and it is in charge of updating the
     database historical data with the new information coming from the stock
     market daily trading sessions; it is also in charge of finding and fixing
-    (or at least report) integrity issues.
+    (or at least report) data integrity issues.
 \end{itemize}
 Please refer to Chapter 3 for the full use case diagram.
 
 \section{Requirements}
-
 \subsection{Functional requirements}
 \begin{itemize}
 	\item The user, upon launching the application, should be able to sign-up and sign-in.

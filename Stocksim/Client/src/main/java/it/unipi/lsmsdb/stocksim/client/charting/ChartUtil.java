@@ -20,9 +20,6 @@ import java.util.*;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class ChartUtil {
-    // icon input stream
-    private final static InputStream is = Client.class.getClassLoader().getResourceAsStream("icon.png");
-
     /**
      * Opens a {@link JFrame} containing the given {@link Chart} in a {@link JSplitPane}.
      *
@@ -52,6 +49,7 @@ public class ChartUtil {
 
         // set jframe icon
         try {
+            final InputStream is = Client.class.getClassLoader().getResourceAsStream("icon.png");
             final ImageIcon iconImg = new ImageIcon(ImageIO.read(is));
             jFrame.setIconImage(iconImg.getImage());
         } catch (IOException e) {
