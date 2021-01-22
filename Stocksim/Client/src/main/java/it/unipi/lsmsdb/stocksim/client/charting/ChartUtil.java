@@ -1,10 +1,14 @@
 package it.unipi.lsmsdb.stocksim.client.charting;
 
+import it.unipi.lsmsdb.stocksim.client.app.Client;
 import org.jfree.chart.ui.UIUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -16,6 +20,9 @@ import java.util.*;
  * @author Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.
  */
 public class ChartUtil {
+    // icon input stream
+    private final static InputStream is = Client.class.getClassLoader().getResourceAsStream("icon.png");
+
     /**
      * Opens a {@link JFrame} containing the given {@link Chart} in a {@link JSplitPane}.
      *
@@ -43,8 +50,20 @@ public class ChartUtil {
 
         splitPane.setOneTouchExpandable(true);
 
+        // set jframe icon
+        try {
+            final ImageIcon iconImg = new ImageIcon(ImageIO.read(is));
+            jFrame.setIconImage(iconImg.getImage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            // icon not found: no worries
+        }
+
+        // add split pane to content pane and show frame
         jFrame.setContentPane(splitPane);
         jFrame.setVisible(true);
+
+        // resize jframe content pane on jframe resized
         jFrame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
