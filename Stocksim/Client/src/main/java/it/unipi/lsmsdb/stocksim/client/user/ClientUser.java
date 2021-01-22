@@ -238,7 +238,7 @@ public class ClientUser {
                 case SYMBOL_SEARCH:
                     // ask for stock ticker symbol
                     ClientUtil.print("Ticker Symbol: ");
-                    final String symbol = scanner.nextLine();
+                    final String symbol = scanner.nextLine().toUpperCase();
 
                     // check input string is valid
                     if (ClientUtil.isValidString(symbol)) {
@@ -336,7 +336,7 @@ public class ClientUser {
     private static void viewStock() {
         // ask for stock ticker symbol
         ClientUtil.print("Ticker Symbol: ");
-        final String symbol = scanner.nextLine();
+        final String symbol = scanner.nextLine().toUpperCase();
 
         // ask for start date
         ClientUtil.print("Start Date [YYYY-MM-DD]: ");

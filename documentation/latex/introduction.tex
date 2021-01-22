@@ -11,16 +11,18 @@ programs:
     \item \textbf{StockSim Server}: supposed to be running 24/7 to ensure 
             historical data is always up-to-date;
     \item \textbf{StockSim Client}: can be launched in either \texttt{admin} or 
-            \texttt{user} mode.
+            \texttt{user} mode and provides different functionalities based on
+            the running mode.
 \end{itemize}
-The StockSim Server is not thought to be distributed to end users, whereas the 
-StockSim Client can be used by both administrators and normal users. The choice 
-was made to provide the same program to both administrators and normal users 
-with two different running modes. Administrators can add new ticker symbols, 
-new administrator accounts, delete both administrator and normal user accounts. 
-Normal users have access to stocks and ETFs historical data, day by day, 
-starting from 2010. They can create their own stock portfolios, run simulations 
-and visualize the resulting statistics.\\
+The StockSim Server is not thought to be distributed to end users and is
+intended to be running on a Server machine, whereas the StockSim Client can be
+used by both administrators and normal users. The choice was made to provide the
+same program to both administrators and normal users with two different running
+modes. Administrators can add new ticker symbols, new administrator accounts,
+delete both administrator and normal user accounts. Normal users have access to
+stocks and ETFs historical data, day by day, starting from 2010. They can search
+for and visualize Stocks, create their own stock portfolios, run simulations and
+visualize the resulting statistics.\\
 \\
 Before continuing with what follows, the following terms should be clarified:
 \begin{itemize}

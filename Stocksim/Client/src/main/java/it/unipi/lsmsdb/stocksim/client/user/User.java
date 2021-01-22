@@ -247,7 +247,7 @@ public class User {
                     final ArrayList<OHLCRow> rows = historicalData.getRows();
 
                     // check if historical data was correctly retrieved
-                    if (rows != null) {
+                    if (rows != null && rows.size() > 0) {
                         // create candle stick chart
                         final CandlestickChart candlestickChart = ChartingFactory.getCandlestickChart(symbol + " Candlestick",
                                 "Time", "Price", symbol, rows);
