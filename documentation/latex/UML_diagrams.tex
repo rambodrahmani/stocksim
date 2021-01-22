@@ -11,6 +11,15 @@
 		\includegraphics[scale=0.22]{img/use_case.jpg}
 	\end{center}
 \end{figure}
-\restoregeometry
 \section{Class diagram}
-\includegraphics[scale=0.20]{img/design_class_diagram_duc.png}
+In the following figure are shown the main entities of the application and the
+relationships among them.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.20]{img/design_class_diagram_duc.png}
+	\end{center}
+\end{figure}
+\noindent Each user can be either an \texttt{admin} or a normal \texttt{user}. Each normal
+user can have zero or more portfolios. Each portfolio is composed by one o more
+Stock.
+\restoregeometry

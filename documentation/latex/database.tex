@@ -4,57 +4,61 @@
 %       See main.tex for further information.
 %-------------------------------------------------------------------------------
 \chapter{Database}
-The database is composed by 8236 stocks from the US stock market, along with
-their general information and historical data; the application also needs to
+The database is composed by 8235 stocks and ETFs from the US stock market, along
+with their general information and historical data; the application also needs to
 store users and admins login credentials, personal information and the
 composition and details of each user's portfolio.\\
-We decided to use a column database (Apache Cassandra) for the storage of
-historical data; this is because historical data represents almost the 99\%\ of
+We decided to use a column family database (Apache Cassandra) for the storage of
+historical data; this is because historical data represents almost 99\%\ of
 the entire database and it is going to be growing very fast as days go by;
 aggregation and financial analytics on these volumes of data will perform better
-in a column database where data storage is designed to optimize this type of
-operations by column.\\
+in a column family database where data storage is designed to optimize this type
+of operations column by column.\\
 We decided to store any other information using a document database (MongoDB),
-in order to exploit the schemaless property to save memory; data frequently
-needed together is stored in the same document and indexes were created to speed
-up linking between documents; 
-
+in order to exploit the schemaless property to save memory; documents frequently
+needed together are stored in the same collection and indexes were created to
+speed up data retrieval;
 \section{Dataset}
-The initial set of data was fetched from the web, by means of Python scripts using
-\texttt{pandas}, \texttt{yfinance} and \texttt{JSON} as support libraries and
-relying upon \url{www.nasdaqtrader.com} and \url{finance.yahoo.com}.
+The initial set of data was fetched from the web, by means of Python scripts
+using the \texttt{pandas}, \texttt{yfinance} and \texttt{JSON} support libraries
+and relying upon \url{www.nasdaqtrader.com} and \url{finance.yahoo.com}.
 \subsection{NasdaqTrader}
-The Nasdaq Stock Market (Nasdaq) is the largest U.S. equities exchange venue by volume. 
-\footnote{https://www.nasdaqtrader.com/} \\
-We choose to take our set of stocks from the Nasdaq index, because it is very popular and
-includes a large number of stock, representative of different economy sectors. This will allow 
-users to interact with big and famous companies stocks (like Google, Apple, Tesla...), but also
-to try smaller companies and/or minor sectors investments. 
-NasdaqTrader provides us a stock symbols' list of all the stocks entered in the NASDAQ index
-from 1970 until now;
+The Nasdaq Stock Market (Nasdaq) is the largest U.S. equities exchange venue by
+volume.\\
+We choose to take our set of stocks from the Nasdaq index, because it is very
+popular and includes a large number of stock, representative of different
+economy sectors. This will allow users to interact with big and famous companies
+stocks (like Google, Apple, Tesla, etc.) but also to try smaller companies
+and/or minor sectors investments. Using NasdaqTrader we fetched the list of
+stocks quoted in the NASDAQ index starting from 1970 until today. For each of
+the retrieved stock symbol we queried \textbf{Yahoo! Finance} historical
+database to populate our own column family database.
 \subsection{Yahoo! Finance}
-"Yahoo Finance provides free stock quotes, up-to-date news, portfolio management resources, 
-international market data, social interaction and mortgage rates that help you manage your 
-financial life." \footnote{https://finance.yahoo.com/} \\
-Yahoo Finance is a service, been part of the Yahoo network, that provides several of information
-about stocks and companies; they are frequently updated, reliable and well organized.\\
-We decided to use this service to retrieve the starting dataset of stocks; we extract only 
-the fields that we need, and parse into a JSON file. In this way  it
-is possible to rebuild from scratch this dataset into MongoDB with few commands (including
-mongoimport).
-With Yahoo Finance it is also possible to retrieve historical data of market values for every 
-stocks. Using this service it has been possible to build a dataset of all the market values of
-each stocks coming from NasdaqTrader; values are collected daily, and we decided to take all 
-the values from 2010 to 2020; this dataset (around 1.43 GB) has been parsed to CVS files and
-than imported into a Cassandra Cluster. Thanks to the Yahoo Finance service, it's possible
-to update every day the database with the last session results. It's also possible to add a new
-stock to the dataset, coming from every market exchange of every country.
-
+"Yahoo Finance provides free stock quotes, up-to-date news, portfolio management
+resources, international market data, social interaction and mortgage rates that
+help you manage your financial life."\\
+Yahoo Finance is a service, part of the Yahoo network, that provides several of
+information about stocks and companies; they are frequently updated, reliable
+and well organized.\\
+We decided to use this service to retrieve the initial dataset of stocks; we
+extract only the fields that we need, and parse into a JSON file. In this way it
+is possible to rebuild from scratch this dataset into MongoDB with few commands
+(using Python \texttt{mongoimport} support library).\\
+With Yahoo Finance it is also possible to retrieve historical data of market
+prices for each of the stocks. Using this service it has been possible to build
+a dataset of all the market prices of each stocks retrieved from NasdaqTrader;
+prices are collected daily, and we decided to take all the values from 2010 to
+2020; the obtained dataset (around 1.43 GB) has been parsed to CVS files and then
+imported into the Apache Cassandra Cluster. Thanks to the Yahoo Finance service,
+it's possible to update every day the database with the last trading session
+data. It's also possible to add a new stocks to the dataset, quoted in any
+market exchange of any country.
 \hfill \break
-{\centering
-\includegraphics[scale=0.12]{img/dataset_comp.png}\\
-}
-
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.12]{img/dataset_comp.png}
+	\end{center}
+\end{figure}
 
 \section{MongoDB}
 "MongoDB is a general purpose, document-based, distributed database build
