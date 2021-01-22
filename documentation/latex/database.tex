@@ -61,17 +61,19 @@ market exchange of any country.
 \end{figure}
 
 \section{MongoDB}
-"MongoDB is a general purpose, document-based, distributed database build
-for modern application developers and for the cloud era." Taken from www.mongodb.com.\\
-MongoDB is a very famous document database with a great support for cloud operations, which 
-will improve the availability of our application. It also supports several analytic functions
-and the creation of custom indexes in order to speedup read operations.
-In order to organize data in a meaningful and memory-optimal way, we opted for this structure:
-
-\hfill \break
-{\centering
-\includegraphics[scale=0.14]{img/mongoDB_schema.png}\\
-}
+"MongoDB is a general purpose, document-based, distributed database built for
+modern application developers and for the cloud era."\\
+MongoDB is a very famous document database with a great support for cloud
+operations, which will improve the data availability of our application. It also
+supports several analytic functions and the creation of custom indexes in order
+to speedup read operations.\\
+In order to organize data in a meaningful and memory-optimal way, we opted for
+this structure:
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.14]{img/mongoDB_schema.png}
+	\end{center}
+\end{figure}
 
 \hfill \break
 This scheme is composed by 3 collections: \textbf{stocks}, \textbf{users}, \textbf{admins};
