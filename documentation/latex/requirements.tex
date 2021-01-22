@@ -38,22 +38,26 @@ Please refer to Chapter 3 for the full use case diagram.
 \section{Requirements}
 \subsection{Functional requirements}
 \begin{itemize}
-	\item The user, upon launching the application, should be able to sign-up and sign-in.
-	\item The user should be able to search for a stock and view related details.
-	\item The user should be able to view charts of the historical data of a stock.
-	\item The user should be able to create and delete portfolios.
-	\item The user should be able to add/remove stocks to/from their portfolio.
-	\item The user should be able to run simulations on a portfolio.
-	\item The user should be able to visualize statistics about a simulation and possibly view related charts.
-	\item Only admins should be able to add new stocks to the database.
-	\item Only admins should be able to create new admin accounts.
-	\item Only admins should be able to delete admin accounts.
-	\item Only admins should be able to delete user accounts.
-	\item The software should always provide the most recent data available for a stock.
+    \item The application is available to be used only by registered users;
+    \item The application provides access to stocks and ETFs historical data, day by day, starting from 2010;\\
+	\item A guest user, upon launching the application, should be able to sign-up;
+	\item A registered user should be able to and sign-in;
+	\item A registered user should be able to search for a stock and view related details;
+	\item A registered user should be able to view charts of the historical data of a stock;
+	\item A registered user should be able to create and delete portfolios;
+	\item A registered user should be able to run simulations on a portfolio;
+	\item A registered user should be able to visualize statistics about a simulation and view related charts.\\
+	\item Only admins can add new stocks to the database;
+	\item Only admins can create new admin accounts;
+	\item Only admins can delete admin accounts;
+	\item Only admins can delete user accounts;
 \end{itemize}
-
 \subsection{Non-functional requirements}
 \begin{itemize}
-	\item The retrieval of data about stocks and portfolios should be fast.
-	\item User password should be stored in a secure way (i.e. hashed).
+    \item The terminal based menu should allow the user to accomplish the desired tasks with the minimum amount of commands;
+    \item The application will store information in non-relation databases (MongoDB and Apache Cassandra);
+    \item Stocks historical data and information should be always available and updated;
+	\item The retrieval of stocks and portfolios historical data and information should be fast;
+	\item Charting retrieved data should be fast;
+	\item User password should be stored in a secure way (i.e. hashed);
 \end{itemize}

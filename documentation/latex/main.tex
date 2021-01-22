@@ -10,7 +10,7 @@
 %         Yuri Mazzuoli <>
 %         Created on 05/11/2020
 %-------------------------------------------------------------------------------
-\documentclass[11pt, a4paper, twoside, openright]{book}
+\documentclass[11pt, a4paper, oneside]{book}
 
 % equal left and right margins
 \usepackage[hmarginratio=1:1]{geometry}
@@ -37,7 +37,16 @@
     urlcolor=blue,
 }
 
-\let\cleardoublepage=\clearpage
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\bottommargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
 
 % blank page command
 \newcommand{\blankpage}
@@ -179,14 +188,8 @@
 % blank page before dedication
 \afterpage{\blankpage}	
 
-% enable page numbering back: roman numbers style
-\pagenumbering{roman}
-
 % print table of contents
 \tableofcontents
-
-% set arabic page numbering style
-\pagenumbering{arabic}
 
 %-------------------------------------------------------------------------------
 % Part I: Documentation
