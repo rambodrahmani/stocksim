@@ -56,7 +56,7 @@ AS '
  *  - the open price is the one of the first day of the time interval;
  *  - the close and adjusted close prices are the ones of the last day;
  *  - the high price is the highest price of the time interval;
- *  - the low price is the minimum price of the time interval;
+ *  - the low price is the lowest price of the time interval;
  *  - the volume is the sum of the volumes;
  */
 CREATE OR REPLACE AGGREGATE AggregateOHLC(int, date, float, float, float, float, float, float)

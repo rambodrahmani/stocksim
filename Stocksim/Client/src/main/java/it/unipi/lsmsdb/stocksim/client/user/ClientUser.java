@@ -285,6 +285,8 @@ public class ClientUser {
         if (ClientUtil.isValidString(sector)) {
             final ArrayList<Document> documents = user.searchSector(sector);
             printStockDocuments(documents);
+        } else {
+            ClientUtil.print("Invalid input string.\n");
         }
     }
 
@@ -304,6 +306,8 @@ public class ClientUser {
         if (ClientUtil.isValidString(country)) {
             final ArrayList<Document> documents = user.searchCountry(country);
             printStockDocuments(documents);
+        } else {
+            ClientUtil.print("Invalid input string.\n");
         }
     }
 
@@ -358,6 +362,8 @@ public class ClientUser {
             } catch (final CQLSessionException e) {
                 e.printStackTrace();
             }
+        } else {
+            ClientUtil.print("Invalid input string.\n");
         }
     }
 
@@ -391,6 +397,8 @@ public class ClientUser {
                 e.printStackTrace();
                 ret = false;
             }
+        } else {
+            ret = false;
         }
 
         return ret;
@@ -420,6 +428,8 @@ public class ClientUser {
             } catch (final CQLSessionException e) {
                 ClientUtil.println("Error while executing portfolio aggregation.\n");
             }
+        } else {
+            ClientUtil.print("Invalid input string.\n");
         }
     }
 
@@ -453,6 +463,8 @@ public class ClientUser {
             } catch (final CQLSessionException e) {
                 ClientUtil.println("Error while executing portfolio simulation.\n");
             }
+        } else {
+            ClientUtil.print("Invalid input string.\n");
         }
     }
 
@@ -471,6 +483,8 @@ public class ClientUser {
         // check if the input string is valid
         if (ClientUtil.isValidString(name)) {
             ret = user.deletePortfolio(name);
+        } else {
+            ret = false;
         }
 
         return ret;
