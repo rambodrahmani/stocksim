@@ -449,7 +449,7 @@ public class DBManager {
     }
 
     /**
-     * Retrieves industries market capitalization and trailing P/E aggregation.
+     * @return industries market capitalization and trailing P/E aggregation.
      */
     public ArrayList<SectorAggregation> getSectorsAggregation() {
         final ArrayList<SectorAggregation> ret = new ArrayList<>();
@@ -482,7 +482,7 @@ public class DBManager {
     }
 
     /**
-     * Retrieves countries market capitalization and trailing P/E aggregation.
+     * @return countries market capitalization and trailing P/E aggregation.
      */
     public ArrayList<CountryAggregation> getCountriesAggregation() {
         final ArrayList<CountryAggregation> ret = new ArrayList<>();
@@ -694,6 +694,13 @@ public class DBManager {
         return portfolio;
     }
 
+    /**
+     * Retrieves user portfolio stocks sectors aggregation.
+     *
+     * @param portfolioStocks list of the {@link Stock} in the user portfolio.
+     * @return
+     * @throws CQLSessionException
+     */
     public ArrayList<PortfolioAggregation> getPortfolioAggregation(final ArrayList<Stock> portfolioStocks) throws CQLSessionException {
         final ArrayList<PortfolioAggregation> ret = new ArrayList<>();
 
