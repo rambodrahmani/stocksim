@@ -1,4 +1,4 @@
-/*
+/**
  * Apache Cassandra Stocksim CQL aggregation function.
  *
  * author: Marco Pinna, Rambod Rahmani, Yuri Mazzuoli.

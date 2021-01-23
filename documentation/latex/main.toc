@@ -17,10 +17,10 @@
 \contentsline {subsection}{\numberline {4.2.1}Aggregations}{13}{subsection.4.2.1}% 
 \contentsline {subsection}{\numberline {4.2.2}Indexes}{15}{subsection.4.2.2}% 
 \contentsline {section}{\numberline {4.3}Apache Cassandra}{15}{section.4.3}% 
-\contentsline {subsection}{\numberline {4.3.1}Aggregations}{16}{subsection.4.3.1}% 
-\contentsline {subsection}{\numberline {4.3.2}Indexes}{18}{subsection.4.3.2}% 
-\contentsline {section}{\numberline {4.4}Sharding and Replicas}{18}{section.4.4}% 
-\contentsline {section}{\numberline {4.5}Apache Cassandra vs MongoDB}{19}{section.4.5}% 
+\contentsline {subsection}{\numberline {4.3.1}Indexes}{16}{subsection.4.3.1}% 
+\contentsline {section}{\numberline {4.4}Sharding and Replicas}{16}{section.4.4}% 
+\contentsline {section}{\numberline {4.5}Apache Cassandra vs MongoDB}{17}{section.4.5}% 
+\contentsline {subsection}{\numberline {4.5.1}Aggregations}{18}{subsection.4.5.1}% 
 \contentsline {chapter}{\numberline {5}Software architecture}{21}{chapter.5}% 
 \contentsline {section}{\numberline {5.1}Maven Multi-Module Structure}{21}{section.5.1}% 
 \contentsline {subsection}{\numberline {5.1.1}Client}{21}{subsection.5.1.1}% 
