@@ -53,13 +53,22 @@ imported into the Apache Cassandra Cluster. Thanks to the Yahoo Finance service,
 it's possible to update every day the database with the last trading session
 data. It's also possible to add a new stocks to the dataset, quoted in any
 market exchange of any country.
-\hfill \break
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[scale=0.12]{img/dataset_comp.png}
 	\end{center}
+	\vspace{-0.6cm}
 \end{figure}
-
+\noindent
+For additional information regarding the implementation of the scripts used to
+fetch the raw data please refer to:
+\vspace{0.2cm}
+\dirtree{%
+.1 stocksim/scripts/.
+.2 fetch\_db\_content.py.
+.2 generate\_cql.py.
+.2 merge\_json\_documents.py.
+}
 \section{MongoDB}
 "MongoDB is a general purpose, document-based, distributed database built for
 modern application developers and for the cloud era."\\
@@ -70,40 +79,51 @@ to speedup read operations.\\
 In order to organize data in a meaningful and memory-optimal way, we opted for
 this structure:
 \begin{figure}[H]
+    \vspace{0.2cm}
 	\begin{center}
-		\includegraphics[scale=0.14]{img/mongoDB_schema.png}
+		\includegraphics[scale=0.76]{img/mongoDB_schema_1.png}
 	\end{center}
 \end{figure}
-
-\hfill \break
-This scheme is composed by 3 collections: \textbf{stocks}, \textbf{users}, \textbf{admins};
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.8]{img/mongoDB_schema_2.png}
+	\end{center}
+\end{figure}
+\noindent
+This schema is composed by 3 collections: \textbf{stocks}, \textbf{users} and \textbf{admins};
 \begin{itemize}
-    \item
-The stocks collection contains one document for each stock; inside this document
-all the general information about the stock is stored; each stock is identified by the attribute SYMBOL.
-Some basic information is always present, while other may be missing for some stocks; we decided 
-to keep these last type of information were possible, exploiting the schemaless property of
-the document database;
-    \item
-The \textbf{users} collection contains one document for each user registered on the application; in each of these documents, login credentials are stored, along with few personal information; for every user there is
-also an array of documents named PORTFOLIOS: this array contains the portfolios of the user.
-Each portfolio has a scheme, which includes an array of TITLEs, named COMPOSITION, which describes
-what the portfolio consists of. This nested structure has been preferred over splitting
-data in different collections, because all the information of a user, including their portfolios, 
-is frequently needed at once; on the other hand, there are not operations that involve
-portfolios owned by different users.
-    \item 
-The \textbf{admins} collection contains the admins login credentials together with few personal
-informations about them; we decided to create a separated collection for administrators 
-to improve the security of the administration features: in this way is impossible to inject
-administration privileges through the login command.
+    \item The \textbf{stocks} collection contains one document for each stock;
+    inside each document general information about the stock is stored; each
+    stock is identified by the attribute \texttt{symbol}; some other basic
+    information is always available too, while other may be missing for certain
+    stocks; we decided to keep these last type of information were possible,
+    exploiting the schemaless property of the document database; available or
+    missing attributes have been handled properly Java-side, during the
+    implementation;
+    \item The \textbf{users} collection contains one document for each user
+    registered on the application; in each of these documents, login credentials
+    are stored, along with few personal information; for every user there is
+    also an array of documents named \texttt{portfolios}: this array contains
+    the portfolios of the user; each portfolio has a scheme, which includes an
+    array of stocks, named \texttt{composition}, which describes what the
+    portfolio consists of; this nested structure has been preferred over
+    splitting data in different collections, because all the information of a
+    user, including his portfolios, is frequently used all together and fetched
+    once; on the other hand, there is no operation that involves portfolios
+    owned by different users;
+    \item The \textbf{admins} collection contains the admins login credentials
+    together with few personal information about them; we decided to create a
+    separated collection for administrators to improve the security of the
+    administration features: in this way it is impossible to inject
+    administration privileges through the login command.
 \end{itemize}
 \subsection{Aggregations}
-One of the main features of our application is the possibility to choose some stocks from
-the market and combine them into a portfolio. When a user is looking for a stock, they want to
-know statistics about \textbf{industries} and \textbf{sectors}, along with classification by 
-\textbf{level of capitalization} and  \textbf{PE ratio} (\textit{Price-Earnings Ratio}); in order to do so, we will provide
-these aggregation pipelines:
+One of the main features of our application is the possibility to choose some
+stocks from the market and combine them into a portfolio. When a user is looking
+for a stock, they want to know statistics about \textbf{industries} and
+\textbf{sectors}, along with classification by \textbf{level of capitalization}
+and \textbf{P/E ratio} (Price-Earnings Ratio); in order to do so, we will
+provide these aggregation pipelines:
 \begin{itemize}
     \item the total market capitalization of each sector
     \item the total market capitalization of each industry

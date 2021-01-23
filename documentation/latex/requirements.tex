@@ -50,14 +50,15 @@ Please refer to Chapter 3 for the full use case diagram.
 	\item Only admins can add new stocks to the database;
 	\item Only admins can create new admin accounts;
 	\item Only admins can delete admin accounts;
-	\item Only admins can delete user accounts;
+	\item Only admins can delete user accounts.
 \end{itemize}
 \subsection{Non-functional requirements}
 \begin{itemize}
     \item The terminal based menu should allow the user to accomplish the desired tasks with the minimum amount of commands;
     \item The application will store information in non-relation databases (MongoDB and Apache Cassandra);
-    \item Stocks historical data and information should be always available and updated;
+    \item Stocks historical data and information should be always available and updated to the latest market trading session;
+    \item MongoDB and Apache Cassandra stocks data should always be consistent;
 	\item The retrieval of stocks and portfolios historical data and information should be fast;
 	\item Charting retrieved data should be fast;
-	\item User password should be stored in a secure way (i.e. hashed);
+	\item User password should be stored in a secure way (i.e. hashed).
 \end{itemize}
