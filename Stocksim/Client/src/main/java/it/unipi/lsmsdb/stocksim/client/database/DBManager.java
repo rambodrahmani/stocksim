@@ -449,15 +449,18 @@ public class DBManager {
     }
 
     /**
-     * @return industries market capitalization and trailing P/E aggregation.
+     * @return sectors market capitalization and trailing P/E aggregation.
      */
     public ArrayList<SectorAggregation> getSectorsAggregation() {
         final ArrayList<SectorAggregation> ret = new ArrayList<>();
 
+        // mongodb sectors aggregation
         final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
         final AggregateIterable<Document> industriesAggregationIterable = stocks.aggregate(Arrays.asList(
                 Aggregates.match(Filters.and(Filters.ne("sector", null), Filters.ne("sector", ""))),
-                Aggregates.group("$sector", Accumulators.sum("marketCapitalization", "$marketCap"), Accumulators.avg("avgTrailingPE", "$trailingPE")),
+                Aggregates.group("$sector",
+                                    Accumulators.sum("marketCapitalization", "$marketCap"),
+                                    Accumulators.avg("avgTrailingPE", "$trailingPE")),
                 Aggregates.match(
                         Filters.and(
                                 Filters.ne("_id", null), Filters.ne("_id", ""),

@@ -130,55 +130,48 @@ provide these aggregation pipelines:
     \item the average P/E ratio of stocks working in the same sector;
     \item the average P/E ratio of stocks from the same country;
 \end{itemize}
-We provide here an example of an aggregation Mongo query:
+Here you are an example from the application source code:
 \begin{lstlisting}[basicstyle=\footnotesize,language=Java,numbers=left,
     numberstyle=\footnotesize,numbersep=4pt,frame=single]
-    /**
-    * Aggregates data with filtering and grouping by an attribute, can compute
-    * sum, avg ecc.
-    *
-    * @param collection the collection where to perform the operation;
-    * @param filter filter to be used to find the documents.
-    * @param groupField the filed used to group the aggregation
-    * @param aggregator the aggregator function and field
-    *
-    * @return iterable object containing the result of the aggregation.
-    */
-   public AggregateIterable<Document> aggregate(final Bson filter, final String groupField, final BsonField aggregator, final MongoCollection<Document> collection) {
-       Bson match = Aggregates.match(filter);
-       return  collection.aggregate(
-               Arrays.asList(match, Aggregates.group("$"+groupField, aggregator)));
-   }
-\end{lstlisting}
-\begin{lstlisting}[basicstyle=\footnotesize,language=Java,numbers=left,
-    numberstyle=\footnotesize,numbersep=4pt,frame=single]
-    MongoCollection<Document> collection1 = 
-        dbManager.getCollection(
-            StocksimCollection.STOCKS.getCollectionName()
-        );
-    // aggregate examples
-    final Bson equity= eq("quoteType", "EQUITY"); //filter(s)
-    // name of the field projected, field to accumulate
-    // type of accumulation (sum, avg...)
-    final BsonField marketCapAccumulator=Accumulators.sum("totalCap","$marketCap");
-    AggregateIterable<Document> aggregateList =
-                                        // grouping attribute
-            dbManager.aggregate(equity, "sector", marketCapAccumulator, collection1);
-    for (Document document : aggregateList) {
-        System.out.println(document);
+/**
+ * @return sectors market capitalization and trailing P/E aggregation.
+ */
+public ArrayList<SectorAggregation> getSectorsAggregation() {
+    final ArrayList<SectorAggregation> ret = new ArrayList<>();
+
+    // mongodb sectors aggregation
+    final MongoCollection<Document> stocks = getMongoDB().getCollection(StocksimCollection.STOCKS.getCollectionName());
+    final AggregateIterable<Document> industriesAggregationIterable =
+        stocks.aggregate(Arrays.asList(
+            Aggregates.match(Filters.and(Filters.ne("sector", null), Filters.ne("sector", ""))),
+            Aggregates.group("$sector",
+                                Accumulators.sum("marketCapitalization", "$marketCap"),
+                                Accumulators.avg("avgTrailingPE", "$trailingPE")),
+            Aggregates.match(
+                    Filters.and(
+                            Filters.ne("marketCapitalization", null), Filters.ne("marketCapitalization", ""),
+                            Filters.ne("avgTrailingPE", null), Filters.ne("avgTrailingPE", "")
+                    )
+            )
+    ));
+
+    // iterate mongo aggregation results
+    final MongoCursor<Document> iterator = industriesAggregationIterable.iterator();
+    while (iterator.hasNext()) {
+        final Document next = iterator.next();
+        final String sector = next.getString("_id");
+        final Double marketCapitalization = next.getDouble("marketCapitalization");
+        final Double avgTrailingPE = next.getDouble("avgTrailingPE");
+        final SectorAggregation sectorAggregation = new SectorAggregation(sector, marketCapitalization, avgTrailingPE);
+        ret.add(sectorAggregation);
     }
-    // avg example with nested attribute
-    final BsonField PEAccumulator=Accumulators.avg("avgPE","$trailingPE");
-    aggregateList =
-            dbManager.aggregate(equity, "location.country",
-                    PEAccumulator, collection1);
-    for (Document document : aggregateList) {
-        System.out.println(document);
-    }
+
+    return ret;
+}
 \end{lstlisting}
 \subsection{Indexes}
-In order to speed up read operation in the document database, 
-we decided to introduce some custom indexes:
+In order to speed up read operations in the document database, we decided to
+introduce some custom indexes:
 \begin{itemize}
     \item a REGULAR and UNIQUE index on the attribute \textbf{symbol} in the collection stocks;
     \item a REGULAR index on the attribute \textbf{marketCAP} in the collection stocks;
@@ -188,13 +181,21 @@ we decided to introduce some custom indexes:
     \item a REGULAR index on the attribute \textbf{country} in the collection stocks;
     \item a REGULAR and UNIQUE index on the attribute \textbf{username} in the collection users;
 \end{itemize}
-We provide some statistic that endorse our indexes choices\\
-
-\includegraphics[scale=0.11]{img/memory_mongo.png}
-\includegraphics[scale=0.11]{img/latency_mongo.png}\\
-
-\noindent Analog results can be found about the username index in the users collection.
-
+We provide some statistics that endorse our indexes choices:
+\begin{figure}[H]
+\hspace{-1.0cm}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[scale=0.11]{img/memory_mongo.png}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[scale=0.11]{img/latency_mongo.png}
+\end{subfigure}
+\end{figure}
+\noindent Similar results can be found about the username index in the
+\texttt{users} collection.
 \section{Apache Cassandra}
 "The Apache Cassandra database is the right choice when you need scalability and high 
 availability without compromising performance. Linear scalability and proven fault-tolerance 
@@ -208,7 +209,6 @@ across multiple nodes. It is built to be write optimized, but with the right ind
 read latency can be improved too; tables schemas and analytic functions can be customized.
 This is the schema of our Cassandra database:\\
 \includegraphics[scale=0.2]{img/cassandraDB_scheme.png}\\
-
 \subsection{Aggregations}
 In order to provide snapshots and statistics of stocks and portfolios trends over time,
 we exploit the customization functionalities of Cassandra; a custom aggregation has been 
