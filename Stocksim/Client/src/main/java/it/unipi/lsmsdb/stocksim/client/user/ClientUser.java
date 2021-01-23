@@ -354,7 +354,7 @@ public class ClientUser {
         if (ClientUtil.isValidString(symbol) && ClientUtil.isValidString(startDate) &&
             ClientUtil.isValidString(endDate) && ClientUtil.isValidString(granularity)) {
             try {
-                user.viewStock(symbol, startDate, endDate, granularity);
+                user.viewStock(symbol, LocalDate.parse(startDate), LocalDate.parse(endDate), Integer.parseInt(granularity));
             } catch (final DateTimeParseException e) {
                 ClientUtil.println("Incorrect date format.\n");
             } catch (final NumberFormatException e) {
@@ -462,6 +462,10 @@ public class ClientUser {
                 }
             } catch (final CQLSessionException e) {
                 ClientUtil.println("Error while executing portfolio simulation.\n");
+            } catch (final DateTimeParseException e) {
+                ClientUtil.println("Incorrect date format.\n");
+            } catch (final NumberFormatException e) {
+                ClientUtil.println("Incorrect days granularity.\n");
             }
         } else {
             ClientUtil.print("Invalid input string.\n");

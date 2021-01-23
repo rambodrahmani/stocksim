@@ -229,21 +229,20 @@ public class User {
      * @param endDate historical data end date;
      * @param granularity historical data days granularity.
      *
-     * @throws CQLSessionException
+     * @throws CQLSessionException, DateTimeParseException, NumberFormatException;
      */
-    public void viewStock(final String symbol, final String startDate, final String endDate, final String granularity)
+    public void viewStock(final String symbol, final LocalDate startDate, final LocalDate endDate, final Integer granularity)
             throws CQLSessionException, DateTimeParseException, NumberFormatException {
         // get historical data runnable
         final Runnable historicalDataRunnable = () -> {
             try {
-                // parse string dates
-                final LocalDate start = LocalDate.parse(startDate);
-                final LocalDate end = LocalDate.parse(endDate);
+                final LocalDate start = startDate;
+                final LocalDate end = endDate;
 
                 // check if the given date interval is valid
                 if (start.isBefore(end)) {
                     // retrieve stock historical data
-                    final HistoricalData historicalData = getHistoricalData(symbol, start, end, Integer.parseInt(granularity));
+                    final HistoricalData historicalData = getHistoricalData(symbol, start, end, granularity);
                     final ArrayList<OHLCRow> rows = historicalData.getRows();
 
                     // check if historical data was correctly retrieved
@@ -280,8 +279,6 @@ public class User {
                             ChartUtil.showCharts(charts, symbol + " Historical Data", true);
                         }
                     }
-                } else {
-                    ClientUtil.println("Invalid date interval. The start date must be before the end date.\n");
                 }
             } catch (final CQLSessionException e) {
                 e.printStackTrace();
@@ -299,6 +296,9 @@ public class User {
         } else {
             ClientUtil.println("No stock found for the given symbol.\n");
         }
+        // check if the given date interval is valid
+        if (!startDate.isBefore(endDate))
+            ClientUtil.println("Invalid date interval. The start date must be before the end date.\n");
     }
 
     /**
