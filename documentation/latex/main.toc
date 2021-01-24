@@ -21,27 +21,27 @@
 \contentsline {section}{\numberline {4.4}Sharding and Replicas}{16}{section.4.4}% 
 \contentsline {section}{\numberline {4.5}Apache Cassandra vs MongoDB}{17}{section.4.5}% 
 \contentsline {subsection}{\numberline {4.5.1}Aggregations}{18}{subsection.4.5.1}% 
-\contentsline {chapter}{\numberline {5}Software architecture}{21}{chapter.5}% 
+\contentsline {chapter}{\numberline {5}Software Architecture}{21}{chapter.5}% 
 \contentsline {section}{\numberline {5.1}Maven Multi-Module Structure}{21}{section.5.1}% 
-\contentsline {subsection}{\numberline {5.1.1}Client}{21}{subsection.5.1.1}% 
-\contentsline {subsection}{\numberline {5.1.2}Server}{22}{subsection.5.1.2}% 
-\contentsline {subsection}{\numberline {5.1.3}Library}{22}{subsection.5.1.3}% 
-\contentsline {section}{\numberline {5.2}Apache Maven Assembly Plugin}{23}{section.5.2}% 
-\contentsline {chapter}{\numberline {6}Conclusions}{24}{chapter.6}% 
-\contentsline {chapter}{\numberline {7}Appendices}{25}{chapter.7}% 
-\contentsline {part}{II\hspace {1em}User Manual}{30}{part.2}% 
-\contentsline {chapter}{\numberline {8}StockSim Server Manual}{31}{chapter.8}% 
-\contentsline {chapter}{\numberline {9}StockSim Client Manual}{34}{chapter.9}% 
-\contentsline {section}{\numberline {9.1}StockSim Client User Mode}{34}{section.9.1}% 
-\contentsline {subsection}{\numberline {9.1.1}Search stock}{35}{subsection.9.1.1}% 
-\contentsline {subsection}{\numberline {9.1.2}View stock}{37}{subsection.9.1.2}% 
-\contentsline {subsection}{\numberline {9.1.3}Create portfolio}{38}{subsection.9.1.3}% 
-\contentsline {subsection}{\numberline {9.1.4}List portfolios}{38}{subsection.9.1.4}% 
-\contentsline {subsection}{\numberline {9.1.5}View portfolio}{39}{subsection.9.1.5}% 
-\contentsline {subsection}{\numberline {9.1.6}Simulate portfolio}{39}{subsection.9.1.6}% 
-\contentsline {subsection}{\numberline {9.1.7}Delete portfolio}{39}{subsection.9.1.7}% 
-\contentsline {section}{\numberline {9.2}StockSim Client Admin Mode}{39}{section.9.2}% 
-\contentsline {subsection}{\numberline {9.2.1}Add ticker}{40}{subsection.9.2.1}% 
-\contentsline {subsection}{\numberline {9.2.2}Add admin}{40}{subsection.9.2.2}% 
-\contentsline {subsection}{\numberline {9.2.3}Remove admin}{40}{subsection.9.2.3}% 
-\contentsline {subsection}{\numberline {9.2.4}Remove user}{41}{subsection.9.2.4}% 
+\contentsline {subsection}{\numberline {5.1.1}Library}{23}{subsection.5.1.1}% 
+\contentsline {subsection}{\numberline {5.1.2}Client}{23}{subsection.5.1.2}% 
+\contentsline {subsection}{\numberline {5.1.3}Server}{24}{subsection.5.1.3}% 
+\contentsline {section}{\numberline {5.2}Apache Maven Assembly Plugin}{24}{section.5.2}% 
+\contentsline {chapter}{\numberline {6}Conclusions}{25}{chapter.6}% 
+\contentsline {chapter}{\numberline {7}Appendices}{26}{chapter.7}% 
+\contentsline {part}{II\hspace {1em}User Manual}{32}{part.2}% 
+\contentsline {chapter}{\numberline {8}StockSim Server Manual}{33}{chapter.8}% 
+\contentsline {chapter}{\numberline {9}StockSim Client Manual}{36}{chapter.9}% 
+\contentsline {section}{\numberline {9.1}StockSim Client User Mode}{36}{section.9.1}% 
+\contentsline {subsection}{\numberline {9.1.1}Search stock}{37}{subsection.9.1.1}% 
+\contentsline {subsection}{\numberline {9.1.2}View stock}{39}{subsection.9.1.2}% 
+\contentsline {subsection}{\numberline {9.1.3}Create portfolio}{40}{subsection.9.1.3}% 
+\contentsline {subsection}{\numberline {9.1.4}List portfolios}{40}{subsection.9.1.4}% 
+\contentsline {subsection}{\numberline {9.1.5}View portfolio}{41}{subsection.9.1.5}% 
+\contentsline {subsection}{\numberline {9.1.6}Simulate portfolio}{41}{subsection.9.1.6}% 
+\contentsline {subsection}{\numberline {9.1.7}Delete portfolio}{41}{subsection.9.1.7}% 
+\contentsline {section}{\numberline {9.2}StockSim Client Admin Mode}{41}{section.9.2}% 
+\contentsline {subsection}{\numberline {9.2.1}Add ticker}{42}{subsection.9.2.1}% 
+\contentsline {subsection}{\numberline {9.2.2}Add admin}{42}{subsection.9.2.2}% 
+\contentsline {subsection}{\numberline {9.2.3}Remove admin}{42}{subsection.9.2.3}% 
+\contentsline {subsection}{\numberline {9.2.4}Remove user}{43}{subsection.9.2.4}% 
