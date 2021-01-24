@@ -1,0 +1,30 @@
+@startuml
+
+title __APP's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.server.app {
+    class it.unipi.lsmsdb.stocksim.server.app.Server {
+        {static} + LOGGER_CONTEXT : String
+        {static} - dbManager : DBManager
+        {static} - scanner : Scanner
+        {static} + main()
+        {static} - parseArguments()
+        {static} - parseCommand()
+        {static} - startUpdaterThread()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.server.app {
+    class it.unipi.lsmsdb.stocksim.server.app.ServerUtil {
+        {static} + getLogger()
+        {static} + printMainMenu()
+        {static} + printWelcomeMessage()
+        {static} + setLogLevel()
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.server.app.ServerUtil -up-|> it.unipi.lsmsdb.stocksim.lib.util.Util
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+
+title __APP's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.client.app {
+    class it.unipi.lsmsdb.stocksim.client.app.Client {
+        {static} + LOGGER_CONTEXT : String
+        {static} + main()
+        {static} - parseArguments()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.app {
+    class it.unipi.lsmsdb.stocksim.client.app.ClientUtil {
+        {static} + SHA256Hash()
+        {static} + getLogger()
+        {static} + printAdminLoginMenu()
+        {static} + printAdminMainMenu()
+        {static} + printSearchMenu()
+        {static} + printUserLoginMenu()
+        {static} + printUserMainMenu()
+        {static} + printWelcomeMessage()
+        {static} + setLogLevel()
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.client.app.ClientUtil -up-|> it.unipi.lsmsdb.stocksim.lib.util.Util
+
+@enduml

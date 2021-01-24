@@ -1,0 +1,123 @@
+@startuml
+
+title __LIBRARY's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    interface it.unipi.lsmsdb.stocksim.lib.database.DB {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    interface it.unipi.lsmsdb.stocksim.lib.database.DBFactory {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace cassandra {
+      class it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException {
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace cassandra {
+      class it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDB {
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace cassandra {
+      class it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDBFactory {
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace cassandra {
+      class it.unipi.lsmsdb.stocksim.lib.database.cassandra.Main {
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      class it.unipi.lsmsdb.stocksim.lib.database.mongoDB.Main {
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      class it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDB {
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      class it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDBFactory {
+      }
+    }
+  }
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      class it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoServer {
+      }
+    }
+  }
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      enum StocksimCollection {
+      }
+    }
+  }
+
+  namespace it.unipi.lsmsdb.stocksim.lib.util {
+    class it.unipi.lsmsdb.stocksim.lib.util.ArgsParser {
+    }
+  }
+
+  namespace it.unipi.lsmsdb.stocksim.lib.util {
+    class it.unipi.lsmsdb.stocksim.lib.util.Util {
+    }
+  }
+
+  namespace it.unipi.lsmsdb.stocksim.lib.yfinance {
+    class it.unipi.lsmsdb.stocksim.lib.yfinance.YFAssetProfile {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.yfinance {
+    class it.unipi.lsmsdb.stocksim.lib.yfinance.YFHistoricalData {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.yfinance {
+    class it.unipi.lsmsdb.stocksim.lib.yfinance.YFSummaryData {
+    }
+  }
+
+  namespace it.unipi.lsmsdb.stocksim.lib.yfinance {
+    class it.unipi.lsmsdb.stocksim.lib.yfinance.YahooFinance {
+    }
+  }
+
+  it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDB .up.|> it.unipi.lsmsdb.stocksim.lib.database.DB
+  it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDBFactory .up.|> it.unipi.lsmsdb.stocksim.lib.database.DBFactory
+  it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDB .up.|> it.unipi.lsmsdb.stocksim.lib.database.DB
+  it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDBFactory .up.|> it.unipi.lsmsdb.stocksim.lib.database.DBFactory
+
+@enduml

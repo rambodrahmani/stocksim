@@ -1,0 +1,58 @@
+@startuml
+
+title __CASSANDRA's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace cassandra {
+      class it.unipi.lsmsdb.stocksim.lib.database.cassandra.CQLSessionException {
+          + CQLSessionException()
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace cassandra {
+      class it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDB {
+          - contactPoints : Vector<InetSocketAddress>
+          - cqlSession : CqlSession
+          - datacenter : String
+          - hostnames : ArrayList<String>
+          - ports : ArrayList<Integer>
+          + connect()
+          + disconnect()
+          + execute()
+          + prepareStatement()
+          + query()
+          + query()
+          # CassandraDB()
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace cassandra {
+      class it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDBFactory {
+          {static} + create()
+          + getCassandraDB()
+          - CassandraDBFactory()
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace cassandra {
+      class it.unipi.lsmsdb.stocksim.lib.database.cassandra.Main {
+          {static} + main()
+          {static} + testAggregation()
+      }
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDB .up.|> it.unipi.lsmsdb.stocksim.lib.database.DB
+  it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDBFactory .up.|> it.unipi.lsmsdb.stocksim.lib.database.DBFactory
+
+@enduml

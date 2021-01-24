@@ -1,0 +1,80 @@
+@startuml
+
+title __MONGODB's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      class it.unipi.lsmsdb.stocksim.lib.database.mongoDB.Main {
+          {static} + main()
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      class it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDB {
+          - databaseName : String
+          - mongoClient : MongoClient
+          - mongoDatabase : MongoDatabase
+          - uri : ConnectionString
+          + aggregate()
+          + connect()
+          + deleteFromArray()
+          + deleteMany()
+          + deleteOne()
+          + disconnect()
+          + findMany()
+          + findOne()
+          + getCollection()
+          + insertInArray()
+          + insertOne()
+          + updateOne()
+          + updateOneInNestedArray()
+          # MongoDB()
+          - buildConnectionString()
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      class it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDBFactory {
+          {static} + create()
+          + getMongoDB()
+          - MongoDBFactory()
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      class it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoServer {
+          - hostname : String
+          - port : int
+          + MongoServer()
+          + getHostname()
+          + getPort()
+      }
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    namespace mongoDB {
+      enum StocksimCollection {
+        ADMINS
+        STOCKS
+        USERS
+        collectionName
+      }
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDB .up.|> it.unipi.lsmsdb.stocksim.lib.database.DB
+  it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDBFactory .up.|> it.unipi.lsmsdb.stocksim.lib.database.DBFactory
+
+@enduml

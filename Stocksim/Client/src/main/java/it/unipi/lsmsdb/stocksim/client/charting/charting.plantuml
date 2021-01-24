@@ -1,0 +1,148 @@
+@startuml
+
+title __CHARTING's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.AvgHistoricalData {
+        - adjCloses : ArrayList<Number>
+        - closes : ArrayList<Number>
+        - dates : ArrayList<Date>
+        - highs : ArrayList<Number>
+        - historicalDatas : ArrayList<HistoricalData>
+        - lows : ArrayList<Number>
+        - opens : ArrayList<Number>
+        - shares : ArrayList<Integer>
+        - volumes : ArrayList<Number>
+        + AvgHistoricalData()
+        + getHistoricalData()
+        - generateAverageHistoricalData()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.BarChart {
+        - bars : ArrayList<String>
+        - categories : ArrayList<String>
+        - categoryAxisLabel : String
+        - valueAxisLabel : String
+        - values : ArrayList<List<Double>>
+        # BarChart()
+        # createChart()
+        # createDataset()
+        # createPanel()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.CandlestickChart {
+        ~ stockSymbol : String
+        - dataRows : ArrayList<OHLCRow>
+        - timeAxisLabel : String
+        - valuesAxisLabel : String
+        # CandlestickChart()
+        # createChart()
+        # createDataset()
+        # createPanel()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    abstract class it.unipi.lsmsdb.stocksim.client.charting.Chart {
+        # chartTitle : String
+        {abstract} # createChart()
+        {abstract} # createDataset()
+        {abstract} # createPanel()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.ChartUtil {
+        {static} + main()
+        {static} + showCharts()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.ChartingFactory {
+        {static} + getBarChart()
+        {static} + getCandlestickChart()
+        {static} + getLineChart()
+        {static} + getPieChart()
+        {static} + getTimeSeriesChart()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.HistoricalData {
+        - rows : ArrayList<OHLCRow>
+        + HistoricalData()
+        + append()
+        + getRows()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.LineChart {
+        - xAxisData : ArrayList<LocalDate>
+        - xAxisLabel : String
+        - yAxisData : ArrayList<Number>
+        - yAxisLabel : String
+        # LineChart()
+        # createChart()
+        # createDataset()
+        # createPanel()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.OHLCRow {
+        ~ adjClose : Number
+        + OHLCRow()
+        + getAdjClose()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.PieChart {
+        - names : ArrayList<String>
+        - values : ArrayList<Number>
+        # PieChart()
+        # createChart()
+        # createDataset()
+        # createPanel()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.TimeSeriesChart {
+        - timeAxisLabel : String
+        - valuesAxisLabel : String
+        - xAxisData : ArrayList<LocalDate>
+        - yAxisData : ArrayList<Number>
+        # TimeSeriesChart()
+        # createChart()
+        # createDataset()
+        # createPanel()
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.client.charting.AvgHistoricalData o-- it.unipi.lsmsdb.stocksim.client.charting.HistoricalData : historicalData
+  it.unipi.lsmsdb.stocksim.client.charting.BarChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.charting.CandlestickChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.charting.LineChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.charting.OHLCRow -up-|> org.jfree.data.xy.OHLCDataItem
+  it.unipi.lsmsdb.stocksim.client.charting.PieChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.charting.TimeSeriesChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+
+@enduml

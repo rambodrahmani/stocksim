@@ -1,0 +1,183 @@
+@startuml
+
+title __CLIENT's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.client.admin {
+    class it.unipi.lsmsdb.stocksim.client.admin.Admin {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.admin {
+    enum AdminMenuAction {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.admin {
+    class it.unipi.lsmsdb.stocksim.client.admin.ClientAdmin {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.app {
+    class it.unipi.lsmsdb.stocksim.client.app.Client {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.app {
+    class it.unipi.lsmsdb.stocksim.client.app.ClientUtil {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.AvgHistoricalData {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.BarChart {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.CandlestickChart {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    abstract class it.unipi.lsmsdb.stocksim.client.charting.Chart {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.ChartUtil {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.ChartingFactory {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.HistoricalData {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.LineChart {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.OHLCRow {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.PieChart {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.charting {
+    class it.unipi.lsmsdb.stocksim.client.charting.TimeSeriesChart {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.CassandraQueryBuilder {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.CountryAggregation {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.DBManager {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.Portfolio {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.PortfolioAggregation {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.SectorAggregation {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.Stock {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.user {
+    class it.unipi.lsmsdb.stocksim.client.user.ClientUser {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.user {
+    enum SearchMenuAction {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.user {
+    class it.unipi.lsmsdb.stocksim.client.user.User {
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.user {
+    enum UserMenuAction {
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.client.admin.Admin o-- it.unipi.lsmsdb.stocksim.client.database.DBManager : dbManager
+  it.unipi.lsmsdb.stocksim.client.app.ClientUtil -up-|> it.unipi.lsmsdb.stocksim.lib.util.Util
+  it.unipi.lsmsdb.stocksim.client.charting.AvgHistoricalData o-- it.unipi.lsmsdb.stocksim.client.charting.HistoricalData : historicalData
+  it.unipi.lsmsdb.stocksim.client.charting.BarChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.charting.CandlestickChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.charting.LineChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.charting.OHLCRow -up-|> org.jfree.data.xy.OHLCDataItem
+  it.unipi.lsmsdb.stocksim.client.charting.PieChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.charting.TimeSeriesChart -up-|> it.unipi.lsmsdb.stocksim.client.charting.Chart
+  it.unipi.lsmsdb.stocksim.client.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDB : cassandraDB
+  it.unipi.lsmsdb.stocksim.client.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDBFactory : cassandraDBFactory
+  it.unipi.lsmsdb.stocksim.client.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDB : mongoDB
+  it.unipi.lsmsdb.stocksim.client.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDBFactory : mongoDBFactory
+  it.unipi.lsmsdb.stocksim.client.database.Stock o-- it.unipi.lsmsdb.stocksim.client.database.Stock.Location : location
+  it.unipi.lsmsdb.stocksim.client.user.User o-- it.unipi.lsmsdb.stocksim.client.database.DBManager : dbManager
+
+@enduml

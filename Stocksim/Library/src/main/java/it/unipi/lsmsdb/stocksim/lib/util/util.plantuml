@@ -1,0 +1,31 @@
+@startuml
+
+title __UTIL's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.lib.util {
+    class it.unipi.lsmsdb.stocksim.lib.util.ArgsParser {
+        - commandLineParser : CommandLineParser
+        - helpFormatter : HelpFormatter
+        - options : Options
+        + ArgsParser()
+        + ArgsParser()
+        + getCommandLine()
+        + getHelpFormatter()
+        {static} + main()
+        + printHelp()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.util {
+    class it.unipi.lsmsdb.stocksim.lib.util.Util {
+        {static} + isValidString()
+        {static} + print()
+        {static} + println()
+        {static} + setCassandraLogLevel()
+        {static} + setMongoLogLevel()
+        {static} + setNettyLogLevel()
+    }
+  }
+
+@enduml

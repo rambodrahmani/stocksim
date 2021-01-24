@@ -1,0 +1,34 @@
+@startuml
+
+title __DATABASE's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.server.database {
+    class it.unipi.lsmsdb.stocksim.server.database.CassandraQueryBuilder {
+        {static} - TICKER_SYMBOLS : String
+        {static} - UPDATE_INSERT_QUERY : String
+        {static} + getLastUpdateDateQuery()
+        {static} + getTickerSymbolsQuery()
+        {static} + getUpdateInsertQuery()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.server.database {
+    class it.unipi.lsmsdb.stocksim.server.database.DBManager {
+        + DBManager()
+        + consistencyCheck()
+        + updateDB()
+        - disconnectCassandraDB()
+        - disconnectMongoDB()
+        - getCassandraDB()
+        - getMongoDB()
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.server.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDB : cassandraDB
+  it.unipi.lsmsdb.stocksim.server.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDBFactory : cassandraDBFactory
+  it.unipi.lsmsdb.stocksim.server.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDB : mongoDB
+  it.unipi.lsmsdb.stocksim.server.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDBFactory : mongoDBFactory
+
+@enduml

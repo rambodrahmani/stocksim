@@ -1,0 +1,150 @@
+@startuml
+
+title __DATABASE's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.CassandraQueryBuilder {
+        {static} - INSERT_QUERY : String
+        {static} + getAggregateOHLCQuery()
+        {static} + getTickerExistenceQuery()
+        {static} + getTickerQuery()
+        {static} + getUpdateInsertQuery()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.CountryAggregation {
+        - avgTrailingPE : Double
+        - country : String
+        - marketCapitalization : Double
+        + CountryAggregation()
+        + getAvgTrailingPE()
+        + getCountry()
+        + getMarketCapitalization()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.DBManager {
+        - username : String
+        + adminLogin()
+        + checkTickerExists()
+        + createAdminAccount()
+        + createAssetProfile()
+        + createPortfolio()
+        + deleteAdminAccount()
+        + deletePortfolio()
+        + deleteUserAccount()
+        + disconnect()
+        + getCountriesAggregation()
+        + getHistoricalData()
+        + getPortfolioAggregation()
+        + getSectorsAggregation()
+        + searchCountry()
+        + searchSector()
+        + searchStock()
+        + updateHistoricalData()
+        + userLogin()
+        + userRegister()
+        - addPortfolio()
+        - checkUserExists()
+        - disconnectCassandraDB()
+        - disconnectMongoDB()
+        - getCassandraDB()
+        - getMongoDB()
+        - portfolioExists()
+        - removePortfolio()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.Portfolio {
+        ~ name : String
+        - shares : ArrayList<Integer>
+        - stocks : ArrayList<Stock>
+        + Portfolio()
+        + getDocument()
+        + getName()
+        + getShare()
+        + getShares()
+        + getStocks()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.PortfolioAggregation {
+        - sector : String
+        - stocks : ArrayList<Stock>
+        - total : double
+        + PortfolioAggregation()
+        + getStocks()
+        + getTotal()
+        + toString()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.SectorAggregation {
+        - avgTrailingPE : Double
+        - marketCapitalization : Double
+        - sector : String
+        + SectorAggregation()
+        + getAvgTrailingPE()
+        + getMarketCapitalization()
+        + getSector()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.Stock {
+        - currency : String
+        - exchangeTimezoneName : String
+        - exchangeTimezoneShortName : String
+        - industry : String
+        - logoURL : String
+        - longBusinessSummary : String
+        - longName : String
+        - market : String
+        - marketCap : Double
+        - quoteType : String
+        - sector : String
+        - shortName : String
+        - symbol : String
+        - trailingPE : Double
+        - website : String
+        + Stock()
+        + equals()
+        + getSymbol()
+        + hashCode()
+        + toString()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.database {
+    class it.unipi.lsmsdb.stocksim.client.database.Stock.Location {
+        - address : String
+        - city : String
+        - country : String
+        - phone : String
+        - state : String
+        + Location()
+        + toString()
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.client.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDB : cassandraDB
+  it.unipi.lsmsdb.stocksim.client.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.cassandra.CassandraDBFactory : cassandraDBFactory
+  it.unipi.lsmsdb.stocksim.client.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDB : mongoDB
+  it.unipi.lsmsdb.stocksim.client.database.DBManager o-- it.unipi.lsmsdb.stocksim.lib.database.mongoDB.MongoDBFactory : mongoDBFactory
+  it.unipi.lsmsdb.stocksim.client.database.Stock o-- it.unipi.lsmsdb.stocksim.client.database.Stock.Location : location
+  it.unipi.lsmsdb.stocksim.client.database.Stock +-down- it.unipi.lsmsdb.stocksim.client.database.Stock.Location
+
+@enduml

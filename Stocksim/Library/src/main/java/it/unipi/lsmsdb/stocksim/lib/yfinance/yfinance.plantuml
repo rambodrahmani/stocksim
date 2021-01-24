@@ -1,0 +1,79 @@
+@startuml
+
+title __YFINANCE's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.lib.yfinance {
+    class it.unipi.lsmsdb.stocksim.lib.yfinance.YFAssetProfile {
+        - address : String
+        - city : String
+        - country : String
+        - currency : String
+        - exchangeTimezoneName : String
+        - exchangeTimezoneShortName : String
+        - industry : String
+        - logoURL : String
+        - ...
+        + YFAssetProfile()
+        + getAddress()
+        + getAssetDocument()
+        + getCity()
+        + getCountry()
+        + get...()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.yfinance {
+    class it.unipi.lsmsdb.stocksim.lib.yfinance.YFHistoricalData {
+        - adj_close : double
+        - close : double
+        - date : LocalDate
+        - high : double
+        - low : double
+        - open : double
+        - volume : double
+        + YFHistoricalData()
+        + getAdjClose()
+        + getClose()
+        + get...()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.yfinance {
+    class it.unipi.lsmsdb.stocksim.lib.yfinance.YFSummaryData {
+        - marketCap : double
+        - trailingPE : double
+        + YFSummaryData()
+        + getMarketCap()
+        + getTrailingPE()
+        + setMarketCap()
+        + setTrailingPE()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.yfinance {
+    class it.unipi.lsmsdb.stocksim.lib.yfinance.YahooFinance {
+        {static} - BASE_URL_V10 : String
+        {static} - BASE_URL_V7 : String
+        {static} - BASE_URL_V8 : String
+        - V10URLAssetProfile : String
+        - V10URLSummaryDetail : String
+        - V7URL : String
+        - V8URL : String
+        - period1 : long
+        - period2 : long
+        - symbol : String
+        + YahooFinance()
+        + getAssetProfile()
+        + getHistoricalData()
+        + getSummaryData()
+        + getV10URLAssetProfile()
+        + getV10URLSummaryDetail()
+        + getV7URL()
+        + getV8URL()
+    }
+  }
+
+@enduml

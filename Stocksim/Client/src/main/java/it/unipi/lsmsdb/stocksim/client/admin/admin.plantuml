@@ -1,0 +1,65 @@
+@startuml
+
+title __ADMIN's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.client.admin {
+    class it.unipi.lsmsdb.stocksim.client.admin.Admin {
+        - loggedIn : boolean
+        - name : String
+        - password : String
+        - surname : String
+        - username : String
+        + Admin()
+        + Admin()
+        + addTicker()
+        + createAdminAccount()
+        + getName()
+        + getPassword()
+        + getSurname()
+        + getUsername()
+        + isLoggedIn()
+        + login()
+        + logout()
+        + removeAdminAccount()
+        + removeUserAccount()
+        + setName()
+        + setSurname()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.admin {
+    enum AdminMenuAction {
+      ADD_ADMIN
+      ADD_TICKER
+      LOGIN
+      LOGOUT
+      QUIT
+      REMOVE_ADMIN
+      REMOVE_USER
+      actionDescription
+      actionName
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.admin {
+    class it.unipi.lsmsdb.stocksim.client.admin.ClientAdmin {
+        {static} - admin : Admin
+        {static} - scanner : Scanner
+        {static} + run()
+        {static} - addAdmin()
+        {static} - addTicker()
+        {static} - isLoggedIn()
+        {static} - login()
+        {static} - logout()
+        {static} - parseCommand()
+        {static} - removeAdmin()
+        {static} - removeUser()
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.client.admin.Admin o-- it.unipi.lsmsdb.stocksim.client.database.DBManager : dbManager
+
+@enduml

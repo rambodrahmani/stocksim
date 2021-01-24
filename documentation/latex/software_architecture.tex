@@ -112,6 +112,31 @@ The \texttt{util} package contains some utilities functions, such as the ones
 used to set the log level both for Apache Cassandra and MongoDB, and our custom
 argument parser derived from \texttt{Apache Commons CLI} used to parse command
 line arguments for both StockSim Server and StockSim Client.
+\begin{figure}[H]
+\begin{subfigure}{.3\textwidth}
+  \hspace{-3.0cm}
+  \includegraphics[scale=0.16]{plantuml/library/yfinance.png}
+\end{subfigure}%
+\hspace{-1.0cm}
+\begin{subfigure}{.3\textwidth}
+  \includegraphics[scale=0.2]{plantuml/library/util.png}
+\end{subfigure}
+\hspace{4.0cm}
+\begin{subfigure}{.3\textwidth}
+  \includegraphics[scale=0.2]{plantuml/library/database.png}
+\end{subfigure}
+\end{figure}
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+  \hspace{-3.0cm}
+  \includegraphics[scale=0.2]{plantuml/library/cassandra.png}
+\end{subfigure}%
+\hspace{1.0cm}
+\begin{subfigure}{.5\textwidth}
+  \includegraphics[scale=0.2]{plantuml/library/mongoDB.png}
+\end{subfigure}
+\caption{Library Module UML sample Diagrams}
+\end{figure}
 \subsection{Client}
 The Client module contains the StockSim Client implementation. This program is
 intended to be distributed to end users.\\
@@ -142,6 +167,13 @@ connection management and the interaction with MongoDB and Apache Cassandra.
 Also here you can find classes intended for storing the retrieved data.\\
 The \texttt{charting} directory contains an API for the \texttt{JFreeChart}
 library, used by the Client to create charts of various types.
+\begin{figure}[H]
+	\begin{center}
+        \hspace*{-3.3cm}
+		\includegraphics[scale=0.337]{plantuml/client/charting.png}
+		\caption{Client charting package UML Diagram as sample}
+	\end{center}
+\end{figure}
 \subsection{Server}
 The Server module represents the StockSim Server program which takes care of
 keeping the data updated and consistent.\\
@@ -163,9 +195,22 @@ The Server module has the following structure:
 .7 CassandraQueryBuilder.java.
 .7 DBManager.java.
 }
-\hfill \break
-\noindent The \texttt{app} directory contains the class with the entry point for the application.\\
-The \texttt{database} directory contains the classes necessary for the interaction with the databases.
+\vspace{0.2cm}
+\noindent The \texttt{app} package contains the class with the entry point for
+the application.\\
+The \texttt{database} package contains the classes necessary for the interaction
+with the databases.
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+  \hspace{-2.0cm}
+  \includegraphics[scale=0.2]{plantuml/server/app.png}
+\end{subfigure}%
+\hspace{-2.0cm}
+\begin{subfigure}{.5\textwidth}
+  \includegraphics[scale=0.2]{plantuml/server/database.png}
+\end{subfigure}
+\caption{Server Module UML sample Diagrams}
+\end{figure}
 \section{Apache Maven Assembly Plugin}
 The Assembly Plugin for Maven enables developers to combine project output into 
 a single distributable archive that also contains dependencies, modules, site 

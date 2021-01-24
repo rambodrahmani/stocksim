@@ -1,0 +1,103 @@
+@startuml
+
+title __USER's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.client.user {
+    class it.unipi.lsmsdb.stocksim.client.user.ClientUser {
+        {static} - scanner : Scanner
+        {static} - user : User
+        {static} + run()
+        {static} - countrySearch()
+        {static} - createPortfolio()
+        {static} - deletePortfolio()
+        {static} - isLoggedIn()
+        {static} - listPortfolios()
+        {static} - login()
+        {static} - logout()
+        {static} - parseCommand()
+        {static} - printStockDocuments()
+        {static} - quit()
+        {static} - register()
+        {static} - searchStock()
+        {static} - sectorSearch()
+        {static} - simulatePortfolio()
+        {static} - viewPortfolio()
+        {static} - viewStock()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.user {
+    enum SearchMenuAction {
+      COUNTRY_SEARCH
+      SECTOR_SEARCH
+      SYMBOL_SEARCH
+      actionDescription
+      actionName
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.user {
+    class it.unipi.lsmsdb.stocksim.client.user.User {
+        - email : String
+        - loggedIn : boolean
+        - name : String
+        - password : String
+        - portfolios : ArrayList<Portfolio>
+        - surname : String
+        - username : String
+        + User()
+        + User()
+        + createPortfolio()
+        + deletePortfolio()
+        + getEmail()
+        + getHistoricalData()
+        + getName()
+        + getPassword()
+        + getSurname()
+        + getUsername()
+        + isLoggedIn()
+        + login()
+        + logout()
+        + printPortfolios()
+        + quit()
+        + register()
+        + searchCountry()
+        + searchSector()
+        + searchStock()
+        + setEmail()
+        + setName()
+        + setPortfolios()
+        + setSurname()
+        + showCountriesAggregation()
+        + showSectorsAggregation()
+        + simulatePortfolio()
+        + viewPortfolio()
+        + viewStock()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.client.user {
+    enum UserMenuAction {
+      CREATE_PORTFOLIO
+      DELETE_PORTFOLIO
+      LIST_PORTFOLIOS
+      LOGIN
+      LOGOUT
+      QUIT
+      REGISTER
+      SEARCH_STOCK
+      SIMULATE_PORTFOLIO
+      VIEW_PORTFOLIO
+      VIEW_STOCK
+      actionDescription
+      actionName
+    }
+  }
+  
+
+  it.unipi.lsmsdb.stocksim.client.user.User o-- it.unipi.lsmsdb.stocksim.client.database.DBManager : dbManager
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+
+title __DATABASE's Class Diagram__\n
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    interface it.unipi.lsmsdb.stocksim.lib.database.DB {
+        {abstract} + connect()
+        {abstract} + disconnect()
+    }
+  }
+  
+
+  namespace it.unipi.lsmsdb.stocksim.lib.database {
+    interface it.unipi.lsmsdb.stocksim.lib.database.DBFactory {
+    }
+  }
+
+@enduml
