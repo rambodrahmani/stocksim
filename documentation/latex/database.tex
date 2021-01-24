@@ -36,7 +36,7 @@ database to populate our own column family database.
 \subsection{Yahoo! Finance}
 "Yahoo Finance provides free stock quotes, up-to-date news, portfolio management
 resources, international market data, social interaction and mortgage rates that
-help you manage your financial life."\\
+help you manage your financial life."\footnote{www.finance.yahoo.com}\\
 Yahoo Finance is a service, part of the Yahoo network, that provides several of
 information about stocks and companies; they are frequently updated, reliable
 and well organized.\\
@@ -55,7 +55,7 @@ data. It's also possible to add a new stocks to the dataset, quoted in any
 market exchange of any country.
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.12]{img/dataset_comp.png}
+		\includegraphics[scale=0.09]{img/dataset_comp.png}
 	\end{center}
 	\vspace{-0.6cm}
 \end{figure}
@@ -71,7 +71,7 @@ fetch the raw data please refer to:
 }
 \section{MongoDB}
 "MongoDB is a general purpose, document-based, distributed database built for
-modern application developers and for the cloud era."\\
+modern application developers and for the cloud era."\footnote{https://www.mongodb.com/}\\\\
 MongoDB is a very famous document database with a great support for cloud
 operations, which will improve the data availability of our application. It also
 supports several analytic functions and the creation of custom indexes in order
@@ -81,12 +81,12 @@ this structure:
 \begin{figure}[H]
     \vspace{0.2cm}
 	\begin{center}
-		\includegraphics[scale=0.76]{img/mongoDB_schema_1.png}
+		\includegraphics[scale=0.74]{img/mongoDB_schema_1.png}
 	\end{center}
 \end{figure}
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[scale=0.8]{img/mongoDB_schema_2.png}
+		\includegraphics[scale=0.2]{img/mongoDB_schema_2.png}
 	\end{center}
 \end{figure}
 \noindent
@@ -120,7 +120,7 @@ This schema is composed by 3 collections: \textbf{stocks}, \textbf{users} and \t
 \subsection{Aggregations}
 One of the main features of our application is the possibility to choose some
 stocks from the market and combine them into a portfolio. When a user is looking
-for a stock, they want to know statistics about \textbf{industries} and
+for a stock, they want to know statistics about \textbf{countries} and
 \textbf{sectors}, along with classification by \textbf{level of capitalization}
 and \textbf{P/E ratio} (Price-Earnings Ratio); in order to do so, we will
 provide these aggregation pipelines:
@@ -174,10 +174,7 @@ In order to speed up read operations in the document database, we decided to
 introduce some custom indexes:
 \begin{itemize}
     \item a REGULAR and UNIQUE index on the attribute \textbf{symbol} in the collection stocks;
-    \item a REGULAR index on the attribute \textbf{marketCAP} in the collection stocks;
-    \item a REGULAR index on the attribute \textbf{trailingPE} in the collection stocks;
     \item a REGULAR index on the attribute \textbf{sector} in the collection stocks;
-    \item a REGULAR index on the attribute \textbf{industry} in the collection stocks;
     \item a REGULAR index on the attribute \textbf{country} in the collection stocks;
     \item a REGULAR and UNIQUE index on the attribute \textbf{username} in the collection users;
 \end{itemize}
@@ -187,11 +184,11 @@ We provide some statistics that endorse our indexes choices:
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[scale=0.11]{img/memory_mongo.png}
+  \includegraphics[scale=0.25]{img/memory_mongo.png}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[scale=0.11]{img/latency_mongo.png}
+  \includegraphics[scale=0.13]{img/latency_mongo.png}
 \end{subfigure}
 \end{figure}
 \noindent Similar results can be found about the username index in the
@@ -202,7 +199,7 @@ high availability without compromising performance. Linear scalability and
 proven fault-tolerance on commodity hardware or cloud infrastructure make it the
 perfect platform for mission-critical data. Cassandra's support for replicating
 across multiple datacenters is best-in-class, providing lower latency for your
-users and the peace of mind of knowing that you can survive regional outages."\\
+users and the peace of mind of knowing that you can survive regional outages."\footnote{https://cassandra.apache.org/}\\
 Apache Cassandra is a database designed for high scalability and availability;
 it is capable of handling a huge amount of data and manage it in a decentralized
 architecture across multiple nodes. It is built to be write optimized, but with
@@ -242,9 +239,7 @@ decentralization and fast data retrieval.
     \item The MongoDB cluster is also built using all 3 virtual machines, and
     the service is replicated; an initial primary server is elected, then
     another one will take its place if the former goes down. The cluster is
-    available as long as one server is working, and incoming traffic could be
-    balanced with the "nearest" preference on client connection; in this way the
-    client would connect to the server with the lowest ping time.
+    available as long as one server is working.
 \end{itemize}
 \begin{figure}[H]
 	\begin{center}
