@@ -26,22 +26,22 @@
 \contentsline {subsection}{\numberline {5.1.1}Library}{23}{subsection.5.1.1}% 
 \contentsline {subsection}{\numberline {5.1.2}Client}{24}{subsection.5.1.2}% 
 \contentsline {subsection}{\numberline {5.1.3}Server}{25}{subsection.5.1.3}% 
-\contentsline {section}{\numberline {5.2}Apache Maven Assembly Plugin}{26}{section.5.2}% 
-\contentsline {chapter}{\numberline {6}Conclusions}{27}{chapter.6}% 
-\contentsline {chapter}{\numberline {7}Appendices}{28}{chapter.7}% 
-\contentsline {part}{II\hspace {1em}User Manual}{34}{part.2}% 
-\contentsline {chapter}{\numberline {8}StockSim Server Manual}{35}{chapter.8}% 
-\contentsline {chapter}{\numberline {9}StockSim Client Manual}{38}{chapter.9}% 
-\contentsline {section}{\numberline {9.1}StockSim Client User Mode}{38}{section.9.1}% 
-\contentsline {subsection}{\numberline {9.1.1}Search stock}{39}{subsection.9.1.1}% 
-\contentsline {subsection}{\numberline {9.1.2}View stock}{41}{subsection.9.1.2}% 
-\contentsline {subsection}{\numberline {9.1.3}Create portfolio}{42}{subsection.9.1.3}% 
-\contentsline {subsection}{\numberline {9.1.4}List portfolios}{42}{subsection.9.1.4}% 
-\contentsline {subsection}{\numberline {9.1.5}View portfolio}{43}{subsection.9.1.5}% 
-\contentsline {subsection}{\numberline {9.1.6}Simulate portfolio}{43}{subsection.9.1.6}% 
-\contentsline {subsection}{\numberline {9.1.7}Delete portfolio}{43}{subsection.9.1.7}% 
-\contentsline {section}{\numberline {9.2}StockSim Client Admin Mode}{43}{section.9.2}% 
-\contentsline {subsection}{\numberline {9.2.1}Add ticker}{44}{subsection.9.2.1}% 
-\contentsline {subsection}{\numberline {9.2.2}Add admin}{44}{subsection.9.2.2}% 
-\contentsline {subsection}{\numberline {9.2.3}Remove admin}{44}{subsection.9.2.3}% 
-\contentsline {subsection}{\numberline {9.2.4}Remove user}{45}{subsection.9.2.4}% 
+\contentsline {section}{\numberline {5.2}Apache Maven Compiler Plugin}{26}{section.5.2}% 
+\contentsline {chapter}{\numberline {6}Conclusions}{28}{chapter.6}% 
+\contentsline {chapter}{\numberline {7}Appendices}{29}{chapter.7}% 
+\contentsline {part}{II\hspace {1em}User Manual}{35}{part.2}% 
+\contentsline {chapter}{\numberline {8}StockSim Server Manual}{36}{chapter.8}% 
+\contentsline {chapter}{\numberline {9}StockSim Client Manual}{39}{chapter.9}% 
+\contentsline {section}{\numberline {9.1}StockSim Client User Mode}{39}{section.9.1}% 
+\contentsline {subsection}{\numberline {9.1.1}Search stock}{40}{subsection.9.1.1}% 
+\contentsline {subsection}{\numberline {9.1.2}View stock}{42}{subsection.9.1.2}% 
+\contentsline {subsection}{\numberline {9.1.3}Create portfolio}{43}{subsection.9.1.3}% 
+\contentsline {subsection}{\numberline {9.1.4}List portfolios}{43}{subsection.9.1.4}% 
+\contentsline {subsection}{\numberline {9.1.5}View portfolio}{44}{subsection.9.1.5}% 
+\contentsline {subsection}{\numberline {9.1.6}Simulate portfolio}{44}{subsection.9.1.6}% 
+\contentsline {subsection}{\numberline {9.1.7}Delete portfolio}{44}{subsection.9.1.7}% 
+\contentsline {section}{\numberline {9.2}StockSim Client Admin Mode}{44}{section.9.2}% 
+\contentsline {subsection}{\numberline {9.2.1}Add ticker}{45}{subsection.9.2.1}% 
+\contentsline {subsection}{\numberline {9.2.2}Add admin}{45}{subsection.9.2.2}% 
+\contentsline {subsection}{\numberline {9.2.3}Remove admin}{45}{subsection.9.2.3}% 
+\contentsline {subsection}{\numberline {9.2.4}Remove user}{46}{subsection.9.2.4}% 

@@ -4,12 +4,29 @@
 %       See main.tex for further information.
 %-------------------------------------------------------------------------------
 \chapter{Conclusions}
-The modular architecture of the project (v. Chapter 5) allowed us to create stand-alone APIs (for both the databases and Yahoo Finance) that are not inherently tied with the StockSim application or with financial applications in general. They all can possibly be used stand-alone and could be integrated in different projects.\\
-
-Many choices we made during both the designing and the development process proved to be effective.
-We opted for a column database architecture to store the historical data because it really lends itself to the usage we thought of. Performance analysis of the query latency (as shown in paragraph 4.5) has confirmed out hypothesis, although tests have been run only locally.\\It would be interesting to repeat the measurements with a bigger database and in a controlled environment where network jittering does not skew the results too much, something that we were not able to do due to limited resources and due to the need of a VPN.\\
-
-At the moment the database is limited to US market only, but it would be really simple to integrate data from other stock markets around the world.\\
-This would not be a problem since the column database architecture is by nature suitable for geographical distribution and for dealing with huge amounts of data. Another test worth doing to evaluate the performance of the application would be to deploy several geographically distributed servers and increase the data volume by some orders of magnitude: the current database amounts to around 1.43 GB and it would be interesting to see how it behaves with tens of terabytes of data.
-
-\afterpage{\blankpage}
+The modular architecture of the project (Chapter 5) allowed us to create
+stand-alone APIs (for both the databases and Yahoo Finance) that are not
+inherently tied with the StockSim application or with financial applications in
+general. They all can possibly be used stand-alone and could be integrated in
+different projects.\\
+\\
+Most of the choices we made during both the designing and the development
+process proved to be effective. We opted for a column database architecture to
+store the historical data because it really lends itself to such usages.
+Performance analysis of the query latency (as shown in paragraph 4.5) confirmed
+our hypothesis, although tests have been run only locally.\\
+It would be interesting to repeat the measurements with a bigger database and in
+a controlled environment where network jittering does not skew the results too
+much, something that we were not able to do due to limited resources of the VMs
+and due to the fact that all traffic is filtered through a VPN.\\
+\\
+At the moment the database is limited to the US market data only, but it would
+be really simple to integrate data from other stock markets around the world
+using the StockSim Client in \texttt{admin} mode.\\
+From the Software and Data Model architectural point of view, this would not be
+a problem since the column database architecture is by nature suitable for
+geographical distribution and for dealing with huge amounts of data. Another
+test worth doing to evaluate the performance of the application would be to
+deploy several geographically distributed servers and increase the data volume
+by some orders of magnitude: the current database size is around 1.43 GB and it
+would be interesting to see how it behaves with tens of terabytes of data.

@@ -211,8 +211,50 @@ with the databases.
 \end{subfigure}
 \caption{Server Module UML sample Diagrams}
 \end{figure}
-\section{Apache Maven Assembly Plugin}
-The Assembly Plugin for Maven enables developers to combine project output into 
-a single distributable archive that also contains dependencies, modules, site 
-documentation, and other files.
-For every module an independent .jar file can be generated  which allows to run that module \textit{standalone}, without any dependency issue.
+\section{Apache Maven Compiler Plugin}
+The Compiler Plugin is used to compile the sources of the project.
+\vspace{0.2cm}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,
+keepspaces=true,tabsize=4,numberstyle=\footnotesize,numbersep=8pt,frame=single]
+$ mvn package
+\end{lstlisting}
+\vspace{-0.3cm}
+The command line will print out various actions, and end with the following:
+\vspace{0.2cm}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,
+keepspaces=true,tabsize=4,numberstyle=\footnotesize,numbersep=8pt,frame=single]
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Stocksim 1.0:
+[INFO] 
+[INFO] Stocksim ........................................... SUCCESS [  0.001 s]
+[INFO] Library ............................................ SUCCESS [  0.820 s]
+[INFO] Client ............................................. SUCCESS [  6.287 s]
+[INFO] Server ............................................. SUCCESS [  5.337 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  12.514 s
+[INFO] Finished at: 2021-01-24T12:58:10+01:00
+[INFO] ------------------------------------------------------------------------
+\end{lstlisting}
+Thanks to the proper configuration in the \texttt{.pom} file of each module,
+the following files are produced
+\vspace{0.2cm}
+\dirtree{%
+.1 Stocksim.
+.2 Library.
+.3 target.
+.4 Library-1.0.jar.
+.2 Client.
+.3 target.
+.4 Client-1.0.jar.
+.4 Client-1.0-jar-with-dependencies.jar.
+.2 Server.
+.3 target.
+.4 Server-1.0.jar.
+.4 Server-1.0-jar-with-dependencies.jar.
+}
+\vspace{0.2cm}
+\noindent The \texttt{jar-with-dependencies} \texttt{.jar} files provide all-inclusive
+Java Archives which can be used to execute the StockSim Server and the StockSim
+Client programs.
