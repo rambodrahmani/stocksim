@@ -429,7 +429,7 @@ public class ClientUser {
                 ClientUtil.println("Error while executing portfolio aggregation.\n");
             }
         } else {
-            ClientUtil.print("Invalid input string.\n");
+            ClientUtil.println("Invalid input string.\n");
         }
     }
 
@@ -468,7 +468,7 @@ public class ClientUser {
                 ClientUtil.println("Incorrect days granularity.\n");
             }
         } else {
-            ClientUtil.print("Invalid input string.\n");
+            ClientUtil.println("Invalid input string.\n");
         }
     }
 

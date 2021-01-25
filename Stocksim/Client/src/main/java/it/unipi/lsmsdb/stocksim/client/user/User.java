@@ -379,7 +379,7 @@ public class User {
                     charts.add(pieChart);
 
                     // display charts
-                    ChartUtil.showCharts(charts, name + " Aggregation Result", false);
+                    ChartUtil.showCharts(charts, name + " Aggregation Result", true);
 
                     // portfolio found, exit loop
                     break;

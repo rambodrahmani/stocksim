@@ -45,3 +45,4 @@
 \contentsline {subsection}{\numberline {9.2.5}View portfolio}{45}{subsection.9.2.5}% 
 \contentsline {subsection}{\numberline {9.2.6}Simulate portfolio}{46}{subsection.9.2.6}% 
 \contentsline {subsection}{\numberline {9.2.7}Delete portfolio}{46}{subsection.9.2.7}% 
+\contentsline {subsection}{\numberline {9.2.8}Quit}{47}{subsection.9.2.8}% 

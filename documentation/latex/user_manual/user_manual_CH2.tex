@@ -59,7 +59,7 @@ logout             logout from current admin account.
 quit               quit StockSim client.                   
 > 
 \end{lstlisting}
-\vspace{-0.5cm}
+\vspace{-0.4cm}
 \subsection{Add stock}
 The \texttt{add-stock} command allows an admin to add a new stock to the
 database, using its ticker (stock symbol) provided that it exists in the
@@ -86,9 +86,9 @@ Asset Profile created with success. Updating historical data.
 Historical data updated with success.
 New stock added.
 \end{lstlisting}
-\vspace{-0.5cm}
+\vspace{-0.4cm}
 \subsection{Add admin}
-The \texttt{add-admin} option allows an admin to add other admin.
+The \texttt{add-admin} command allows an admin to add other admin.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > add-admin
@@ -98,11 +98,9 @@ Admin account username: admin2
 Admin account password: stocksim
 New admin account created.
 \end{lstlisting}
-
+\vspace{-0.4cm}
 \subsection{Remove admin}
-
-The \texttt{remove-admin} option allows an admin to remove another admin from their role.
-
+The \texttt{remove-admin} command allows an admin to delete another admin account:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > remove-admin
@@ -110,21 +108,20 @@ Admin account username: admin2
 Admin account password: stocksim
 Admin account deleted.
 \end{lstlisting}
-
+\vspace{-0.4cm}
 \subsection{Remove user}
-The \texttt{remove-user} option allows an admin to delete a user from the database.
-
+The \texttt{remove-user} command allows an admin to delete a user account:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > remove-user
 User account email: jsmith@example.com
 User account deleted.
 \end{lstlisting}
-
 \section{StockSim Client User Mode}
 Upon launching the StockSim Client in \textit{user} mode, the user is presented
 with three options: \textit{register}, \textit{login} and \textit{quit}.\\
 Using the \textit{register} command, the user can sign-up:
+\vspace{0.2cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > register
@@ -157,10 +154,9 @@ delete-portfolio		delete user stock portfolio.
 logout					logout from current user account.       
 quit					quit StockSim client.   
 \end{lstlisting}
-
+\vspace{-0.4cm}
 \subsection{Search stock}
-The \texttt{search-stock} option allows the user to search for a specific stock in the database. The search can be done by \textbf{symbol}, by \textbf{sector} or by \textbf{country}.\\
-
+The \texttt{search-stock} command allows the user to search for a specific stock in the database. The search can be done by \textbf{symbol}, by \textbf{sector} or by \textbf{country}.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > search-stock
@@ -169,7 +165,9 @@ symbol-search			search for a stock ticker using its ticker.
 sector-search			search for a stock ticker using the sector.
 country-search			search for a stock ticker using the country.
 \end{lstlisting}
+\vspace{-0.5cm}
 A search by symbol prompts the user for the symbol of the stock to be searched and returns all the information available in the database about that stock.
+\vspace{0.2cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > symbol-search
@@ -193,102 +191,160 @@ Website: http://www.tesla.com
 Long business summary:
 Tesla, Inc. designs, develops, manufactures, leases, and sells electric
 vehicles, and energy [...]
-
 \end{lstlisting}
-
-A search by sector opens a two bar charts showing aggregated data for all sectors (one for total market capitalizaion and the other for average trailing P/E) and prompts the user for the sector they are interested in.
-Once the desired sector is entered, a list with all related symbols is returned.
-
-\hfill \break
-{\centering
-\includegraphics[scale=0.28]{img/user_manual/sector_aggregation.png}\\
-}
-
+A search by sector opens a frame with two bar charts showing aggregated data for
+all available sectors (one chart with the total market capitalization and the
+other for the average trailing P/E) and prompts the user for the sector they are
+interested in. Once the desired sector is entered, a list with all available
+stocks is returned.
+\newgeometry{bottom=0.1cm}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.29]{img/user_manual/sectors_aggregation.png}
+	\end{center}
+\end{figure}
+\vspace{-0.5cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > sector-search
 Sector Name: Energy
 [ BROG, PSXP, KOS, GMLP, CLMT, NCSM, PFIE, CCLP, NGS, WES, ENSV, FTSI, AXAS, EC, DEN, TTI, NBLX, E, GTE, PSX, PED, NNA, VVV, PVL, AR, HP, CEQP, MUR, DK, RTLR, LEU, NGL, NFG, PTEN, MMLP, PAGP, NESR, NR, PBFX, TRMD, BKR, NOG, ... ]
 \end{lstlisting}
-
-The search by country is similar to the search by sector: it also opens two bar charts with aggregated data by country and returns a list of the symbols of all the stocks belonging to the specified country.
+\vspace{-0.5cm}
+The search by country is similar to the search by sector: it also opens a frame
+with two bar charts with data aggregated by country and returns a list of the
+symbols of all the stocks belonging to the specified country.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.22]{img/user_manual/countries_aggregation.png}
+	\end{center}
+\end{figure}
+\vspace{-0.6cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > country-search
 Country Name: Italy
-[ E, NTZ, KLR, RACE, ]
+[ E, NTZ, KLR, RACE, G.MI, ]
 \end{lstlisting}
 \subsection{View stock}
-
-The \texttt{view-stock} option allows the user to see the evolution of a stock in the market for a specific time range.\\
-It asks the user for the stock symbol, the start and end dates and the day granularity, and then shows both a candlestick chart and a line chart of that stock for the desired time interval, along with printing all the information about that stock.
-
+The \texttt{view-stock} command allows the user to see the evolution of a stock
+in the market for a specific time interval.\\
+It asks the user for the stock symbol, the start and end dates and the days
+granularity, and then shows both a candlestick chart and a time series chart of
+that stock for the desired time interval, along with printing all the
+information about that stock.
+\vspace{0.2cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > view-stock
-Ticker Symbol: TSLA
-Start Date [YYYY-MM-DD]: 2021-01-01
-End Date [YYYY-MM-DD]: 2021-01-10
-Days granularity: 1
-Short Name: Tesla, Inc.
-Long Name: Tesla, Inc.
-Symbol: TSLA
+Ticker Symbol: AAPL
+Start Date [YYYY-MM-DD]: 2010-01-01
+End Date [YYYY-MM-DD]: 2021-01-01
+Days granularity: 20
+
+Short Name: Apple Inc.
+Long Name: Apple Inc.
+Symbol: AAPL
 Quote type: EQUITY
-Market capitalization: 8.00041992192E11
-PE ratio: 1265.3346
+Market capitalization: 2.152956821504E12
+PE ratio: 40.234756
 Market: us_market
 Exchange timezone short name: EST
 Exchange timezone name: America/New_York
-Sector: Consumer Cyclical
-Industry: Auto Manufacturers
+Sector: Technology
+Industry: Consumer Electronics
 Currency: USD
-Location:  3500 Deer Creek Road Palo Alto CA United States
-650-681-5000
-Logo URL: https://logo.clearbit.com/tesla.com
-Website: http://www.tesla.com
+Location:  One Apple Park Way Cupertino CA United States
+408-996-1010
+Logo URL: https://logo.clearbit.com/apple.com
+Website: http://www.apple.com
 Long business summary:
-Tesla, Inc. designs, develops, manufactures, leases, and sells electric
-vehicles, and energy [...]
+Apple Inc. designs, manufactures, and markets smartphones, personal computers,
+tablets, wearables, [...]
 \end{lstlisting}
-
-\hfill \break
-{\centering
-\includegraphics[scale=0.32]{img/user_manual/view_stock.png}\\
-}
-
+\vspace{-0.6cm}
+\begin{figure}[H]
+	\begin{center}
+        \hspace*{-2.2cm}
+		\includegraphics[scale=0.32]{img/user_manual/view_stock.png}
+	\end{center}
+\end{figure}
+\restoregeometry
+\newgeometry{bottom=0.1cm}
 \subsection{Create portfolio}
-The \texttt{create-portfolio} option allows the user create a new portfolio and insert stocks into it.\\
-The user is first required to insert a name for the new portfolio and then to type a list of comma-separated symbols of the stocks they wish to insert in the portfolio.
-
+The \texttt{create-portfolio} command allows the user to create a new portfolio
+with the specified stocks and shares.\\
+The user is first required to insert a name for the new portfolio and then to
+type a list of comma-separated symbols and shares of the stocks they wish to
+insert in the portfolio.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > create-portfolio
-Portfolio name: Portfolio1
-Ticker Symbols [comma separated]: TSLA, MSFT, RACE
+Portfolio name: Portfolio5
+Stock Symbols [comma separated]: AAPL, MSFT, TSLA
+Stock Shares [comma separated]: 14000, 20000, 40000
 Portfolio created correctly.
-
 \end{lstlisting}
-
+\vspace{-0.6cm}
 \subsection{List portfolios}
-The \texttt{list-portfolios} option shows the user a list of all their portfolios and the stocks each one of them is made of.\\
-
+The \texttt{list-portfolios} command shows the user a list of all their
+portfolios and the stocks each one of them is made of.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > list-portfolios
-Portfolio1: [ TSLA, MSFT, RACE, ]
-FAANG: [ FB, AAPL, AMZN, NFLX, GOOGL, ]
+Portfolio1: [ TSLA (10), MSFT (12), RACE (13), ]
+Portfolio2: [ TSLA (1), MSFT (2), RACE (3), DISH (4), ]
+Portfolio3: [ TSLA (1), MSFT (30), RACE (3), DISH (4), BROG (5), ALLO (6), ]
+Portfolio4: [ RACE (1), AAPL (10), MSFT (100), TSLA (1000), ]
+Portfolio5: [ AAPL (14000), MSFT (20000), TSLA (40000), ]
 \end{lstlisting}
-
+\vspace{-0.6cm}
 \subsection{View portfolio}
-The \texttt{view-portfolio} option allows the user to view the composition of one of their portfolios. It prompts the user for the name of the portfolio to be viewed and then shows a pie chart of the portfolio.\\
-
-{\centering
-\includegraphics[scale=0.32]{img/user_manual/view_portfolio.png}\\
-}
-
+The \texttt{view-portfolio} command allows the user to view the composition of
+one of their portfolios. It prompts the user for the name of the portfolio to be
+viewed and then shows a pie chart of the portfolio.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.32]{img/user_manual/view_portfolio.png}
+	\end{center}
+\end{figure}
+\restoregeometry
 \subsection{Simulate portfolio}
-TODO
-
+The \texttt{simulate-portfolio} command allows the user to simulate the trading
+of the stocks in their Portfolio for the desired time interval. The user is
+prompted for the name of the portfolio to be simulated, the start and end dates
+and the days granularity to be used in the aggregation. As a result, the
+candlestick resulting from the simulation is displayed:
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+> simulate-portfolio
+Portfolio name: Portfolio5
+Start Date [YYYY-MM-DD]: 2014-01-01
+End Date [YYYY-MM-DD]: 2021-01-01
+Days granularity: 20
+\end{lstlisting}
+\vspace{-0.6cm}
+\begin{figure}[H]
+	\begin{center}
+        \hspace*{-2.5cm}
+		\includegraphics[scale=0.33]{img/user_manual/simulate_portfolio.png}
+	\end{center}
+\end{figure}
 \subsection{Delete portfolio}
-The \texttt{delete-portfolio} option allows the user to delete one of their portfolios. It prompts the user for the name of the portfolio to be deleted and then it deletes the portfolio.
+The \texttt{delete-portfolio} command allows the user to delete one of their
+portfolios. It prompts the user for the name of the portfolio to be deleted and
+then deletes the gieven portfolio.
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+> delete-portfolio
+Portfolio name: Portfolio5
+Portfolio deleted.
+\end{lstlisting}
+\subsection{Quit}
+The \texttt{quit} command can be used to terminate the program.
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+> quit
 
+Process finished with exit code 0
+\end{lstlisting}
