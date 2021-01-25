@@ -6,6 +6,7 @@ programs:
 always up-to-date;
 * StockSim Client: can be launched in either ```admin``` or ```user``` mode and
 provides different functionalities based on the running mode.
+
 The StockSim Server is not thought to be distributed to end users and is
 intended to be running on a Server machine, whereas the StockSim Client can be
 used by both administrators and normal users. The choice was made to provide the
@@ -19,4 +20,9 @@ visualize the resulting statistics.
 All the programs are terminal based but the StockSim Client, running in
 ```user``` mode, can display charts resulting from the different operations
 performed on stocks.
+
 ![StockSim Stock View](documentation/latex/img/user_manual/view_stock.png)
+
+## Database
+StockSim relys upon both a MongoDB Cluster and an Apache Cassandra Cluster.
+![StockSim Databases](documentation/latex/img/cluster_diagram.png)
