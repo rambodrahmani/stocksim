@@ -7,7 +7,7 @@ package it.unipi.lsmsdb.stocksim.client.admin;
  */
 public enum AdminMenuAction {
     LOGIN("login", "login to your admin account."),
-    ADD_TICKER("add-ticker", "add a new ticker symbol to the database."),
+    ADD_STOCK("add-stock", "add a new stock to the database using its ticker."),
     ADD_ADMIN("add-admin", "create new admin account."),
     REMOVE_ADMIN("remove-admin", "delete admin account."),
     REMOVE_USER("remove-user", "delete user account."),

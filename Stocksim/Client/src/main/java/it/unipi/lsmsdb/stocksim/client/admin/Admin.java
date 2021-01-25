@@ -81,12 +81,13 @@ public class Admin {
      *
      * @return
      */
-    public boolean addTicker(final String symbol) throws CQLSessionException, IOException, JSONException {
+    public boolean addStock(final String symbol) throws CQLSessionException, IOException, JSONException {
         boolean ret  = true;
 
         // check if symbol is not already present in the db
         final boolean tickerExists = dbManager.checkTickerExists(symbol);
         if (tickerExists) {
+            ClientUtil.println("Stock already available in the database.");
             return false;
         }
 

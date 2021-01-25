@@ -53,9 +53,11 @@ quit		quit Stocksim server.
 [UPDATER THREAD] Going to sleep for 13 hours before next update.
 > 
 \end{lstlisting}
+\vspace{-0.5cm}
 which executes the \texttt{historical data update} procedure right after
 startup. Whereas, the second startup mode can be triggered using the
 \texttt{--no-update} command line argument:
+\vspace{0.2cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 $ java -jar Server.jar --no-update
@@ -102,15 +104,31 @@ update       update databases historical data.
 quit         quit Stocksim server.
 > 
 \end{lstlisting}
+\vspace{-0.5cm}
 in this mode, no update is executed right after startup, the main menu is shown
 and the user can decide the action to be performed.\\
 \\
 In the previously shown examples, we should pay attention to the following
 \begin{itemize}
-    \item \texttt{DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.}
-    \item \texttt{the stocksim server automatically detects the last update
-    date, the number of days since the last update and fetches the required
-    data using Yahoo Finance for EACH and EVERY ticker symbol.}
-    \item \texttt{Historical Data Update logs.}
-    \item \texttt{[UPDATER THREAD]}
+    \item when the \texttt{update} command is used, the first output is
+    "\texttt{DATA CONSISTENCY CHECK SUCCESS. PROCEEDING WITH UPDATE.}", this is
+    because before updating the historical data for each stock an integrity
+    check is performed to check the consistency of the data stored on MongoDB
+    and Apache Casssandra; the same operation can be executed standalone with
+    the command \texttt{status}; in case of inconsistencies, the program will
+    show debugging information useful to find out the issues;
+    \item the historical data update functionality was implemented to be as
+    automated as possible; for each stocks, the StockSim Server automatically
+    detects the last update date, the number of days since the last update and
+    fetches the required missing data using the Yahoo Finance API;
+    \item while the historical data update is being performed, some logs are
+    printed relative to the stock being updated, the number of days since the
+    last update; also, at the end, a report is provided in order to check for
+    eventual errors in the update process; the log level can be increased to be
+    more verbose using the \texttt{setLogLevel} utility method provided by
+    \texttt{ServerUtil.java};
+    \item the \texttt{[UPDATER THREAD]}, which prints messages to the terminal
+    in parallel to the \texttt{main} thread, is in charge of executing the
+    historical data update each day at 20:00 P.M. (at the end of the
+    \textbf{after-hours trading}) New York time.
 \end{itemize}

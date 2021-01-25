@@ -41,7 +41,7 @@ public class ClientUtil extends Util {
      */
     public final static void printAdminMainMenu() {
         print("Available Commands:\n");
-        print(String.format("%-12s %5s %-40s%n", AdminMenuAction.ADD_TICKER.getActionName(), " ", AdminMenuAction.ADD_TICKER.getActionDescription()));
+        print(String.format("%-12s %5s %-40s%n", AdminMenuAction.ADD_STOCK.getActionName(), " ", AdminMenuAction.ADD_STOCK.getActionDescription()));
         print(String.format("%-12s %5s %-40s%n", AdminMenuAction.ADD_ADMIN.getActionName(), " ", AdminMenuAction.ADD_ADMIN.getActionDescription()));
         print(String.format("%-12s %5s %-40s%n", AdminMenuAction.REMOVE_ADMIN.getActionName(), " ", AdminMenuAction.REMOVE_ADMIN.getActionDescription()));
         print(String.format("%-12s %5s %-40s%n", AdminMenuAction.REMOVE_USER.getActionName(), " ", AdminMenuAction.REMOVE_USER.getActionDescription()));

@@ -58,16 +58,16 @@ public class ClientAdmin {
                         }
                     }
                     break;
-                case ADD_TICKER:
+                case ADD_STOCK:
                     if (isLoggedIn()) {
                         try {
-                            if (addTicker()) {
-                                ClientUtil.println("New ticker added.\n");
+                            if (addStock()) {
+                                ClientUtil.println("New stock added.\n");
                             } else {
-                                ClientUtil.println("Could not add new ticker.\n");
+                                ClientUtil.println("Could not add new stock.\n");
                             }
                         } catch (final CQLSessionException | IOException | JSONException e) {
-                            e.printStackTrace();
+                            ClientUtil.println("Could not add new stock.\n");
                         }
                     } else {
                         ClientUtil.println("You need to login first.\n");
@@ -156,20 +156,20 @@ public class ClientAdmin {
     /**
      * Add new ticker symbol.
      */
-    private static boolean addTicker() throws CQLSessionException, IOException, JSONException {
+    private static boolean addStock() throws CQLSessionException, IOException, JSONException {
         boolean ret = true;
 
         // ask for admin username
-        ClientUtil.print("Ticker symbol: ");
+        ClientUtil.print("Ticker: ");
         final String symbol = scanner.nextLine();
 
         // check if the given string input is a valid one
         if (ClientUtil.isValidString(symbol)) {
             // add new ticker
-            ret = admin.addTicker(symbol);
+            ret = admin.addStock(symbol);
         } else {
             ret = false;
-            ClientUtil.println("Invalid ticker symbol.");
+            ClientUtil.println("Invalid ticker string.");
         }
 
         return ret;

@@ -5,6 +5,7 @@
 %-------------------------------------------------------------------------------
 \chapter{StockSim Client Manual}
 The StockSim Client has two different running modes: the first one
+\vspace{0.2cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 Welcome to the StockSim Client.
@@ -15,9 +16,12 @@ Available Commands:
 register		create a new user account.              
 login			login to your user account.             
 quit			quit StockSim client. 
+> 
 \end{lstlisting}
+\vspace{-0.5cm}
 is the \texttt{user mode}. Whereas, the second running mode can be triggered 
 using the \texttt{--admin} command line argument:
+\vspace{0.2cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 $ java -jar Client.jar --admin
@@ -27,15 +31,100 @@ Welcome to the StockSim Client.
 *** [RUNNING IN ADMIN MODE] ***
 
 Available Commands:
-login		login to your admin account.            
-quit		quit StockSim client.
+login            login to your admin account.            
+quit             quit StockSim client.                   
+> 
 \end{lstlisting}
+\vspace{-0.5cm}
 and is the \texttt{admin mode}. Although they might look like the same, the 
-available menu actions differ once the user/admin login has been executed.
+available commands, once the user/admin login has been executed, differ.
+\section{StockSim Client Admin Mode}
+After launching the StockSim Client in \textit{admin} mode and logging in with
+admin credentials (\textit{username}: \texttt{admin}, \textit{password}:
+\texttt{stocksim}), the following commands are available:
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+> login
+Username: admin
+Password: stocksim
+Admin login executed correctly.
+Welcome StockSim Admin.
+
+Available Commands:
+add-stock          add a new stock to the database using its ticker.
+add-admin          create new admin account.               
+remove-admin       delete admin account.                   
+remove-user        delete user account.                    
+logout             logout from current admin account.      
+quit               quit StockSim client.                   
+> 
+\end{lstlisting}
+\vspace{-0.5cm}
+\subsection{Add stock}
+The \texttt{add-stock} command allows an admin to add a new stock to the
+database, using its ticker (stock symbol) provided that it exists in the
+Yahoo! Finance database.\\
+The underlying function retrieves both general and historical data from the
+YFinance databases and loads it into the application databases (MongoDB and
+Apache Cassandra).
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,,language={},numbers=left,keepspaces=true,tabsize=4,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+> add-stock
+Ticker symbol: LSMSDB
+Yahoo Finance Quotes not found. Some information will be missing.
+Yahoo Finance Asset Profile not found. Some information will be missing.
+Could not add new ticker.
+
+> add-stock
+Ticker: RACE
+Stock already available in the database.
+Could not add new stock.
+
+> add-stock
+Ticker: G.MI
+Asset Profile created with success. Updating historical data.
+Historical data updated with success.
+New stock added.
+\end{lstlisting}
+\vspace{-0.5cm}
+\subsection{Add admin}
+The \texttt{add-admin} option allows an admin to add other admin.
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+> add-admin
+Admin account name: John
+Admin account surname: Doe
+Admin account username: admin2
+Admin account password: stocksim
+New admin account created.
+\end{lstlisting}
+
+\subsection{Remove admin}
+
+The \texttt{remove-admin} option allows an admin to remove another admin from their role.
+
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+> remove-admin
+Admin account username: admin2
+Admin account password: stocksim
+Admin account deleted.
+\end{lstlisting}
+
+\subsection{Remove user}
+The \texttt{remove-user} option allows an admin to delete a user from the database.
+
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
+numberstyle=\footnotesize,numbersep=8pt,frame=single]
+> remove-user
+User account email: jsmith@example.com
+User account deleted.
+\end{lstlisting}
 
 \section{StockSim Client User Mode}
-Upon launching the application in \textit{user} mode, the user is presented with three options: \textit{register}, \textit{login} and \textit{quit}.\\
-After selecting \textit{register}, the user is asked to enter their info, such as name, surname, email, username and password:
+Upon launching the StockSim Client in \textit{user} mode, the user is presented
+with three options: \textit{register}, \textit{login} and \textit{quit}.\\
+Using the \textit{register} command, the user can sign-up:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > register
@@ -46,9 +135,9 @@ Username [login]: jsmith
 Password [login]: hunter2
 User sign up executed correctly. You can now login.
 \end{lstlisting}
-
-Once the user is registered and logged in, the application offers several options:
-
+\vspace{-0.5cm}
+Once the user is registered and logged in, the application offers several commands:
+\vspace{0.2cm}
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
 numberstyle=\footnotesize,numbersep=8pt,frame=single]
 > login
@@ -202,71 +291,4 @@ TODO
 
 \subsection{Delete portfolio}
 The \texttt{delete-portfolio} option allows the user to delete one of their portfolios. It prompts the user for the name of the portfolio to be deleted and then it deletes the portfolio.
-
-\section{StockSim Client Admin Mode}
-
-After launching the application in \textit{admin} mode and logging in with admin credential, the following options are available:
-
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
-numberstyle=\footnotesize,numbersep=8pt,frame=single]
-> login
-Username: admin
-Password: stocksim
-Admin login executed correctly.
-Welcome StockSim Admin.
-Available Commands:
-
-add-ticker			add a new ticker symbol to the database.
-add-admin			create new admin account.                                                                                                                                                                     
-remove-admin		delete admin account.                                                                                                                                                                         
-remove-user			delete user account.                                                                                                                                                                          
-logout				logout from current admin account.                                                                                                                                                            
-quit				quit StockSim client.  
-\end{lstlisting}
-
-\subsection{Add ticker}
-The \texttt{add-ticker} option allows an admin to add a ticker to the database, provided it exists in the Yahoo! Finance database.
-The underlying function retrieves the data from YFinance and loads it into the application database.
-
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,,language={},numbers=left,keepspaces=true,tabsize=4,
-numberstyle=\footnotesize,numbersep=8pt,frame=single]
-> add-ticker
-Ticker symbol: LSMSDB
-Asset Profile created with success. Updating historical data.
-Historical data updated with success.
-\end{lstlisting}
-
-\subsection{Add admin}
-The \texttt{add-admin} option allows an admin to add other admin.
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
-numberstyle=\footnotesize,numbersep=8pt,frame=single]
-> add-admin
-Admin account name: John
-Admin account surname: Doe
-Admin account username: admin2
-Admin account password: stocksim
-New admin account created.
-\end{lstlisting}
-
-\subsection{Remove admin}
-
-The \texttt{remove-admin} option allows an admin to remove another admin from their role.
-
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
-numberstyle=\footnotesize,numbersep=8pt,frame=single]
-> remove-admin
-Admin account username: admin2
-Admin account password: stocksim
-Admin account deleted.
-\end{lstlisting}
-
-\subsection{Remove user}
-The \texttt{remove-user} option allows an admin to delete a user from the database.
-
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,language={},numbers=left,keepspaces=true,tabsize=4,
-numberstyle=\footnotesize,numbersep=8pt,frame=single]
-> remove-user
-User account email: jsmith@example.com
-User account deleted.
-\end{lstlisting}
 
