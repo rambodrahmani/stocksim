@@ -32,7 +32,7 @@ The Intellij IDEA Java project can be found in the ```Stocksim``` directory.
 Just open it in the Intellij IDEA IDE and generate the JARs with the following
 command:
 ```bash
-mvn package
+$ mvn package
 
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Summary for Stocksim 1.0:
@@ -53,9 +53,9 @@ of each module.
 
 Execute with the following command:
 ```bash
-java -jar Server-1.0-jar-with-dependencies.jar
+$ java -jar Server-1.0-jar-with-dependencies.jar
 ```
 or
 ```bash
-java -jar Client-1.0-jar-with-dependencies.jar
+$ java -jar Client-1.0-jar-with-dependencies.jar
 ```
