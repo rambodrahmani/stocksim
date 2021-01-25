@@ -26,3 +26,36 @@ performed on stocks.
 ## Database
 StockSim relys upon both a MongoDB Cluster and an Apache Cassandra Cluster.
 ![StockSim Databases](documentation/latex/img/cluster_diagram.png)
+
+## How To Use
+The Intellij IDEA Java project can be found in the ```Stocksim``` directory.
+Just open it in the Intellij IDEA IDE and generate the JARs with the following
+command:
+```bash
+mvn package
+
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Stocksim 1.0:
+[INFO] 
+[INFO] Stocksim ........................................... SUCCESS [  0.001 s]
+[INFO] Library ............................................ SUCCESS [  0.820 s]
+[INFO] Client ............................................. SUCCESS [  6.287 s]
+[INFO] Server ............................................. SUCCESS [  5.337 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  12.514 s
+[INFO] Finished at: 2021-01-24T12:58:10+01:00
+[INFO] ------------------------------------------------------------------------
+```
+you will then find the JARs with the dependencies in the ```targer``` directory
+of each module.
+
+Execute with the following command:
+```bash
+java -jar Server-1.0-jar-with-dependencies.jar
+```
+or
+```bash
+java -jar Client-1.0-jar-with-dependencies.jar
+```
